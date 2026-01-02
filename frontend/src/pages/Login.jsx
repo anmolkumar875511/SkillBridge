@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import axiosInstance from '../axiosInstance'
+import axios from 'axios'
 
 const Login = () => {
     const [state,setState] = useState("Sign Up")
@@ -8,6 +10,16 @@ const Login = () => {
 
     const submitHandler = async (e)=>{
         e.preventDefault()
+        const res = state === "Sign Up" ?
+        await axiosInstance.post("/register",{
+          name,
+          email,
+          password,
+        }):
+        await axiosInstance.post("/login",{
+           email,
+           password
+        })
     }
   return (
    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
