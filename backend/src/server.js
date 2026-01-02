@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
-import connectDB from './src/db/index.js';
-import {app} from './app.js';
-import { createDefaultAdmin } from './src/utils/defaultAdmin.js';
+import connectDB from './db/index.js';
+import app from './app.js';
+import { createDefaultAdmin } from './utils/defaultAdmin.js';
 
 dotenv.config({path: "./.env"});
 
