@@ -99,7 +99,7 @@ export const refreshAccessToken = asyncHandler(async (req, res, next) => {
     
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
         sameSite: "Strict",
         maxAge: 1000 * 60 * 15 // 15 minutes
     });
