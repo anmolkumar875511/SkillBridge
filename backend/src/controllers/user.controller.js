@@ -68,10 +68,6 @@ export const loginUser = asyncHandler(async (req, res, next) => {
             refreshToken 
         })
     );
-
-  res.status(200).json(
-    new apiResponse(200, "Login successful", { user: user.toJSON(), accessToken, refreshToken })
-  );
 });
 
 
