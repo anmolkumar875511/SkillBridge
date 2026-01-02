@@ -1,13 +1,13 @@
 class apiResponse {
     constructor(
-        status,
+        statusCode = 200,
         message = "Request successful",
         data = null
     ) {
-        this.status = status;
+        this.statusCode = statusCode;
         this.message = message;
         this.data = data;
-        this.success = status >= 200 && status < 400;
+        this.success = statusCode >= 200 && statusCode < 400;
     }
 }
 
