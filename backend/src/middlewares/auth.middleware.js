@@ -4,7 +4,7 @@ import User from "../models/user.model.js";
 import apiError from "../utils/apiError";
 
 export const verifyToken = asyncHandler(async (req, res, next) => {
-  const token = req.cookies.refreshToken || req.header("Authorization")?.replace("Bearer ", "") || req.header("x-auth-token");
+  const token = req.header("Authorization")?.replace("Bearer ", "") || req.cookies.accessToken;
 
   if (!token) {
     return next(new apiError(401, "Not authorized, token missing"));
