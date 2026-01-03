@@ -1,25 +1,38 @@
 import React, { useState } from 'react'
 import axiosInstance from '../axiosInstance'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
     const [state,setState] = useState("Sign Up")
     const [name, setName] = useState("")
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
+    const navigate = useNavigate()
 
     const submitHandler = async (e)=>{
         e.preventDefault()
-        const res = state === "Sign Up" ?
-        await axiosInstance.post("/register",{
-          name,
-          email,
-          password,
-        }):
-        await axiosInstance.post("/login",{
-           email,
-           password
-        })
+        try {
+          if(state === "Sign Up"){
+            await axiosInstance.post("/register",{
+              name,
+              email,
+              password,
+            })
+            setState("Login")
+            navigate(`/Login`)
+          }
+          else{
+            await axiosInstance.post("/login",{
+              email,
+              password
+            })
+            navigate(`/Dashboard/${name}`)
+          }
+        } catch (error) {
+          console.log(error)
+          alert(error.response.data.message || "Something Went Wrong")
+        }
     }
   return (
    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
