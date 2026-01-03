@@ -27,7 +27,7 @@ const Login = () => {
               email,
               password
             })
-            navigate(`/Dashboard/${name}`)
+            navigate(`/Dashboard`)
           }
         } catch (error) {
           console.log(error)

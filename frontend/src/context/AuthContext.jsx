@@ -14,7 +14,8 @@ export const AuthProvider = ({children}) =>{
             const res = await axiosInstance.get("/profile",{
                 withCredentials: true,
             })
-            setUser(res.data)
+            console.log("Fetched User:", res.data.data.user);
+            setUser(res.data.data.user)
         } catch (error) {
             setUser(null)
         } finally{
@@ -27,7 +28,7 @@ export const AuthProvider = ({children}) =>{
     },[])
 
     return(
-        <AuthContext.Provider value={{user,setUser,loading}}>
+        <AuthContext.Provider value={{user,loading}}>
             {children}
         </AuthContext.Provider>
     )

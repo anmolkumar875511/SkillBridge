@@ -76,6 +76,7 @@ export const getUserProfile = asyncHandler(async (req, res, next) => {
   res.status(200).json(
     new apiResponse(200, "User profile fetched successfully", { user: req.user.toJSON() })
   );
+  return res;
 });
 
 

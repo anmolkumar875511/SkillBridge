@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
+import ProtectedRoute from './pages/ProtectedRoute.jsx'
 
 function App() {
   return (
@@ -17,8 +18,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/Login" element={<Login />} />
           {/* Protected Routes */}
-          <Route >
-          <Route path='/Dashboard/:username' element={<Dashboard/>}/>
+          <Route element={<ProtectedRoute/>}>
+          <Route path='/Dashboard' element={<Dashboard/>}/>
           </Route>
 
 
