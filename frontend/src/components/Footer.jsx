@@ -3,7 +3,7 @@ import logo from '../assets/logo.png'
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-white border-t border-gray-100">
+    <footer className="w-full bg-white border-t border-gray-100 mt-20">
       {/* 1. max-w-7xl: Limits the width exactly like the Navbar.
         2. mx-auto: Centers the container.
         3. px-6: Matches the horizontal padding of your Navbar.
@@ -42,6 +42,7 @@ const Footer = () => {
               <p className="text-sm font-bold mb-6 text-black uppercase">Get In Touch</p>
               <ul className="space-y-3 text-sm text-gray-600">
                 <li>+91 8920103876</li>
+                <li>+91 8755671186</li>
                 <li className="text-blue-500">SkillBridge@gmail.com</li>
               </ul>
             </div>
