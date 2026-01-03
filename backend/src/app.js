@@ -15,6 +15,10 @@ app.use(cors({
 
 import userRoutes from "./routes/user.routes.js";
 app.use("/api/v1/user", userRoutes);
+
+import resumeRoutes from "./routes/resume.routes.js";
+app.use("/api/v1/resume", resumeRoutes);
+
 app.use(errorHandler);
 
 
