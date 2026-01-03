@@ -8,9 +8,9 @@ import Login from './pages/Login'
 
 function App() {
   return (
-    <div className="overflow-x-hidden">
+    <div>
       <Navbar />
-      <main className="pt-24">
+      <main className="no-scrollbar overflow-y-auto h-screen pt-30">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Login" element={<Login />} />
