@@ -9,9 +9,9 @@ import Dashboard from './pages/Dashboard'
 
 function App() {
   return (
-    <div className="overflow-x-hidden">
+    <div>
       <Navbar />
-      <main className="pt-24">
+      <main className="no-scrollbar overflow-y-auto h-screen pt-30">
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
