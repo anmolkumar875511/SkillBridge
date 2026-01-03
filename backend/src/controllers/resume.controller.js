@@ -1,4 +1,4 @@
-import pdf from "pdf-parse";
+import pdfParse from "../utils/pdfHelper.cjs";
 import asyncHandler from "../utils/asyncHandler.js";
 import ResumeParsed from "../models/resumeParsed.model.js";
 import apiError from "../utils/apiError.js";
@@ -9,7 +9,7 @@ export const parseResumePreview = asyncHandler(async (req, res) => {
     throw new apiError(400, "No resume file uploaded");
   }
 
-  const data = await pdf(req.file.buffer);
+  const data = await pdfParse(req.file.buffer);
   const rawText = data.text;
 
   if (!rawText || rawText.trim().length === 0) {
@@ -17,6 +17,7 @@ export const parseResumePreview = asyncHandler(async (req, res) => {
   }
 
   const text = rawText.toLowerCase();
+  console.log("Extracted Text:", text);
 
   const parsedData = {
     skills: ["JavaScript", "Node.js", "Express"], // Dummy data for preview
