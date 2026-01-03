@@ -7,16 +7,17 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 
 function App() {
-
   return (
-    <>
-    <Navbar/>
-    <Routes>
-      <Route path='/' element={<Home/>}/>
-      <Route path='/Login' element={<Login/>}/>
-    </Routes>
-    <Footer/>
-    </>
+    <div className="overflow-x-hidden">
+      <Navbar />
+      <main className="pt-24">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/Login" element={<Login />} />
+        </Routes>
+        <Footer />
+      </main>
+    </div>
   )
 }
 

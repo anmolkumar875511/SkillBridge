@@ -3,7 +3,7 @@ import logo from '../assets/logo.png'
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-white border-t border-gray-100 mt-20">
+    <footer className="w-full bg-white border-t border-gray-100 mt-10">
       {/* 1. max-w-7xl: Limits the width exactly like the Navbar.
         2. mx-auto: Centers the container.
         3. px-6: Matches the horizontal padding of your Navbar.
