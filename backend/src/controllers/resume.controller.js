@@ -1,30 +1,26 @@
-import pdf from 'pdf-parse-debugging-disabled';
+import pdf from "pdf-parse-debugging-disabled";
+
 import asyncHandler from "../utils/asyncHandler.js";
-import ResumeParsed from "../models/resumeParsed.model.js";
 import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
+
+import ResumeParsed from "../models/resumeParsed.model.js";
+import { parseResumeText } from "../resumeParser/index.js";
 
 export const parseResumePreview = asyncHandler(async (req, res) => {
   if (!req.file) {
     throw new apiError(400, "No resume file uploaded");
   }
 
-  const data = await pdf(req.file.buffer);
-  const rawText = data.text;
+  const pdfData = await pdf(req.file.buffer);
+  const rawText = pdfData.text;
 
   if (!rawText || rawText.trim().length === 0) {
     throw new apiError(422, "Uploaded PDF is empty or unreadable");
   }
 
-  const text = rawText.toLowerCase();
-  console.log("Extracted Text:", text);
-
-  const parsedData = {
-    skills: ["JavaScript", "Node.js", "Express"], // Dummy data for preview
-    experience: ["Software Developer at XYZ Corp (12 months)"], // Dummy data for preview
-    education: ["Bachelor's in Computer Science from ABC University (2020)"], // Dummy data for preview
-    projects: ["Resume Parser Tool"] // Dummy data for preview
-  };
+  const parsedData = parseResumeText(rawText);
+  console.log(parsedData);
 
   return res.status(200).json(
     new apiResponse(200, "Resume parsed successfully", parsedData)
@@ -43,26 +39,27 @@ export const confirmResumeData = asyncHandler(async (req, res) => {
     throw new apiError(400, "Invalid resume data format");
   }
 
-  const normalizedSkills = skills.map(skill => {
-    if (typeof skill === "string") {
-      return {
-        name: skill.toLowerCase().trim(),
-        level: "beginner",
-        confidence: 0.7,
-        source: "resume"
-      };
-    }
 
-    return {
-      name: skill.name.toLowerCase().trim(),
-      level: skill.level || "beginner",
-      confidence: skill.confidence ?? 0.7,
-      source: skill.source || "resume"
-    };
-  });
+  const normalizedSkills = skills.map(skill => ({
+    name:
+      typeof skill === "string"
+        ? skill.toLowerCase().trim()
+        : skill.name.toLowerCase().trim(),
+    level: skill.level || "beginner",
+    confidence: skill.confidence ?? 0.7,
+    source: skill.source || "resume"
+  }));
 
-  const resume = await ResumeParsed.create({
+  // Resume versioning
+  const lastResume = await ResumeParsed.findOne({ user: req.user._id })
+    .sort({ resumeVersion: -1 })
+    .select("resumeVersion");
+
+  const nextVersion = lastResume ? lastResume.resumeVersion + 1 : 1;
+
+  const savedResume = await ResumeParsed.create({
     user: req.user._id,
+    resumeVersion: nextVersion,
     skills: normalizedSkills,
     experience,
     education,
@@ -70,6 +67,10 @@ export const confirmResumeData = asyncHandler(async (req, res) => {
   });
 
   return res.status(201).json(
-    new apiResponse(201, "Resume data saved successfully", resume)
+    new apiResponse(
+      201,
+      "Resume data saved successfully",
+      savedResume
+    )
   );
 });

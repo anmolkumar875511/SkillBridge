@@ -1,0 +1,1 @@
+export { parseResumeText } from "./parseResume.service.js";
