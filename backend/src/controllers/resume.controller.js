@@ -1,4 +1,4 @@
-import pdfParse from "../utils/pdfHelper.cjs";
+import pdf from 'pdf-parse-debugging-disabled';
 import asyncHandler from "../utils/asyncHandler.js";
 import ResumeParsed from "../models/resumeParsed.model.js";
 import apiError from "../utils/apiError.js";
@@ -9,7 +9,7 @@ export const parseResumePreview = asyncHandler(async (req, res) => {
     throw new apiError(400, "No resume file uploaded");
   }
 
-  const data = await pdfParse(req.file.buffer);
+  const data = await pdf(req.file.buffer);
   const rawText = data.text;
 
   if (!rawText || rawText.trim().length === 0) {
