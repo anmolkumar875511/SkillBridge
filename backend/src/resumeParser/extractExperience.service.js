@@ -28,6 +28,12 @@ export const extractExperience = (
 
   lines.forEach(line => {
     const lower = line.toLowerCase();
+    if (
+      lower.includes("positions of responsibility") ||
+      lower.includes("experience")
+    ) {
+      return;
+    }
 
     if (!ROLE_KEYWORDS.some(k => lower.includes(k))) return;
 
@@ -48,8 +54,9 @@ export const extractExperience = (
 
     const role = line
       .replace(/20\d{2}.*/, "")
-      .replace(/[–-].*/, "")
+      .replace(/positions of responsibility/i, "")
       .trim();
+
 
     if (!role || seen.has(role)) return;
 

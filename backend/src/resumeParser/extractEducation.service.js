@@ -1,26 +1,24 @@
 export const extractEducation = (sectionText = "") => {
   if (!sectionText) return [];
 
-  const education = [];
+  const blocks = sectionText
+    .split("\n•")
+    .map(b => b.trim())
+    .filter(b => b.length > 20);
 
-  const DEGREE_REGEX =
-    /(b\.tech|m\.tech|bs|bachelor|master|intermediate|high school)/gi;
+  return blocks.map(block => {
+    const year = block.match(/20\d{2}/)?.[0] || null;
 
-  let match;
-  while ((match = DEGREE_REGEX.exec(sectionText)) !== null) {
-    const slice = sectionText.slice(match.index, match.index + 200);
-
-    const yearMatch = slice.match(/20\d{2}/);
-    const instituteMatch = slice.match(
-      /(institute|college|university)[a-z\s,]*/i
+    const degreeMatch = block.match(
+      /b\.tech|bs|bachelor|m\.tech|intermediate|high school/i
     );
 
-    education.push({
-      degree: match[0],
-      institute: instituteMatch ? instituteMatch[0].trim() : "",
-      year: yearMatch ? Number(yearMatch[0]) : null
-    });
-  }
+    const lines = block.split("\n").filter(Boolean);
 
-  return education;
+    return {
+      degree: degreeMatch ? degreeMatch[0].toLowerCase() : "",
+      institute: lines[0]?.replace(/20\d{2}.*/, "").trim() || "",
+      year: year ? Number(year) : null
+    };
+  });
 };

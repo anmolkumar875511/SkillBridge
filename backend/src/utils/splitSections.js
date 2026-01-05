@@ -1,22 +1,34 @@
-export const splitSections = (text) => {
+export const splitSections = (text = "") => {
   const sections = {};
+  const lines = text.split("\n");
 
-  const patterns = {
-    education: /education([\s\S]*?)(personal projects|technical skills|coding profiles|positions|coding achievements|$)/,
+  let current = null;
 
-    projects: /(personal projects|projects)([\s\S]*?)(technical skills|coding profiles|positions|coding achievements|$)/,
-
-    skills: /(technical skills and interests|technical skills)([\s\S]*?)(coding profiles|positions|coding achievements|$)/,
-
-    positions: /(positions of responsibility|experience)([\s\S]*?)(coding achievements|$)/
+  const MAP = {
+    education: ["education", "academic", "qualifications"],
+    projects: ["personal projects", "projects", "project experience"],
+    skills: ["technical skills", "skills", "skill set", "areas of expertise", "expertise", "technologies"],
+    experience: ["positions of responsibility", "experience"],
+    coding: ["coding achievements"]
   };
 
-  for (const key in patterns) {
-    const match = text.match(patterns[key]);
-    if (match) {
-      sections[key] = match[2]?.trim() || match[1]?.trim();
+  for (const line of lines) {
+    const clean = line.trim();
+
+    for (const key in MAP) {
+      if (MAP[key].some(h => clean.includes(h))) {
+        current = key;
+        sections[current] = [];
+        continue;
+      }
     }
+
+    if (current) sections[current].push(clean);
   }
+
+  Object.keys(sections).forEach(
+    k => (sections[k] = sections[k].join("\n"))
+  );
 
   return sections;
 };

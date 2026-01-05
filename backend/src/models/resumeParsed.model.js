@@ -55,8 +55,18 @@ const resumeParsedSchema = new mongoose.Schema(
       }
     ],
 
-    projects: [String],
-
+    projects: [
+      {
+        title: {
+          type: String,
+          required: true
+        },
+        description: {
+          type: String,
+          default: ""
+        }
+      }
+    ],
     parsedAt: {
       type: Date,
       default: Date.now

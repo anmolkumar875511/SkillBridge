@@ -1,20 +1,38 @@
 export const extractSkills = (sectionText = "") => {
   if (!sectionText) return [];
 
-  const skillSet = new Set();
+  const groups = {
+    languages: [],
+    frameworks: [],
+    tools: [],
+    databases: []
+  };
 
-  const SKILL_REGEX =
-    /(python|c\+\+|java|javascript|html|css|node\.js|express\.js|mongodb|flask|bootstrap|git|github|sql|sqlite3)/gi;
+  const lines = sectionText.split("\n");
 
-  let match;
-  while ((match = SKILL_REGEX.exec(sectionText)) !== null) {
-    skillSet.add(match[1].toLowerCase());
-  }
+  lines.forEach(line => {
+    if (line.includes("languages:")) {
+      groups.languages.push(...line.split(":")[1].split(","));
+    }
+    if (line.includes("frameworks:")) {
+      groups.frameworks.push(...line.split(":")[1].split(","));
+    }
+    if (line.includes("developer tools:")) {
+      groups.tools.push(...line.split(":")[1].split(","));
+    }
+    if (line.includes("cloud/databases:")) {
+      groups.databases.push(...line.split(":")[1].split(","));
+    }
+  });
 
-  return Array.from(skillSet).map(skill => ({
-    name: skill,
-    level: "intermediate",
-    confidence: 0.85,
-    source: "resume"
-  }));
+  return Object.values(groups)
+    .flat()
+    .map(s => s.trim())
+    .filter(Boolean)
+    .map(skill => ({
+      name: skill.toLowerCase(),
+      level: "intermediate",
+      confidence: 0.85,
+      source: "resume"
+    }));
 };
