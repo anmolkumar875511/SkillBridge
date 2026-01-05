@@ -37,15 +37,6 @@ const userSchema = new mongoose.Schema(
       required: true
     },
 
-    skills: {
-      type: [String],
-      default: []
-    },
-
-    resume: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Resume"
-    },
     refreshToken: {
       type: String
     }
@@ -102,5 +93,4 @@ export default mongoose.model("User", userSchema);
 // 2. email
 // 3. password
 // 4. role
-// 5. skills
-// 6. resume
+// 5. refreshToken
