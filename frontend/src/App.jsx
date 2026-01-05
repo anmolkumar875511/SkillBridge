@@ -7,6 +7,7 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import ProtectedRoute from './pages/ProtectedRoute.jsx'
+import ConfirmResume from './pages/ConfirmResume.jsx'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           {/* Protected Routes */}
           <Route element={<ProtectedRoute/>}>
           <Route path='/Dashboard' element={<Dashboard/>}/>
+          <Route path='/Confirm' element={<ConfirmResume/>}/>
           </Route>
 
 

@@ -14,7 +14,7 @@ const Login = () => {
         e.preventDefault()
         try {
           if(state === "Sign Up"){
-            await axiosInstance.post("/register",{
+            await axiosInstance.post("/user/register",{
               name,
               email,
               password,
@@ -23,7 +23,7 @@ const Login = () => {
             navigate(`/Login`)
           }
           else{
-            await axiosInstance.post("/login",{
+            await axiosInstance.post("/user/login",{
               email,
               password
             })

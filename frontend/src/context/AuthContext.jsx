@@ -11,7 +11,7 @@ export const AuthProvider = ({children}) =>{
 
     const fetchUser = async () =>{
         try {
-            const res = await axiosInstance.get("/profile",{
+            const res = await axiosInstance.get("/user/profile",{
                 withCredentials: true,
             })
             console.log("Fetched User:", res.data.data.user);
