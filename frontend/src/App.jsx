@@ -21,7 +21,6 @@ function App() {
           {/* Protected Routes */}
           <Route element={<ProtectedRoute/>}>
           <Route path='/Dashboard' element={<Dashboard/>}/>
-          <Route path='/Confirm' element={<ConfirmResume/>}/>
           </Route>
 
 

@@ -1,18 +1,131 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from "react";
+import axiosInstance from "../axiosInstance";
 
-const ConfirmResume = () => {
-    const [isEdit,setIsEdit] = useState(false)
+const ConfirmResume = ({ resumeId }) => {
+  const [isEdit, setIsEdit] = useState(false);
+  const [skills, setSkills] = useState([]);
+  const [education, setEducation] = useState([]);
+  const [experience, setExperience] = useState([]);
+  const [projects, setProjects] = useState([]);
+
+  const fetchData = async () => {
+    const res = await axiosInstance.get(`/resume/${resumeId}`);
+    console.log(res.data);
+    setSkills(res.data.data.skills);
+    setEducation(res.data.data.education);
+    setExperience(res.data.data.experience);
+    setProjects(res.data.data.projects);
+    console.log("Data Fetched Succesfully");
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
-    <div>
-      <div>Skills</div>
-      <div>Education</div>
-      <div>Experience</div>
-      <div>Projects</div>
-      <div>
-        {isEdit ? <button onClick={() => setIsEdit(false)}>Save</button> : <button onClick={()=> setIsEdit(true)}>Edit</button>}
+    <div className="w-full space-y-10">
+
+      {/* Skill Section */}
+      <div className="bg-gray-50 rounded-xl p-6 space-y-4">
+        <h3 className="text-lg font-semibold text-gray-800">Skills</h3>
+
+        {skills.map((item, index) => {
+          return isEdit ? (
+            <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                value={item.name}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                onChange={(e) =>
+                  setSkills(prev =>
+                    prev.map((skill, i) =>
+                      i === index
+                        ? { ...skill, name: e.target.value }
+                        : skill
+                    )
+                  )
+                }
+              />
+
+              <input
+                type="text"
+                value={item.level}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                onChange={(e) =>
+                  setSkills(prev =>
+                    prev.map((skill, i) =>
+                      i === index
+                        ? { ...skill, level: e.target.value }
+                        : skill
+                    )
+                  )
+                }
+              />
+            </div>
+          ) : (
+            <div key={index} className="flex flex-col md:flex-row md:items-center md:gap-8">
+              <div>
+                <label className="text-sm font-medium text-gray-500">Skill Name</label>
+                <p className="text-gray-800">{item.name}</p>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-500">Skill Level</label>
+                <p className="text-black">{item.level}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Project Section */}
+      <div className="bg-gray-50 rounded-xl p-6 min-h-30">
+        {isEdit ? (
+          <input className="w-full rounded-lg border border-gray-300 px-4 py-2" />
+        ) : (
+          <p className="text-gray-400">Projects section</p>
+        )}
+      </div>
+
+      {/* Education Section */}
+      <div className="bg-gray-50 rounded-xl p-6 min-h-30">
+        {isEdit ? (
+          <input className="w-full rounded-lg border border-gray-300 px-4 py-2" />
+        ) : (
+          <p className="text-gray-400">Education section</p>
+        )}
+      </div>
+
+      {/* Experience Section */}
+      <div className="bg-gray-50 rounded-xl p-6 min-h-30">
+        {isEdit ? (
+          <input className="w-full rounded-lg border border-gray-300 px-4 py-2" />
+        ) : (
+          <p className="text-gray-400">Experience section</p>
+        )}
+      </div>
+
+      {/* Action Button */}
+      <div className="flex justify-end">
+        {isEdit ? (
+          <button
+            onClick={() => setIsEdit(false)}
+            className="px-6 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
+          >
+            Save
+          </button>
+        ) : (
+          <button
+            onClick={() => setIsEdit(true)}
+            className="px-6 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition"
+          >
+            Edit
+          </button>
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ConfirmResume
+
+export default ConfirmResume;
