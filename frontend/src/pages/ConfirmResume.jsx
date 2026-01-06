@@ -79,30 +79,162 @@ const ConfirmResume = ({ resumeId }) => {
       </div>
 
       {/* Project Section */}
-      <div className="bg-gray-50 rounded-xl p-6 min-h-30">
-        {isEdit ? (
-          <input className="w-full rounded-lg border border-gray-300 px-4 py-2" />
-        ) : (
-          <p className="text-gray-400">Projects section</p>
-        )}
+      <div className="bg-gray-50 rounded-xl p-6 space-y-4">
+        <h3 className="text-lg font-semibold text-gray-800">Projects</h3>
+
+        {projects.map((item, index) => {
+          return isEdit ? (
+            <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                value={item.name}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                onChange={(e) =>
+                  setSkills(prev =>
+                    prev.map((skill, i) =>
+                      i === index
+                        ? { ...skill, name: e.target.value }
+                        : skill
+                    )
+                  )
+                }
+              />
+
+              <input
+                type="text"
+                value={item.level}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                onChange={(e) =>
+                  setSkills(prev =>
+                    prev.map((skill, i) =>
+                      i === index
+                        ? { ...skill, level: e.target.value }
+                        : skill
+                    )
+                  )
+                }
+              />
+            </div>
+          ) : (
+            <div key={index} className="flex flex-col md:flex-row md:items-center md:gap-8">
+              <div>
+                <label className="text-sm font-medium text-gray-500">Skill Name</label>
+                <p className="text-gray-800">{item.name}</p>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-500">Skill Level</label>
+                <p className="text-black">{item.level}</p>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Education Section */}
-      <div className="bg-gray-50 rounded-xl p-6 min-h-30">
-        {isEdit ? (
-          <input className="w-full rounded-lg border border-gray-300 px-4 py-2" />
-        ) : (
-          <p className="text-gray-400">Education section</p>
-        )}
+      <div className="bg-gray-50 rounded-xl p-6 space-y-4">
+        <h3 className="text-lg font-semibold text-gray-800">Education</h3>
+
+        {education.map((item, index) => {
+          return isEdit ? (
+            <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                value={item.degree}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                onChange={(e) =>
+                  setEducation(prev =>
+                    prev.map((education, i) =>
+                      i === index
+                        ? { ...education, degree: e.target.value }
+                        : education
+                    )
+                  )
+                }
+              />
+
+              <input
+                type="text"
+                value={item.year}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                onChange={(e) =>
+                  setEducation(prev =>
+                    prev.map((education, i) =>
+                      i === index
+                        ? { ...education, year: e.target.value }
+                        : education
+                    )
+                  )
+                }
+              />
+            </div>
+          ) : (
+            <div key={index} className="flex flex-col md:flex-row md:items-center md:gap-8">
+              <div>
+                <label className="text-sm font-medium text-gray-500">Skill Name</label>
+                <p className="text-gray-800">{item.degree}</p>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-500">Skill Level</label>
+                <p className="text-black">{item.year}</p>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Experience Section */}
-      <div className="bg-gray-50 rounded-xl p-6 min-h-30">
-        {isEdit ? (
-          <input className="w-full rounded-lg border border-gray-300 px-4 py-2" />
-        ) : (
-          <p className="text-gray-400">Experience section</p>
-        )}
+      <div className="bg-gray-50 rounded-xl p-6 space-y-4">
+        <h3 className="text-lg font-semibold text-gray-800">Experience</h3>
+
+        {experience.map((item, index) => {
+          return isEdit ? (
+            <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                value={item.role}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                onChange={(e) =>
+                  setExperience(prev =>
+                    prev.map((experience, i) =>
+                      i === index
+                        ? { ...experience, role: e.target.value }
+                        : experience
+                    )
+                  )
+                }
+              />
+
+              <input
+                type="text"
+                value={item.company}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                onChange={(e) =>
+                  setExperience(prev =>
+                    prev.map((experience, i) =>
+                      i === index
+                        ? { ...experience, company: e.target.value }
+                        : experience
+                    )
+                  )
+                }
+              />
+            </div>
+          ) : (
+            <div key={index} className="flex flex-col md:flex-row md:items-center md:gap-8">
+              <div>
+                <label className="text-sm font-medium text-gray-500">Skill Name</label>
+                <p className="text-gray-800">{item.role}</p>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-500">Skill Level</label>
+                <p className="text-black">{item.company}</p>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Action Button */}
