@@ -15,14 +15,10 @@ const Dashboard = () => {
         return
       }
       const formData = new FormData()
-      formData.append("pdf",file)
+      formData.append("resume",file)
       
       try {
-        const res = await axiosInstance.post("/resume/upload",{
-          formData,
-        })
-        const data = await res.json()
-        console.log(data.message)
+        const res = await axiosInstance.post("/resume/upload", formData);
         alert('Data Parsed Successfully!!')
         setIsContent(true)
       } catch (error) {
@@ -33,7 +29,7 @@ const Dashboard = () => {
 
   return (
     <div>
-       <h1>Hello {user.name}</h1>
+       <h1>Hello {user?.name}</h1>
        <h3>Upload Pdf to Get Your Roadmap</h3>
        <input type="file" accept="application/pdf" onChange={(e)=>{setFile(e.target.files[0])}} />
        <button onClick={handleUpload}>Upload PDF</button>

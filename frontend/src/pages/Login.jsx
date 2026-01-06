@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import axiosInstance from '../axiosInstance'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { AuthContext } from '../context/AuthContext'
 
 const Login = () => {
     const [state,setState] = useState("Sign Up")
@@ -9,6 +11,8 @@ const Login = () => {
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
     const navigate = useNavigate()
+
+    const { fetchUser } = useContext(AuthContext);
 
     const submitHandler = async (e)=>{
         e.preventDefault()
@@ -23,10 +27,13 @@ const Login = () => {
             navigate(`/Login`)
           }
           else{
-            await axiosInstance.post("/user/login",{
-              email,
-              password
-            })
+            await axiosInstance.post(
+              "/user/login",
+              { email, password },
+              { withCredentials: true }
+            );
+            
+            await fetchUser();
             navigate(`/Dashboard`)
           }
         } catch (error) {
