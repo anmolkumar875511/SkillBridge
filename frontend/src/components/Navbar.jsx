@@ -24,13 +24,20 @@ function Navbar() {
 
         {/* ----- Left: Logo ----- */}
         <div className="flex-1 flex justify-start">
-          <img
+          {user ? <img
+            className="h-14 md:h-16 w-auto cursor-pointer object-contain
+              hover:scale-105 transition-transform"
+            onClick={() => navigate('/Dashboard')}
+            src={logo}
+            alt="SkillBridge Logo"
+          /> : <img
             className="h-14 md:h-16 w-auto cursor-pointer object-contain
               hover:scale-105 transition-transform"
             onClick={() => navigate('/')}
             src={logo}
             alt="SkillBridge Logo"
-          />
+          />}
+          
         </div>
 
         {/* ----- Middle: Navigation Links ----- */}
