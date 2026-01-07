@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../context/AuthContext.jsx'
 import axiosInstance from '../axiosInstance.js'
 import { useNavigate } from 'react-router-dom'
@@ -33,6 +33,10 @@ const Dashboard = () => {
       console.log(error)
     }
   }
+
+  useEffect(()=>{
+    
+  },[resumeId])
 
   return (
     <div className="min-h-[calc(100vh-8rem)] px-6 py-8 bg-gray-50">
@@ -75,7 +79,7 @@ const Dashboard = () => {
 
           <div className="min-h-75 bg-white rounded-xl shadow-sm p-6">
             {isContent ? (
-              <ConfirmResume resumeId={resumeId} />
+              <ConfirmResume key={resumeId} resumeId={resumeId} />
             ) : (
               <div className="flex items-center justify-center h-full text-gray-400">
                 NO Content Is Available

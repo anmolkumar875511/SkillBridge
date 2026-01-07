@@ -23,12 +23,14 @@ export const AuthProvider = ({children}) =>{
         }
     }
 
+   
+
     useEffect(()=>{
          fetchUser()
     },[])
 
     return (
-    <AuthContext.Provider value={{ user, loading, fetchUser }}>
+    <AuthContext.Provider value={{ user, loading, fetchUser, setUser }}>
         {children}
     </AuthContext.Provider>
     )
