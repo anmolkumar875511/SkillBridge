@@ -1,21 +1,9 @@
-import { parseResumeWithLLM } from "../llm/parseResumeWithLLM.js";
+import { parseResumeWithLLM } from "../parserLLM/parseResumeWithLLM.js";
+import { ruleBasedParse } from "../parserRule/ruleBasedParse.service.js";
 import { mergeParsedData } from "./mergeParsedData.service.js";
-import { isOllamaRunning } from "../llm/checkOllamaHealth.js";
-import { ruleBasedParse } from "./ruleBasedParse.service.js";
 
 export const parseResumeText = async (rawText) => {
-  const ruleBasedData = ruleBasedParse(rawText);
-
-  let finalData = ruleBasedData;
-
-  if (await isOllamaRunning()) {
-    console.log("Using AI to parse resume");
-    const aiData = await parseResumeWithLLM(rawText);
-
-    if (aiData) {
-      finalData = mergeParsedData(ruleBasedData, aiData);
-    }
-  }
-
-  return finalData;
+  const ruleData = ruleBasedParse(rawText);
+  const aiData = await parseResumeWithLLM(rawText);
+  return mergeParsedData(ruleData, aiData);
 };
