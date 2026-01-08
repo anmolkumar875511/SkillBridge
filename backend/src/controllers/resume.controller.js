@@ -17,7 +17,7 @@ export const uploadResume = asyncHandler(async (req, res) => {
     throw new apiError(422, "Uploaded resume is unreadable");
   }
 
-  const parsedData = parseResumeText(rawText);
+  const parsedData = await parseResumeText(rawText);
 
   const lastResume = await ResumeParsed.findOne({ user: req.user._id })
     .sort({ resumeVersion: -1 })
@@ -37,7 +37,8 @@ export const uploadResume = asyncHandler(async (req, res) => {
 
   return res.status(201).json(
     new apiResponse(201, "Resume uploaded & saved", {
-      resumeId: resume._id
+      resumeId: resume._id,
+      data: parsedData
     })
   );
 });

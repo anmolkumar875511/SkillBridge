@@ -6,7 +6,7 @@ import { extractEducation } from "./extractEducation.service.js";
 import { extractProjects } from "./extractProject.service.js";
 import { extractExperience } from "./extractExperience.service.js";
 
-export const parseResumeText = (rawText = "") => {
+export const ruleBasedParse = (rawText = "") => {
   const normalizedText = normalizeText(rawText);
   const sections = splitSections(normalizedText);
 
