@@ -8,11 +8,8 @@ export const parseResumeText = async (rawText) => {
 
   let finalData = ruleBasedData;
 
-  const needsAI =
-    ruleBasedData.skills.length < 5 ||
-    ruleBasedData.projects.length === 0;
-
-  if (needsAI && await isOllamaRunning()) {
+  if (await isOllamaRunning()) {
+    console.log("Using AI to parse resume");
     const aiData = await parseResumeWithLLM(rawText);
 
     if (aiData) {

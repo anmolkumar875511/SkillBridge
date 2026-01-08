@@ -87,14 +87,14 @@ const ConfirmResume = ({ resumeId }) => {
             <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
                 type="text"
-                value={item.name}
+                value={item.title}
                 className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 onChange={(e) =>
-                  setSkills(prev =>
-                    prev.map((skill, i) =>
+                  setProjects(prev =>
+                    prev.map((project, i) =>
                       i === index
-                        ? { ...skill, name: e.target.value }
-                        : skill
+                        ? { ...project, title: e.target.value }
+                        : project 
                     )
                   )
                 }
@@ -102,14 +102,14 @@ const ConfirmResume = ({ resumeId }) => {
 
               <input
                 type="text"
-                value={item.level}
+                value={item.description}
                 className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 onChange={(e) =>
-                  setSkills(prev =>
-                    prev.map((skill, i) =>
+                  setProjects(prev =>
+                    prev.map((project, i) =>
                       i === index
-                        ? { ...skill, level: e.target.value }
-                        : skill
+                        ? { ...project, description: e.target.value }
+                        : project
                     )
                   )
                 }

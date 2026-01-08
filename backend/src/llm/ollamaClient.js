@@ -5,7 +5,7 @@ export const queryOllama = async (prompt) => {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: "tinyllama",
+      model: "qwen2.5:7b",
       prompt,
       stream: false,
       options: {

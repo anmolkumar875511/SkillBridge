@@ -1,33 +1,29 @@
 export const mergeParsedData = (ruleData, aiData) => {
   if (!aiData) {
+    console.log("LLM failed, using rule-based data only");
     return ruleData;
-    console.log("AI data is null, returning rule-based data only.");
   }
 
   return {
-    skills:
-      ruleData.skills.length >= 5
-        ? ruleData.skills
-        : aiData.skills.map(s => ({
-            name: s.name.toLowerCase(),
-            level: "intermediate",
-            confidence: 0.6,
-            source: "ai_inferred"
-          })),
+    skills: aiData.skills?.length
+      ? aiData.skills.map(s => ({
+          name: s.name.toLowerCase(),
+          level: s.level || "intermediate",
+          confidence: s.confidence || 0.7,
+          source: "ai_inferred"
+        }))
+      : ruleData.skills,
 
-    education:
-      ruleData.education.length
-        ? ruleData.education
-        : aiData.education,
+    education: aiData.education?.length
+      ? aiData.education
+      : ruleData.education,
 
-    experience:
-      ruleData.experience.length
-        ? ruleData.experience
-        : aiData.experience,
+    experience: aiData.experience?.length
+      ? aiData.experience
+      : ruleData.experience,
 
-    projects:
-      ruleData.projects.length
-        ? ruleData.projects
-        : aiData.projects
+    projects: aiData.projects?.length
+      ? aiData.projects
+      : ruleData.projects
   };
 };
