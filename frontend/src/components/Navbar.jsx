@@ -54,7 +54,7 @@ function Navbar() {
               ${isActive ? 'text-[#0B4DB8] after:scale-x-100' : 'after:scale-x-0'}`
             }
           >
-            Home
+            Dashboard
           </NavLink>   : <NavLink
             to="/"
             className={({ isActive }) =>
@@ -72,8 +72,20 @@ function Navbar() {
           
 
           
-
-          <NavLink
+          {user ? <NavLink
+            to="/Resume"
+            className={({ isActive }) =>
+              `relative font-medium px-2 transition-colors
+              text-slate-600 hover:text-[#0B4DB8]
+              after:absolute after:left-1/2 after:-bottom-1
+              after:h-0.5 after:w-6 after:-translate-x-1/2
+              after:origin-center after:transition-transform after:duration-300
+              after:bg-[#F59E0B]
+              ${isActive ? 'text-[#0B4DB8] after:scale-x-100' : 'after:scale-x-0'}`
+            }
+          >
+            Resume
+          </NavLink> :<NavLink
             to="/contributors"
             className={({ isActive }) =>
               `relative font-medium px-2 transition-colors
@@ -86,7 +98,8 @@ function Navbar() {
             }
           >
             Contributors
-          </NavLink>
+          </NavLink>}
+          
 
           <NavLink
             to="/contact"
@@ -100,7 +113,7 @@ function Navbar() {
               ${isActive ? 'text-[#0B4DB8] after:scale-x-100' : 'after:scale-x-0'}`
             }
           >
-            Contact
+            Contact Us
           </NavLink>
         </div>
 

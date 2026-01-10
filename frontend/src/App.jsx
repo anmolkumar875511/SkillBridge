@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import ProtectedRoute from './pages/ProtectedRoute.jsx'
 import ConfirmResume from './pages/ConfirmResume.jsx'
+import Resume from './pages/Resume.jsx'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           {/* Protected Routes */}
           <Route element={<ProtectedRoute/>}>
           <Route path='/Dashboard' element={<Dashboard/>}/>
+          <Route path='/Resume' element={<Resume/>}/>
           </Route>
 
 

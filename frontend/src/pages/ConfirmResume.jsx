@@ -118,13 +118,13 @@ const ConfirmResume = ({ resumeId }) => {
           ) : (
             <div key={index} className="flex flex-col md:flex-row md:items-center md:gap-8">
               <div>
-                <label className="text-sm font-medium text-gray-500">Skill Name</label>
-                <p className="text-gray-800">{item.name}</p>
+                <label className="text-sm font-medium text-gray-500">Project Name</label>
+                <p className="text-gray-800">{item.title}</p>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-500">Skill Level</label>
-                <p className="text-black">{item.level}</p>
+                <label className="text-sm font-medium text-gray-500">Project Description</label>
+                <p className="text-black">{item.description}</p>
               </div>
             </div>
           );
@@ -171,12 +171,12 @@ const ConfirmResume = ({ resumeId }) => {
           ) : (
             <div key={index} className="flex flex-col md:flex-row md:items-center md:gap-8">
               <div>
-                <label className="text-sm font-medium text-gray-500">Skill Name</label>
+                <label className="text-sm font-medium text-gray-500">Degree Name</label>
                 <p className="text-gray-800">{item.degree}</p>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-500">Skill Level</label>
+                <label className="text-sm font-medium text-gray-500">Year of Joining</label>
                 <p className="text-black">{item.year}</p>
               </div>
             </div>
@@ -224,12 +224,12 @@ const ConfirmResume = ({ resumeId }) => {
           ) : (
             <div key={index} className="flex flex-col md:flex-row md:items-center md:gap-8">
               <div>
-                <label className="text-sm font-medium text-gray-500">Skill Name</label>
+                <label className="text-sm font-medium text-gray-500">Current Role</label>
                 <p className="text-gray-800">{item.role}</p>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-500">Skill Level</label>
+                <label className="text-sm font-medium text-gray-500">Company Name</label>
                 <p className="text-black">{item.company}</p>
               </div>
             </div>
