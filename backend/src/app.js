@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middlewares/errorHandler.middleware.js";
+import "./cron/cleanupUnverifiedUsers.js";
 
 const app = express();
 

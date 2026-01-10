@@ -3,30 +3,152 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
+import { generateOTP } from "../utils/generateOTP.js";
+import { sendOTPEmail, sendWelcomeEmail } from "../utils/sendEmail.js";
+
+
 
 export const registerUser = asyncHandler(async (req, res, next) => {
-  const { name, email, password} = req.body;
+  const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
     return next(new apiError(400, "Missing required fields"));
   }
+  
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (req.body.role && req.body.role.toLowerCase() !== 'student') {
-        return next(new apiError(403, "Invalid role assignment"));
-    }
+  if (!emailRegex.test(email)) {
+    return next(new apiError(400, "Invalid email format"));
+  }
 
   const existingUser = await User.findOne({ email });
-  if (existingUser) {
+
+  if (existingUser && existingUser.isEmailVerified) {
     return next(new apiError(400, "User with this email already exists"));
   }
 
-  const user = new User({ name, email, password});
+  if (existingUser && !existingUser.isEmailVerified) {
+    await User.deleteOne({ _id: existingUser._id });
+  }
+
+  const otp = generateOTP();
+  const user = new User({ name, email, password });
+  await user.setEmailOTP(otp);
+
+  try {
+    await sendOTPEmail(email, otp);
+  } catch (error) {
+    return next(
+      new apiError(
+        400,
+        "Email address is invalid or cannot receive emails"
+      )
+    );
+  }
+
   await user.save();
 
   res.status(201).json(
-    new apiResponse(201, "User registered successfully", { user: user.toJSON() })
+    new apiResponse(201, "OTP sent to email for verification", {
+      email
+    })
   );
 });
+
+
+
+export const verifyEmailOTP = asyncHandler(async (req, res, next) => {
+  const { email, otp } = req.body;
+
+  if (!email || !otp) {
+    return next(new apiError(400, "Email and OTP are required"));
+  }
+
+  const user = await User.findOne({ email }).select("+emailOTP +emailOTPExpires");
+
+  if (!user) {
+    return next(new apiError(404, "User not found"));
+  }
+
+  if (user.isEmailVerified) {
+    return next(new apiError(400, "Email already verified"));
+  }
+
+  if (!user.emailOTP || user.emailOTPExpires < Date.now()) {
+    return next(new apiError(400, "OTP expired"));
+  }
+
+  const isValidOTP = await user.isEmailOTPMatch(otp);
+  if (!isValidOTP) {
+    return next(new apiError(400, "Invalid OTP"));
+  }
+
+  user.isEmailVerified = true;
+  user.clearEmailOTP();
+  await sendWelcomeEmail(user.email, user.name);
+
+  const accessToken = user.generateAccessToken();
+  const refreshToken = user.generateRefreshToken();
+  user.refreshToken = refreshToken;
+
+  await user.save({ validateBeforeSave: false });
+
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "Lax"
+  };
+
+  res
+    .status(200)
+    .cookie("accessToken", accessToken, {
+      ...options,
+      maxAge: 1000 * 60 * 15
+    })
+    .cookie("refreshToken", refreshToken, {
+      ...options,
+      maxAge: 1000 * 60 * 60 * 24 * 7
+    })
+    .json(
+      new apiResponse(200, "Email verified and login successful", {
+        user: user.toJSON(),
+        accessToken,
+        refreshToken
+      })
+    );
+});
+
+
+
+export const resendEmailOTP = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return next(new apiError(400, "Email is required"));
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return next(new apiError(404, "User not found"));
+  }
+
+  if (user.isEmailVerified) {
+    return next(new apiError(400, "Email already verified"));
+  }
+
+  const otp = generateOTP();
+  await user.emailOTP(otp);
+
+  await user.save({ validateBeforeSave: false });
+  await sendOTPEmail(email, otp);
+
+  res.status(200).json(
+    new apiResponse(200, "OTP resent successfully")
+  );
+});
+
+
 
 export const loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
@@ -36,144 +158,163 @@ export const loginUser = asyncHandler(async (req, res, next) => {
   }
 
   const user = await User.findOne({ email }).select("+password");
+
   if (!user || !(await user.isPasswordMatch(password))) {
     return next(new apiError(401, "Invalid email or password"));
   }
 
+  if (!user.isEmailVerified) {
+    return next(new apiError(403, "Please verify your email before login"));
+  }
+
   const accessToken = user.generateAccessToken();
   const refreshToken = user.generateRefreshToken();
+
   user.refreshToken = refreshToken;
   await user.save({ validateBeforeSave: false });
 
-    const options = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "Lax"
-    };
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "Lax"
+  };
 
-    res
+  res
     .status(200)
-    .cookie("accessToken", accessToken, { 
-        ...options, 
-        maxAge: 1000 * 60 * 15 // 15 mins 
+    .cookie("accessToken", accessToken, {
+      ...options,
+      maxAge: 1000 * 60 * 15
     })
-    .cookie("refreshToken", refreshToken, { 
-        ...options, 
-        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days 
+    .cookie("refreshToken", refreshToken, {
+      ...options,
+      maxAge: 1000 * 60 * 60 * 24 * 7
     })
     .json(
-        new apiResponse(200, "Login successful", { 
-            user: user.toJSON(), 
-            accessToken, 
-            refreshToken 
-        })
+      new apiResponse(200, "Login successful", {
+        user: user.toJSON(),
+        accessToken,
+        refreshToken
+      })
     );
 });
 
 
 
-export const getUserProfile = asyncHandler(async (req, res, next) => {
+export const getUserProfile = asyncHandler(async (req, res) => {
   res.status(200).json(
-    new apiResponse(200, "User profile fetched successfully", { user: req.user.toJSON() })
+    new apiResponse(200, "User profile fetched successfully", {
+      user: req.user.toJSON()
+    })
   );
-  return res;
 });
 
 
 
-export const logoutUser = asyncHandler(async (req, res, next) => {
-    await User.findByIdAndUpdate(req.user._id, { $unset: { refreshToken: "" } });
+export const logoutUser = asyncHandler(async (req, res) => {
+  await User.findByIdAndUpdate(req.user._id, {
+    $unset: { refreshToken: "" }
+  });
 
-    const options = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "Lax"
-    };
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "Lax"
+  };
 
-    res.clearCookie("accessToken", options);
-    res.clearCookie("refreshToken", options);
+  res.clearCookie("accessToken", options);
+  res.clearCookie("refreshToken", options);
 
-    res.status(200).json(
-        new apiResponse(200, "Logout successful")
-    );
+  res.status(200).json(
+    new apiResponse(200, "Logout successful")
+  );
 });
+
+
 
 export const refreshAccessToken = asyncHandler(async (req, res, next) => {
-    const refreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
-    
-    if (!refreshToken) {
-        return next(new apiError(401, "Refresh token missing"));
-    }
-    
-    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-    const user = await User.findOne({ _id: decoded.id, refreshToken });
-    if (!user) {
-        return next(new apiError(401, "Invalid refresh token"));
-    }
-    
-    const newAccessToken = user.generateAccessToken();
-    const newRefreshToken = user.generateRefreshToken();
-    user.refreshToken = newRefreshToken;
-    await user.save({ validateBeforeSave: false });
+  const refreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
 
-    const options = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "Lax"
-    };
+  if (!refreshToken) {
+    return next(new apiError(401, "Refresh token missing"));
+  }
 
-    res.cookie("accessToken", newAccessToken, options);
-    res.cookie("refreshToken", newRefreshToken, options);
+  const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
 
-    res.status(200).json(
-        new apiResponse(200, "Access token refreshed successfully", { accessToken: newAccessToken, refreshToken: newRefreshToken })
+  const user = await User.findOne({
+    _id: decoded.id,
+    refreshToken
+  });
+
+  if (!user) {
+    return next(new apiError(401, "Invalid refresh token"));
+  }
+
+  const newAccessToken = user.generateAccessToken();
+  const newRefreshToken = user.generateRefreshToken();
+
+  user.refreshToken = newRefreshToken;
+  await user.save({ validateBeforeSave: false });
+
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "Lax"
+  };
+
+  res
+    .cookie("accessToken", newAccessToken, options)
+    .cookie("refreshToken", newRefreshToken, options)
+    .status(200)
+    .json(
+      new apiResponse(200, "Access token refreshed successfully", {
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken
+      })
     );
 });
 
+
+
 export const updateUserProfile = asyncHandler(async (req, res, next) => {
-  const user = req.user;
   const { name } = req.body;
 
   if (!name) {
     return next(new apiError(400, "Missing required fields"));
   }
 
-  user.name = name;
-  await user.save();
+  req.user.name = name;
+  await req.user.save();
 
   res.status(200).json(
-    new apiResponse(200, "User profile updated successfully", { user: user.toJSON() })
+    new apiResponse(200, "User profile updated successfully", {
+      user: req.user.toJSON()
+    })
   );
 });
 
+
+
 export const changeUserPassword = asyncHandler(async (req, res, next) => {
-    const { currentPassword, newPassword } = req.body;
-    
-    if (!currentPassword || !newPassword) {
-        return next(new apiError(400, "Missing required fields"));
-    }
-    if(currentPassword === newPassword) {
-        return next(new apiError(400, "New password must be different from current password"));
-    }
+  const { currentPassword, newPassword } = req.body;
 
-    const user = await User.findById(req.user._id).select("+password");
+  if (!currentPassword || !newPassword) {
+    return next(new apiError(400, "Missing required fields"));
+  }
 
-    if (!(await user.isPasswordMatch(currentPassword))) {
-        return next(new apiError(401, "Current password is incorrect"));
-    }
+  if (currentPassword === newPassword) {
+    return next(new apiError(400, "New password must be different from current password"));
+  }
 
-    user.password = newPassword;
-    await user.save();
+  const user = await User.findById(req.user._id).select("+password");
 
-    res.status(200).json(
-        new apiResponse(200, "Password changed successfully")
-    );
+  if (!(await user.isPasswordMatch(currentPassword))) {
+    return next(new apiError(401, "Current password is incorrect"));
+  }
+
+  user.password = newPassword;
+  await user.save();
+
+  res.status(200).json(
+    new apiResponse(200, "Password changed successfully")
+  );
 });
-
-// 1. registerUser
-// 2. loginUser
-// 3. getUserProfile
-// 4. logoutUser
-// 5. refreshAccessToken
-// 6. updateUserProfile
-// 7. changeUserPassword
