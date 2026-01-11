@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 const userSchema = new mongoose.Schema(
   {
@@ -39,6 +40,16 @@ const userSchema = new mongoose.Schema(
 
     refreshToken: {
       type: String
+    },
+
+    passwordResetToken: {
+      type: String,
+      select: false
+    },
+    
+    passwordResetExpires: {
+      type: Date,
+      select: false
     },
 
     isEmailVerified: {
@@ -106,14 +117,20 @@ userSchema.methods.generateRefreshToken = function () {
   );
 };
 
-userSchema.methods.generateResetPasswordToken = function () {
-  return jwt.sign(
-    { id: this._id },
-    process.env.JWT_RESET_PASSWORD_SECRET,
-    { expiresIn: process.env.JWT_RESET_PASSWORD_EXPIRES_IN }
-  );
+
+userSchema.methods.generatePasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString("hex");
+
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+
+  return resetToken;
 };
 
-userSchema.index({isEmailVerifieda: 1, createdAt: 1});
+userSchema.index({isEmailVerified: 1, createdAt: 1});
 
 export default mongoose.model("User", userSchema);
