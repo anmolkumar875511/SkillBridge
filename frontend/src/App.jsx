@@ -16,7 +16,7 @@ function App() {
   return (
     <div>
       <Navbar />
-      <main className="no-scrollbar overflow-y-auto h-screen pt-30">
+      <main className="no-scrollbar overflow-y-auto h-screen">
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
