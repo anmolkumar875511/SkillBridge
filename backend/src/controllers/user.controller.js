@@ -4,7 +4,8 @@ import User from "../models/user.model.js";
 import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
 import { generateOTP } from "../utils/generateOTP.js";
-import { sendOTPEmail, sendWelcomeEmail } from "../utils/sendEmail.js";
+import { sendOTPEmail, sendWelcomeEmail, sendPasswordResetEmail } from "../utils/sendEmail.js";
+import crypto from "crypto";
 
 
 
@@ -316,5 +317,75 @@ export const changeUserPassword = asyncHandler(async (req, res, next) => {
 
   res.status(200).json(
     new apiResponse(200, "Password changed successfully")
+  );
+});
+
+
+
+export const forgotPassword = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return next(new apiError(400, "Email is required"));
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return next(new apiError(404, "You are not registered with us"));
+  }
+
+  const resetToken = user.generatePasswordResetToken();
+  await user.save({ validateBeforeSave: false });
+
+  const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+
+  try {
+    await sendPasswordResetEmail(user.email, resetUrl);
+
+    res.status(200).json(
+      new apiResponse(200, "Password reset email sent successfully")
+    );
+  } catch (error) {
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    return next(new apiError(500, "Failed to send password reset email"));
+  }
+});
+
+
+
+export const resetPassword = asyncHandler(async (req, res, next) => {
+  const { token } = req.params;
+  const { newPassword } = req.body;
+
+  if (!newPassword) {
+    return next(new apiError(400, "New password is required"));
+  }
+
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(token)
+    .digest("hex");
+
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() }
+  }).select("+password");
+
+  if (!user) {
+    return next(new apiError(400, "Invalid or expired reset token"));
+  }
+
+  user.password = newPassword;
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+
+  await user.save();
+
+  res.status(200).json(
+    new apiResponse(200, "Password reset successful")
   );
 });

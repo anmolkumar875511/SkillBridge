@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
+import asyncHandler from "./asyncHandler.js";
 
-export const createDefaultAdmin = async () => {
+export const createDefaultAdmin = asyncHandler(async () => {
   try {
     const existingAdmin = await User.findOne({ role: 'admin' });
     if (existingAdmin) {
@@ -11,7 +12,7 @@ export const createDefaultAdmin = async () => {
     const defaultAdmin = new User({
       name: 'Default Admin',
       email: 'admin@skillbridge.com',
-      password: 'admin123', // In a real-world scenario, ensure to hash passwords
+      password: 'admin123',
       role: 'admin'
     });
 
@@ -21,4 +22,4 @@ export const createDefaultAdmin = async () => {
   } catch (error) {
     console.error('Failed to create default admin:', error);
   }
-}
+});

@@ -136,3 +136,60 @@ export const sendWelcomeEmail = async (to, name) => {
     `
   });
 };
+
+
+export const sendPasswordResetEmail = async (to, resetLink) => {
+  await transporter.sendMail({
+    from: `"SkillBridge" <${process.env.EMAIL_USER}>`,
+    to,
+    subject: "SkillBridge Password Reset",
+    html: `
+      <div style="background:#f8fafc;padding:30px;font-family:Arial,sans-serif">
+        <div style="max-width:520px;margin:auto;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.08)">
+          
+          <div style="text-align:center;padding:24px">
+            <img src="cid:skillbridge-logo" alt="SkillBridge" style="height:70px" />
+          </div>
+
+          <div style="padding:0 32px 32px;color:#0f172a">
+            <h2 style="color:#1e3a8a;margin-bottom:8px">
+              Password Reset Request
+            </h2>
+
+            <p style="font-size:15px;line-height:1.6">
+              We received a request to reset your SkillBridge password.  
+              Click the button below to proceed.
+            </p>
+
+            <div style="text-align:center;margin:28px 0">
+              <a href="${resetLink}"
+                style="
+                  background:linear-gradient(90deg,#1e3a8a,#f97316);
+                  color:#ffffff;
+                  padding:12px 28px;
+                  border-radius:999px;
+                  text-decoration:none;
+                  font-weight:bold;
+                  display:inline-block;
+                ">
+                Reset Password
+              </a>
+            </div>
+
+            <p style="font-size:14px;color:#475569">
+              If you did not request a password reset, please ignore this email.  
+              Your password will remain unchanged.
+            </p>
+
+            <hr style="margin:24px 0;border:none;border-top:1px solid #e5e7eb" />
+
+            <p style="font-size:13px;color:#64748b;text-align:center">
+              © ${new Date().getFullYear()} SkillBridge  
+              <br />Bridging Skills to Success
+            </p>
+          </div>
+        </div>
+      </div>
+    `
+  });
+};
