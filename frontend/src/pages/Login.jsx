@@ -162,6 +162,10 @@ const Login = () => {
                             >
                                 {state === "Sign Up" ? "Login" : "Sign Up"}
                             </span>
+                            {state === "Login"? <span onClick={()=> navigate("/forgetpassword")} className='ml-2 font-semibold cursor-pointer hover:underline text-blue-500'>
+                                forget Password ?
+                            </span> : <span></span>}
+                            
                         </p>
                     </form>
                 ) : (
@@ -189,7 +193,7 @@ const Login = () => {
                                 loading ? 'bg-green-300 cursor-not-allowed' : 'bg-green-500 hover:opacity-90'
                             }`}
                         >
-                            {loading ? "Verifying..." : "Verify & Register"}
+                            {loading ? "Processing..." : "Verify & Register"}
                         </button>
 
                         <div className="flex items-center justify-between text-sm">

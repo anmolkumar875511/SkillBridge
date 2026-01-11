@@ -139,7 +139,7 @@ export const resendEmailOTP = asyncHandler(async (req, res, next) => {
   }
 
   const otp = generateOTP();
-  await user.emailOTP(otp);
+  user.emailOTP = otp
 
   await user.save({ validateBeforeSave: false });
   await sendOTPEmail(email, otp);

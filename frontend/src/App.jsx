@@ -9,6 +9,8 @@ import Dashboard from './pages/Dashboard'
 import ProtectedRoute from './pages/ProtectedRoute.jsx'
 import ConfirmResume from './pages/ConfirmResume.jsx'
 import Resume from './pages/Resume.jsx'
+import Forgetpassw from './pages/Forgetpassw.jsx'
+import Resetpassw from './pages/Resetpassw.jsx'
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/Login" element={<Login />} />
+          <Route path="/forgetpassword" element={<Forgetpassw/>}/>
+          <Route path='/reset-password/:token' element={<Resetpassw/>} />
           {/* Protected Routes */}
           <Route element={<ProtectedRoute/>}>
           <Route path='/Dashboard' element={<Dashboard/>}/>
