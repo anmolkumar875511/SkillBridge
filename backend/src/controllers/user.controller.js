@@ -75,7 +75,9 @@ export const verifyEmailOTP = asyncHandler(async (req, res, next) => {
     return next(new apiError(400, "Email already verified"));
   }
 
-  if (!user.emailOTP || user.emailOTPExpires < Date.now()) {
+  if (!user.emailOTP || user.emailOTPExpires.getTime() < Date.now()) {
+    const currentTime = Date.now();
+    console.log("Expired OTP:", user.emailOTPExpires.getTime(), "Current Time:", currentTime);
     return next(new apiError(400, "OTP expired"));
   }
 
@@ -139,7 +141,7 @@ export const resendEmailOTP = asyncHandler(async (req, res, next) => {
   }
 
   const otp = generateOTP();
-  user.emailOTP = otp
+  await user.setEmailOTP(otp);
 
   await user.save({ validateBeforeSave: false });
   await sendOTPEmail(email, otp);
