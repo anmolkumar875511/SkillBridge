@@ -18,7 +18,7 @@ const Forgetpassw = () => {
     }
   return (
     <div className="min-h-[calc(100vh-160px)] flex items-center justify-center bg-gray-50 px-4">
-  <form className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg space-y-6">
+  <form onSubmit={submithandler} className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg space-y-6">
     
     <p className="text-3xl font-semibold text-center text-gray-800">
       Forgot Password
