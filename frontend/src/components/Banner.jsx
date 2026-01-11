@@ -5,7 +5,7 @@ const Banner = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 md:px-6 lg:px-8 overflow-hidden">
+    <div className="w-full max-w-7xl mx-auto px-4 md:px-6 lg:px-8 overflow-hidden py-12 mt-20">
       {/* Container with logo-inspired theme */}
       <div className="relative overflow-hidden rounded-3xl 
         bg-linear-to-br from-[#f5faff] via-[#eef6ff] to-[#fff7ed]
