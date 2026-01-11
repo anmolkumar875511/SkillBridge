@@ -163,7 +163,7 @@ const Login = () => {
                                 {state === "Sign Up" ? "Login" : "Sign Up"}
                             </span>
                             {state === "Login"? <span onClick={()=> navigate("/forgetpassword")} className='ml-2 font-semibold cursor-pointer hover:underline text-blue-500'>
-                                forget Password ?
+                                Forget Password?
                             </span> : <span></span>}
                             
                         </p>
