@@ -2,7 +2,10 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middlewares/errorHandler.middleware.js";
-import "./cron/cleanupUnverifiedUsers.js";
+import { runCron } from "./cron/adzuna.cron.js";
+import "./cron/cleanupUnverifiedUsers.cron.js";
+
+runCron();
 
 const app = express();
 
