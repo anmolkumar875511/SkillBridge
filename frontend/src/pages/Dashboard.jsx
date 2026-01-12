@@ -7,7 +7,7 @@ const Dashboard = () => {
   return (
     <div>
        <h1 className="text-2xl font-semibold text-gray-800">
-            Hello {user?.name}
+            Hello {user.name}       
           </h1>
     </div>
   )

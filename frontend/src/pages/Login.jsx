@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import { AuthContext } from '../context/AuthContext'
+import { toast } from 'sonner'
 
 const Login = () => {
     const [state, setState] = useState("Sign Up"); 
@@ -34,31 +35,32 @@ const Login = () => {
     }, [state, timer]);
 
     const resendotp = async () => {
-        setLoading(true);
-        try {
-            await axiosInstance.post("/user/resend-otp", { email });
-            alert("OTP Resent");
-            setTimer(60);
-            setCanResend(false);
-        } catch (error) {
-            alert("Failed to resend OTP");
-        } finally {
-            setLoading(false);
-        }
+        toast.promise(axiosInstance.post("/user/resend-otp", { email }),{
+            loading: "OTP Resending....",
+            success: (res) =>{
+                setTimer(60)
+                setCanResend(false)
+                return "OTP Resent Successfully"
+            },
+            error: (err) =>{
+                return "Failed to resend OTP"
+            }
+        })
     };
 
     const verifyemail = async (e) => {
         e.preventDefault();
-        setLoading(true);
-        try {
-            await axiosInstance.post("/user/verify-email", { email, otp });
-            await fetchUser();
-            navigate(`/Dashboard`);
-        } catch (error) {
-            alert(error.response?.data?.message || "Invalid OTP");
-        } finally {
-            setLoading(false);
-        }
+        toast.promise(axiosInstance.post("/user/verify-email", { email, otp }),{
+            loading: "Verifying Credential...",
+            success: (res) =>{
+                fetchUser()
+                navigate(`/Dashboard`)
+                return "Verification Successful"
+            },
+            error: (err) =>{
+                 return "Invalid OTP"
+            }
+        })
     };
 
     const submitHandler = async (e) => {
@@ -68,6 +70,7 @@ const Login = () => {
             if (state === "Sign Up") {
                 await axiosInstance.post("/user/register", { name, email, password });
                 setState("Middle"); 
+                toast.success("OTP Sent To your Email")
             } else {
                 await axiosInstance.post(
                     "/user/login",
@@ -75,14 +78,13 @@ const Login = () => {
                     { withCredentials: true }
                 );
                 await fetchUser();
+                toast.success("Login Successfully")
                 navigate(`/Dashboard`);
             }
         } catch (error) {
             console.log(error);
-            alert(error.response?.data?.message || "Something Went Wrong");
-        } finally {
-            setLoading(false);
-        }
+            toast.error(error.response?.data?.message || "Something Went Wrong");
+        } 
     };
 
     return (
@@ -90,11 +92,7 @@ const Login = () => {
             <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 space-y-5 relative overflow-hidden">
                 
                 {/* Visual Loading Bar at the top of the card */}
-                {loading && (
-                    <div className="absolute top-0 left-0 w-full h-1 bg-blue-100 overflow-hidden">
-                        <div className="w-full h-full bg-blue-500 animate-progress"></div>
-                    </div>
-                )}
+                
 
                 {state !== "Middle" ? (
                     <form onSubmit={submitHandler} className="space-y-5">
@@ -137,35 +135,22 @@ const Login = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`w-full py-3 text-white font-semibold rounded-lg transition flex items-center justify-center ${
-                                loading ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-500 hover:opacity-90'
-                            }`}
+                            className={`w-full py-3 text-white bg-blue-600 font-semibold rounded-lg transition flex items-center justify-center`}
                         >
-                            {loading ? (
-                                <span className="flex items-center">
-                                    <svg className="animate-spin h-5 w-5 mr-2 text-white" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    Processing...
-                                </span>
-                            ) : (
-                                state === "Sign Up" ? "Create Account" : "Login"
-                            )}
+                            {state === "Sign Up" ? "Create Account" : "Login"}
                         </button>
 
                         <p className="text-center text-gray-600 text-sm">
                             {state === "Sign Up" ? "Already Have Account?" : "Don't Have Account?"}
                             <span
-                                onClick={() => !loading && setState(state === "Sign Up" ? "Login" : "Sign Up")}
-                                className={`ml-2 font-semibold cursor-pointer hover:underline ${loading ? 'text-gray-400' : 'text-blue-500'}`}
+                                onClick={() =>  setState(state === "Sign Up" ? "Login" : "Sign Up")}
+                                className={`ml-2 font-semibold cursor-pointer hover:underline text-blue-500`}
                             >
                                 {state === "Sign Up" ? "Login" : "Sign Up"}
                             </span>
                             {state === "Login"? <span onClick={()=> navigate("/forgetpassword")} className='ml-2 font-semibold cursor-pointer hover:underline text-blue-500'>
                                 Forget Password?
-                            </span> : <span></span>}
-                            
+                            </span> : <span></span>}    
                         </p>
                     </form>
                 ) : (
@@ -188,12 +173,9 @@ const Login = () => {
 
                         <button
                             type="submit"
-                            disabled={loading}
-                            className={`w-full py-3 text-white font-semibold rounded-lg transition flex items-center justify-center ${
-                                loading ? 'bg-green-300 cursor-not-allowed' : 'bg-green-500 hover:opacity-90'
-                            }`}
+                            className={`w-full py-3 text-white font-semibold rounded-lg transition flex items-center justify-center`}
                         >
-                            {loading ? "Processing..." : "Verify & Register"}
+                            Verify & Register
                         </button>
 
                         <div className="flex items-center justify-between text-sm">
@@ -203,10 +185,10 @@ const Login = () => {
                             <button
                                 type="button"
                                 onClick={resendotp}
-                                disabled={!canResend || loading}
-                                className={`font-semibold ${canResend && !loading ? 'text-blue-500 hover:underline' : 'text-gray-300 cursor-not-allowed'}`}
+                                disabled={!canResend}
+                                className={`font-semibold`}
                             >
-                                {loading ? "Sending..." : "Resend OTP"}
+                                Resend OTP
                             </button>
                         </div>
                     </form>

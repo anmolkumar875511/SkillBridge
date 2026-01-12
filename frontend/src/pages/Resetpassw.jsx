@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axiosInstance from '../axiosInstance'
 import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 
 const Resetpassw = () => {
     const [newPassword, setPassword] = useState("")
@@ -11,14 +12,16 @@ const Resetpassw = () => {
     const submithandler = async (e) =>{
         e.preventDefault()
         if(newPassword === confpassword){
-            try {
-              await axiosInstance.post(`/user/reset-password/${token}`,{newPassword})
-              alert("Your Password Has been changed Successfully")
-              navigate("/Login")  
-            } catch (error) {
-                alert("error Occured")
-            }
-            
+            toast.promise(axiosInstance.post(`/user/reset-password/${token}`,{newPassword}),{
+              loading: "Processing....",
+              success: (res) =>{
+                return "Your Password Has been changed Successfully"
+              },
+              error: (err) =>{
+                console.log(err)
+                return err.message
+              }
+            })   
         }
     }
 

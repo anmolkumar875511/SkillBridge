@@ -3,6 +3,7 @@ import { AuthContext } from '../context/AuthContext.jsx'
 import axiosInstance from '../axiosInstance.js'
 import { useNavigate } from 'react-router-dom'
 import ConfirmResume from './ConfirmResume.jsx'
+import { toast } from 'sonner'
 
 const Resume = () => {
   const { user } = useContext(AuthContext)
@@ -17,30 +18,30 @@ const Resume = () => {
 
   const handleUpload = async () => {
     if (!file) {
-      alert("Please Upload the pdf file to get roadmap")
+      toast.warning("Please Upload the pdf file to get roadmap")
       return
     }
     setLoading(true)
     const formData = new FormData()
     formData.append("resume", file)
 
-    try {
-      const res = await axiosInstance.post("/resume/upload", formData)
-      alert("Data Parsed Successfully!!")
-      const id = res.data.data.resumeId
-      setResumeId(id)
-      setIsContent(true)
-      
 
-      localStorage.setItem("lastResumeId", id)
-    } catch (error) {
-      if(error.status == 500){
-        alert("Please Check Your Resume")
+    toast.promise(axiosInstance.post("/resume/upload", formData),{
+      loading: "Parsing Your Resume...",
+      success: (res) => {
+         const id = res.data.data.resumeId
+         setResumeId(id)
+         setIsContent(true)
+         localStorage.setItem("lastResumeId", id);
+         return "Resume Parsed successfully!"
+      },
+      error: (err) =>{
+        if (err.status === 500){
+           return "Please Check Your Resume Format"
+        }
+        return "Something went wrong Please try again"
       }
-      console.log(error)
-    } finally{
-        setLoading(false)
-    }
+    })
   }
 
   useEffect(()=>{
@@ -52,11 +53,6 @@ const Resume = () => {
 
     <div className="min-h-[calc(100vh-8rem)] px-6 py-8 bg-gray-50">
       <div className="max-w-5xl mx-auto space-y-8">
-        {loading && (
-  <div className="absolute top-0 left-0 h-1 bg-[#F59E0B] animate-pulse z-60" 
-       style={{ width: '100%' }}>
-  </div>
-)}
         
         <div className="space-y-2">
           <h1 className="text-2xl font-semibold text-gray-800">

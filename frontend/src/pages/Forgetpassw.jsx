@@ -1,20 +1,22 @@
 import React, { useState } from 'react'
 import axiosInstance from '../axiosInstance'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 const Forgetpassw = () => {
     const [email,setEmail] = useState("")
     const navigate = useNavigate()
     const submithandler = async (e) =>{
         e.preventDefault()
-        try {
-         await axiosInstance.post("/user/forgot-password",{email})
-         alert("Reset Password Link sent to Your email")
-         navigate("/")
-        } catch (error) {
-            alert("Error Occured")
-        }
-         
+        toast.promise(axiosInstance.post("/user/forgot-password",{email}),{
+          loading: "Checking Crendentials...",
+          success: (res) =>{
+              return "Reset Password Link Sent To Your Email"
+          },
+          error: (err) =>{
+            return "Error Occured"
+          }
+        })   
     }
   return (
     <div className="min-h-[calc(100vh-160px)] flex items-center justify-center bg-gray-50 px-4">

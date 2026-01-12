@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import ProtectedRoute from './pages/ProtectedRoute.jsx'
 import ConfirmResume from './pages/ConfirmResume.jsx'
+import {Toaster} from 'sonner'
 import Resume from './pages/Resume.jsx'
 import Forgetpassw from './pages/Forgetpassw.jsx'
 import Resetpassw from './pages/Resetpassw.jsx'
@@ -16,7 +17,8 @@ function App() {
   return (
     <div>
       <Navbar />
-      <main className="no-scrollbar overflow-y-auto h-screen">
+      <Toaster richColors position="top-center" />
+      <main className="no-scrollbar overflow-y-auto h-screen pt-30">
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
