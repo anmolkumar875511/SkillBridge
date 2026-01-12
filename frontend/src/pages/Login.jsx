@@ -87,114 +87,164 @@ const Login = () => {
         } 
     };
 
+     const colors = {
+  blue: "#2A6FA8",      // lighter, softer blue
+  orange: "#F6A04D",    // lighter orange
+  lightBlue: "#e7f0f7"
+};
+
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-            <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 space-y-5 relative overflow-hidden">
-                
-                {/* Visual Loading Bar at the top of the card */}
-                
+      <div className="min-h-screen flex items-center justify-center bg-[#fafbfc] px-4 animate-fade-in">
+      {/* Decorative Background Elements */}
+      <div className="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] right-[-5%] w-100 h-100 rounded-full opacity-[0.03]" style={{ backgroundColor: colors.blue }} />
+        <div className="absolute bottom-[-10%] left-[-5%] w-75 h-75 rounded-full opacity-[0.05]" style={{ backgroundColor: colors.orange }} />
+      </div>
 
-                {state !== "Middle" ? (
-                    <form onSubmit={submitHandler} className="space-y-5">
-                        <p className="text-2xl font-bold text-center text-gray-800">
-                            {state === "Sign Up" ? "Create Account" : "Login"}
-                        </p>
-
-                        {state === "Sign Up" && (
-                            <input
-                                type="text"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                placeholder="Enter Your Name"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-50"
-                                required
-                                disabled={loading}
-                            />
-                        )}
-
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Enter Your Email"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-50"
-                            required
-                            disabled={loading}
-                        />
-
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter your Password"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-50"
-                            required
-                            disabled={loading}
-                        />
-
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className={`w-full py-3 text-white bg-blue-600 font-semibold rounded-lg transition flex items-center justify-center`}
-                        >
-                            {state === "Sign Up" ? "Create Account" : "Login"}
-                        </button>
-
-                        <p className="text-center text-gray-600 text-sm">
-                            {state === "Sign Up" ? "Already Have Account?" : "Don't Have Account?"}
-                            <span
-                                onClick={() =>  setState(state === "Sign Up" ? "Login" : "Sign Up")}
-                                className={`ml-2 font-semibold cursor-pointer hover:underline text-blue-500`}
-                            >
-                                {state === "Sign Up" ? "Login" : "Sign Up"}
-                            </span>
-                            {state === "Login"? <span onClick={()=> navigate("/forgetpassword")} className='ml-2 font-semibold cursor-pointer hover:underline text-blue-500'>
-                                Forget Password?
-                            </span> : <span></span>}    
-                        </p>
-                    </form>
-                ) : (
-                    <form onSubmit={verifyemail} className="space-y-5">
-                        <div className="text-center">
-                            <p className="text-2xl font-bold text-gray-800">Verify Email</p>
-                            <p className="text-sm text-gray-500 mt-2">Enter the 6-digit code sent to your email</p>
-                        </div>
-
-                        <input
-                            type="text"
-                            maxLength="6"
-                            value={otp}
-                            onChange={(e) => setOtp(e.target.value)}
-                            placeholder="000000"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-center text-2xl tracking-widest disabled:bg-gray-50"
-                            required
-                            disabled={loading}
-                        />
-
-                        <button
-                            type="submit"
-                            className={`w-full py-3 text-white font-semibold rounded-lg transition flex items-center justify-center`}
-                        >
-                            Verify & Register
-                        </button>
-
-                        <div className="flex items-center justify-between text-sm">
-                            <p className="text-gray-600">
-                                {timer > 0 ? `Resend in ${timer}s` : "Didn't get code?"}
-                            </p>
-                            <button
-                                type="button"
-                                onClick={resendotp}
-                                disabled={!canResend}
-                                className={`font-semibold`}
-                            >
-                                Resend OTP
-                            </button>
-                        </div>
-                    </form>
-                )}
-            </div>
+      <div className="w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/10 p-10 space-y-8 relative overflow-hidden border border-gray-100 z-10">
+        
+        {/* Top Brand Accent */}
+        <div className="absolute top-0 left-0 w-full h-2 flex">
+          <div className="flex-1" style={{ backgroundColor: colors.blue }} />
+          <div className="flex-1" style={{ backgroundColor: colors.orange }} />
         </div>
+
+        {state !== "Middle" ? (
+          <form onSubmit={submitHandler} className="space-y-6">
+            <div className="text-center space-y-2">
+              <h2 className="text-3xl font-black tracking-tight text-gray-800">
+                {state === "Sign Up" ? "Create Account" : "Welcome Back"}
+              </h2>
+              <p className="text-gray-400 text-sm font-medium uppercase tracking-widest">
+                {state === "Sign Up" ? "Join the bridge to success" : "Login to your roadmap"}
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {state === "Sign Up" && (
+                <div className="group">
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Full Name"
+                    className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-orange-400 focus:bg-white transition-all"
+                    style={{ color: colors.blue }}
+                    required
+                  />
+                </div>
+              )}
+
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email Address"
+                className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-orange-400 focus:bg-white transition-all"
+                style={{ color: colors.blue }}
+                required
+              />
+
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-orange-400 focus:bg-white transition-all"
+                style={{ color: colors.blue }}
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-4 text-white font-black rounded-2xl transition-all shadow-xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center tracking-wider"
+              style={{ backgroundColor: colors.blue, boxShadow: `0 10px 20px -5px ${colors.blue}44` }}
+            >
+              {state === "Sign Up" ? "GET STARTED" : "LOGIN NOW"}
+            </button>
+
+            <div className="space-y-3 pt-2">
+              <p className="text-center text-gray-500 text-sm font-medium">
+                {state === "Sign Up" ? "Already have an account?" : "Don't have an account?"}
+                <span
+                  onClick={() => setState(state === "Sign Up" ? "Login" : "Sign Up")}
+                  className="ml-2 font-bold cursor-pointer hover:underline"
+                  style={{ color: colors.orange }}
+                >
+                  {state === "Sign Up" ? "Login" : "Sign Up"}
+                </span>
+              </p>
+              
+              {state === "Login" && (
+                <div className="text-center">
+                  <span 
+                    onClick={() => navigate("/forgetpassword")} 
+                    className="text-xs font-bold uppercase tracking-tighter cursor-pointer hover:opacity-70 transition-opacity"
+                    style={{ color: colors.blue }}
+                  >
+                    Forgot Password?
+                  </span>
+                </div>
+              )}
+            </div>
+          </form>
+        ) : (
+          <form onSubmit={verifyemail} className="space-y-8 animate-in fade-in zoom-in duration-300">
+            <div className="text-center space-y-2">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center" style={{ backgroundColor: colors.lightBlue }}>
+                <svg className="w-8 h-8" style={{ color: colors.blue }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <p className="text-3xl font-black text-gray-800 tracking-tight">Verify Email</p>
+              <p className="text-sm text-gray-400 font-medium">We sent a 6-digit code to your inbox</p>
+            </div>
+
+            <input
+              type="text"
+              maxLength="6"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              placeholder="000000"
+              className="w-full px-4 py-5 bg-gray-50 border-2 border-dashed border-gray-200 rounded-3xl focus:outline-none focus:border-orange-400 text-center text-4xl font-black tracking-[1rem] transition-all"
+              style={{ color: colors.blue }}
+              required
+            />
+
+            <button
+              type="submit"
+              className="w-full py-4 text-white font-black rounded-2xl transition-all shadow-xl hover:scale-[1.02] active:scale-[0.98]"
+              style={{ backgroundColor: colors.orange, boxShadow: `0 10px 20px -5px ${colors.orange}44` }}
+            >
+              VERIFY & REGISTER
+            </button>
+
+            <div className="flex flex-col items-center justify-center space-y-4 pt-2">
+              <div className="flex items-center gap-2 text-sm font-bold">
+                <span className="text-gray-400 uppercase tracking-widest">
+                  {timer > 0 ? `Resend available in ${timer}s` : "Didn't get the code?"}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={resendotp}
+                disabled={!canResend}
+                className={`text-sm font-black uppercase tracking-widest transition-all ${!canResend ? 'opacity-30 cursor-not-allowed' : 'hover:scale-105'}`}
+                style={{ color: colors.blue }}
+              >
+                Resend OTP
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
+      `}} />
+    </div>
     );
 };
 
