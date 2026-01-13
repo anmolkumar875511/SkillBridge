@@ -82,7 +82,7 @@ function Navbar() {
             </button>
           ) : (
             <button
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/Login')}
               className="relative px-8 py-3 rounded-2xl font-black text-sm text-white transition-all shadow-xl hover:scale-105 active:scale-95 overflow-hidden group tracking-widest"
               style={{ backgroundColor: colors.blue }}
             >

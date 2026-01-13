@@ -19,7 +19,15 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
-    const { fetchUser } = useContext(AuthContext);
+
+    const { fetchUser, user } = useContext(AuthContext);
+
+  useEffect(() => {
+    // If the context updates and we have a user, leave this page immediately
+    if (user) {
+        navigate("/Dashboard", { replace: true });
+    }
+}, [user, navigate]);
 
     useEffect(() => {
         let interval;
@@ -55,6 +63,7 @@ const Login = () => {
             success: (res) =>{
                 fetchUser()
                 navigate(`/Dashboard`)
+                setState("Login")
                 return "Verification Successful"
             },
             error: (err) =>{
@@ -65,12 +74,12 @@ const Login = () => {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        setLoading(true);
+        const toastId = toast.loading("Processing...");
         try {
             if (state === "Sign Up") {
                 await axiosInstance.post("/user/register", { name, email, password });
                 setState("Middle"); 
-                toast.success("OTP Sent To your Email")
+                toast.success("OTP Sent To your Email",{id:toastId})
             } else {
                 await axiosInstance.post(
                     "/user/login",
@@ -78,12 +87,12 @@ const Login = () => {
                     { withCredentials: true }
                 );
                 await fetchUser();
-                toast.success("Login Successfully")
+                toast.success("Login Successfully",{id:toastId})
                 navigate(`/Dashboard`);
             }
         } catch (error) {
             console.log(error);
-            toast.error(error.response?.data?.message || "Something Went Wrong");
+            toast.error(error.response?.data?.message || "Something Went Wrong",{id:toastId});
         } 
     };
 
