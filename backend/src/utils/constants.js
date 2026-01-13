@@ -30,3 +30,61 @@ export const JOB_CATEGORIES = [
     keywords: ["project manager", "product manager"]
   }
 ];
+
+// utils/constants.js
+
+export const DOMAINS = {
+  tech: [
+    "software",
+    "developer",
+    "engineer",
+    "programming",
+    "it",
+    "data",
+    "cloud",
+    "devops",
+    "ai",
+    "ml",
+    "web",
+    "mobile",
+    "fullstack",
+    "frontend",
+    "backend",
+    "fullstack-developer",
+    "qa",
+  ],
+
+  medical: [
+    "doctor",
+    "nurse",
+    "hospital",
+    "clinical",
+    "pharma",
+    "medical",
+    "healthcare"
+  ],
+
+  law: [
+    "lawyer",
+    "advocate",
+    "legal",
+    "law",
+    "paralegal"
+  ],
+
+  finance: [
+    "finance",
+    "accounting",
+    "bank",
+    "auditor",
+    "investment"
+  ],
+
+  education: [
+    "teacher",
+    "professor",
+    "education",
+    "school",
+    "lecturer"
+  ]
+};

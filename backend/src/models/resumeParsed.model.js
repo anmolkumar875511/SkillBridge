@@ -14,6 +14,27 @@ const resumeParsedSchema = new mongoose.Schema(
       default: 1
     },
 
+    categories: [
+      {
+        name: {
+          type: String,
+          required: true,
+          lowercase: true,
+          trim: true,
+          index: true
+        },
+        confidence: {
+          type: Number,
+          default: 0.7
+        },
+        source: {
+          type: String,
+          enum: ["rule_based", "ai_inferred"],
+          default: "rule_based"
+        }
+      }
+    ],
+
     skills: [
       {
         name: {
@@ -28,7 +49,7 @@ const resumeParsedSchema = new mongoose.Schema(
           default: "beginner"
         },
         confidence: {
-          type: Number, // 0–1
+          type: Number,
           default: 0.7
         },
         source: {
@@ -67,6 +88,7 @@ const resumeParsedSchema = new mongoose.Schema(
         }
       }
     ],
+
     parsedAt: {
       type: Date,
       default: Date.now
@@ -76,11 +98,3 @@ const resumeParsedSchema = new mongoose.Schema(
 );
 
 export default mongoose.model("ResumeParsed", resumeParsedSchema);
-
-// 1. user
-// 2. resumeVersion
-// 3. skills
-// 4. experience
-// 5. education
-// 6. projects
-// 7. parsedAt
