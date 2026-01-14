@@ -40,13 +40,14 @@ function Navbar() {
           {[
             { name: user ? 'Dashboard' : 'Home', path: user ? '/Dashboard' : '/' },
             { name: user ? 'Resume' : 'Contributors', path: user ? '/Resume' : '/contributors' },
+            ...(user ? [{ name: 'Opportunities', path: '/Opportunities' }] : []),
             { name: 'Contact Us', path: '/contact' }
           ].map((link) => (
             <NavLink
               key={link.path}
               to={link.path}
               className={({ isActive }) =>
-                `relative px-5 py-2 rounded-xl text-sm font-bold transition-all duration-300 group
+                `relative px-5 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-all duration-300 group
                 ${isActive 
                   ? 'text-[#115793] bg-[#115793]/5' 
                   : 'text-gray-500 hover:text-[#115793] hover:bg-gray-50'}`

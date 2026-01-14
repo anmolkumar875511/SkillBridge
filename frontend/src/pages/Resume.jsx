@@ -105,7 +105,9 @@ const Resume = () => {
                 htmlFor="file-upload"
                 className="flex items-center justify-between w-full px-4 py-3 bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl cursor-pointer hover:border-orange-400 hover:bg-orange-50/30 transition-all group"
               >
-                <span className="text-sm font-semibold text-gray-500 group-hover:text-orange-600">Select Resume File...</span>
+                <span className={`text-sm font-semibold truncate pr-4 ${file ? 'text-gray-900' : 'text-gray-500 group-hover:text-orange-600'}`}>
+                  {file ? file.name : "Select Resume File..."}
+                </span>
                 <span className="px-3 py-1 text-xs font-bold text-white rounded-lg" style={{ backgroundColor: colors.blue }}>BROWSE</span>
               </label>
             </div>

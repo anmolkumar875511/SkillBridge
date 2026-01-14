@@ -12,6 +12,7 @@ import {Toaster} from 'sonner'
 import Resume from './pages/Resume.jsx'
 import Forgetpassw from './pages/Forgetpassw.jsx'
 import Resetpassw from './pages/Resetpassw.jsx'
+import Contact from './pages/Contact.jsx'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/forgetpassword" element={<Forgetpassw/>}/>
           <Route path='/reset-password/:token' element={<Resetpassw/>} />
+          <Route path='/contact' element={<Contact/>} />
           {/* Protected Routes */}
           <Route element={<ProtectedRoute/>}>
           <Route path='/Dashboard' element={<Dashboard/>}/>
