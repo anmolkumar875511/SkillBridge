@@ -13,7 +13,7 @@ IMPORTANT:
 JSON schema:
 {
   "categories": [
-    { "name": "tech | medical | law | finance | education || other", "confidence": number, "source": "ai_inferred" }
+    { "name": "tech | medical | law | finance | education | design | management | other", "confidence": number, "source": "ai_inferred" }
   ],
   "skills": [
     { "name": "string", "level": "beginner | intermediate | advanced", "confidence": number, "source": "resume | ai_inferred" }

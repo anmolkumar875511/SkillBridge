@@ -1,38 +1,5 @@
 export const DB_NAME="SkillBridge";
 
-export const JOB_CATEGORIES = [
-  {
-    name: "tech",
-    keywords: ["software developer", "frontend", "backend", "full stack"]
-  },
-  {
-    name: "data",
-    keywords: ["data scientist", "data analyst", "machine learning"]
-  },
-  {
-    name: "finance",
-    keywords: ["accountant", "financial analyst", "banking"]
-  },
-  {
-    name: "medical",
-    keywords: ["doctor", "nurse", "medical officer"]
-  },
-  {
-    name: "law",
-    keywords: ["lawyer", "legal associate"]
-  },
-  {
-    name: "design",
-    keywords: ["ui designer", "ux designer", "graphic designer"]
-  },
-  {
-    name: "management",
-    keywords: ["project manager", "product manager"]
-  }
-];
-
-// utils/constants.js
-
 export const DOMAINS = {
   tech: [
     "software",
@@ -86,5 +53,59 @@ export const DOMAINS = {
     "education",
     "school",
     "lecturer"
+  ],
+  
+  design: [
+    "design",
+    "ui",
+    "ux",
+    "graphic",
+    "designer"
+  ],
+
+  management: [
+    "manager",
+    "management",
+    "project",
+    "product",
+    "scrum"
+  ]
+};
+
+
+export const DOMAIN_SKILLS = {
+  tech: [
+    "javascript", "typescript", "react", "node", "aws",
+    "docker", "kubernetes", "sql", "mongodb"
+  ],
+
+  medical: [
+    "patient care", "clinical research", "nursing",
+    "pharmacology", "diagnosis", "medical coding"
+  ],
+
+  law: [
+    "legal research", "drafting", "litigation",
+    "contract law", "compliance"
+  ],
+
+  finance: [
+    "accounting", "auditing", "financial analysis",
+    "taxation", "investment banking"
+  ],
+
+  education: [
+    "curriculum development", "lesson planning",
+    "classroom management", "assessment"
+  ],
+
+  design: [
+    "figma", "adobe", "ui design", "ux research",
+    "wireframing", "prototyping"
+  ],
+
+  management: [
+    "project management", "agile", "scrum",
+    "stakeholder management", "roadmapping"
   ]
 };
