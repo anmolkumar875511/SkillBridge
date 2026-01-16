@@ -1,4 +1,4 @@
-import { queryGroq } from "./groqClient.js";
+import { queryGroq } from "../utils/groqClient.js";
 import { safeJsonParse } from "../utils/safeJsonParse.js";
 import { resumePrompt } from "./resumePrompt.js";
 import { normalizeResumeParsed } from "../utils/normalizeResumeParsed.js";

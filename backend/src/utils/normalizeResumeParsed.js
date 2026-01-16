@@ -10,7 +10,6 @@ const clamp = (n, min = 0, max = 1) =>
   typeof n === "number" ? Math.min(max, Math.max(min, n)) : 0.7;
 
 export const normalizeResumeParsed = (data) => {
-  console.log("Normalizing resume parsed data:", data);
 
   return {
     categories: Array.isArray(data.categories)
