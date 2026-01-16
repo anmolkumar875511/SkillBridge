@@ -2,10 +2,10 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middlewares/errorHandler.middleware.js";
-import { startDomainJobsCron } from "./cron/adzuna.cron.js";
+import { startFindWorkCron } from "./cron/adzuna.cron.js";
 import "./cron/cleanupUnverifiedUsers.cron.js";
 
-startDomainJobsCron();
+startFindWorkCron();
 
 const app = express();
 
@@ -22,6 +22,9 @@ app.use("/api/v1/user", userRoutes);
 
 import resumeRoutes from "./routes/resume.routes.js";
 app.use("/api/v1/resume", resumeRoutes);
+
+import jobIngestRoutes from "./routes/jobIngest.routes.js";
+app.use("/api/v1/ingest", jobIngestRoutes);
 
 app.use(errorHandler);
 

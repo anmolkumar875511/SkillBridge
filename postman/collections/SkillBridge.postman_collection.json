@@ -1,0 +1,416 @@
+{
+  "info": {
+    "_postman_id": "37868ef4-8d1b-4cb4-91ba-2e7d5d7092f7",
+    "name": "SkillBridge",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "user",
+      "item": [
+        {
+          "name": "register",
+          "id": "7c2c4b77-1fed-454f-a6be-04b735755483",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{serverSkillBridge}}/user/register",
+              "host": [
+                "{{serverSkillBridge}}"
+              ],
+              "path": [
+                "user",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "id": "b876c7fb-e9de-4bf5-bc8e-36e020cf4ce1",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{serverSkillBridge}}/user/login",
+              "host": [
+                "{{serverSkillBridge}}"
+              ],
+              "path": [
+                "user",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "refresh-token",
+          "id": "f6f83a8e-4c40-45af-b9c2-8a56888661cc",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{serverSkillBridge}}/user/refresh-token",
+              "host": [
+                "{{serverSkillBridge}}"
+              ],
+              "path": [
+                "user",
+                "refresh-token"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getProfile",
+          "id": "fdb2b69a-3518-439b-9750-132f03ac84c2",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "{{serverSkillBridge}}/user/profile",
+              "host": [
+                "{{serverSkillBridge}}"
+              ],
+              "path": [
+                "user",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "updateProfile",
+          "id": "7a8b155b-c256-4528-bb8a-4742fda62ae0",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "Anmol Shaharwal",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{serverSkillBridge}}/user/profile",
+              "host": [
+                "{{serverSkillBridge}}"
+              ],
+              "path": [
+                "user",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "changePassword",
+          "id": "47c7cef7-9848-420a-9ff4-f5171901fb31",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "currentPassword",
+                  "value": "1234567",
+                  "type": "text"
+                },
+                {
+                  "key": "newPassword",
+                  "value": "12345678",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{serverSkillBridge}}/user/change-password",
+              "host": [
+                "{{serverSkillBridge}}"
+              ],
+              "path": [
+                "user",
+                "change-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logout",
+          "id": "678a8322-cb8a-4f8d-a898-fa868781f6ee",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "{{serverSkillBridge}}/user/logout",
+              "host": [
+                "{{serverSkillBridge}}"
+              ],
+              "path": [
+                "user",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "verify-email",
+          "id": "e48bdad9-03b7-4d41-a7c3-2c7247de92e6",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "email",
+                  "value": "anmolkumarshaharwal@gmail.com",
+                  "type": "text"
+                },
+                {
+                  "key": "otp",
+                  "value": "960750",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{serverSkillBridge}}/user/verify-email",
+              "host": [
+                "{{serverSkillBridge}}"
+              ],
+              "path": [
+                "user",
+                "verify-email"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "resend-otp",
+          "id": "57d87f0a-e7c9-4073-8f74-8a0da9acfcee",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "email",
+                  "value": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{serverSkillBridge}}/user/resend-otp",
+              "host": [
+                "{{serverSkillBridge}}"
+              ],
+              "path": [
+                "user",
+                "resend-otp"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "reset-password",
+          "id": "92245cdf-7b83-4147-b357-5be161705c3e",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "newPassword",
+                  "value": "1234321",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{serverSkillBridge}}/user/reset-password/",
+              "host": [
+                "{{serverSkillBridge}}"
+              ],
+              "path": [
+                "user",
+                "reset-password",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "forgot-password",
+          "id": "0532deb1-d7d9-46de-83dd-8ed94ab39db9",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "email",
+                  "value": "anmolkumarshaharwal@gmail.com",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{serverSkillBridge}}/user/forgot-password",
+              "host": [
+                "{{serverSkillBridge}}"
+              ],
+              "path": [
+                "user",
+                "forgot-password"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "fd2ac7e8-4c29-405d-80e4-02e3f24f4d91"
+    },
+    {
+      "name": "resume",
+      "item": [
+        {
+          "name": "upload",
+          "id": "efa79020-f3fb-4b0f-8f2b-9b7423932d4c",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "{{serverSkillBridge}}/resume/parse",
+              "host": [
+                "{{serverSkillBridge}}"
+              ],
+              "path": [
+                "resume",
+                "parse"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get",
+          "id": "7cc079a9-c894-4691-9b1a-629ae3ff4cc9",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{serverSkillBridge}}/resume/695bba9cf4341d9f8d1ee71c",
+              "host": [
+                "{{serverSkillBridge}}"
+              ],
+              "path": [
+                "resume",
+                "695bba9cf4341d9f8d1ee71c"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update",
+          "id": "9afcdcd4-7be2-481f-925e-4a835c9a6404",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "        \"projects\": [\n            {\n                \"title\": \"personal projects hospital management system2024\",\n                \"description\": \" a full-stack hospital record management system focusing on appointments, patient data, and admin workflows. -tools: html, css, bootstrap, flask, sqlalchemy, sqlite3, jinja -designed backend logic, database schema, and responsive ui for hospital operations. the caravan chronicle2024 a web-based travel grievance platform. contributed to backend development, rest api routes and database integration. -tools: html, css, javascript, node.js, express.js, multer, mongodb atlas -implemented secure file uploads, backend logic, and cloud database connectivity.\",\n                \"_id\": \"695bba9cf4341d9f8d1ee71e\"\n            }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{serverSkillBridge}}/resume/695bba9cf4341d9f8d1ee71c",
+              "host": [
+                "{{serverSkillBridge}}"
+              ],
+              "path": [
+                "resume",
+                "695bba9cf4341d9f8d1ee71c"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "ad5cb75c-7bb5-4466-8dbb-20bc7ada40eb"
+    },
+    {
+      "name": "ingest",
+      "item": [
+        {
+          "name": "findwork",
+          "id": "7b499821-7632-4c18-b9ba-c1d13897c5c6",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{serverSkillBridge}}/api/v1/ingest/findwork?keyword=software%20developer",
+              "host": [
+                "{{serverSkillBridge}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "ingest",
+                "findwork"
+              ],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "software%20developer",
+                  "uuid": "9b02bce9-8d41-4abc-9e27-ec06753f8e47"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "e934240d-f883-40f5-9ecb-bb8d623aef33"
+    }
+  ]
+}

@@ -13,6 +13,7 @@ export const createDefaultAdmin = asyncHandler(async () => {
       name: 'Default Admin',
       email: 'admin@skillbridge.com',
       password: 'admin123',
+      isEmailVerified: true,
       role: 'admin'
     });
 
