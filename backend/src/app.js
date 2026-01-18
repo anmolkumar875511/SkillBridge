@@ -29,6 +29,9 @@ app.use("/api/v1/ingest", jobIngestRoutes);
 import skillGapRoutes from "./routes/skillGap.routes.js";
 app.use("/api/v1/skillgap", skillGapRoutes);
 
+import roadmapRoutes from "./routes/roadmap.routes.js";
+app.use("/api/v1/roadmap", roadmapRoutes);
+
 app.use(errorHandler);
 
 
