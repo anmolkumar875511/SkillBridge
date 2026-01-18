@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const opportunitySchema = new mongoose.Schema(
+const learningRoadmapSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -43,4 +43,4 @@ const opportunitySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Opportunity", opportunitySchema);
+export default mongoose.model("LearningRoadmap", learningRoadmapSchema);
