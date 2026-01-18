@@ -31,7 +31,6 @@ export const generateRoadmap = async (userId, opportunityId) => {
         return await LearningRoadmap.create({
             user: userId,
             opportunity: opportunityId,
-            skillGapReport: report._id,
             roadmap: trackableRoadmap,
             progress: 0
         });

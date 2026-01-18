@@ -7,38 +7,33 @@ const learningRoadmapSchema = new mongoose.Schema(
       ref: "User",
       required: true
     },
-    
+
     opportunity: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Opportunity",
       required: true
     },
 
-    roadmap: {
-      week: Number,
-      topic: String,
-      tasks: [
-        {
-          description: String,
-          isCompleted: {
-            type: Boolean,
-            default: false
+    skillGapReport: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "SkillGapReport"
+    },
+
+    roadmap: [
+      {
+        week: Number,
+        topic: String,
+        tasks: [
+          {
+            description: String,
+            isCompleted: { type: Boolean, default: false }
           }
-        }
-      ]
-    },
-
-    progress: {
-      type: Number,
-      default: 0,
-      min: 0,
-      max: 100
-    },
-
-    isActive: {
-      type: Boolean,
-      default: true
-    }
+        ],
+        resources: [{ title: String, url: String }]
+      }
+    ],
+    
+    progress: { type: Number, default: 0 }
   },
   { timestamps: true }
 );
