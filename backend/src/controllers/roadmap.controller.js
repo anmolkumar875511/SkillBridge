@@ -2,6 +2,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
 import { generateRoadmap } from "../services/roadmapGenerator/roadmap.service.js";
+import Roadmap from "../models/learningRoadmap.model.js";
 
 export const createRoadmap = asyncHandler(async (req, res) => {
     const { opportunityId } = req.params;
@@ -44,7 +45,7 @@ export const toggleTaskStatus = asyncHandler(async (req, res) => {
     roadmap.roadmap.forEach((week) => {
         week.tasks.forEach((task) => {
             totalTasks++;
-            if (task._id === taskId) {
+            if (task._id.toString() === taskId) {
                 taskFound = true;
                 task.isCompleted = !task.isCompleted;
             }
