@@ -1,4 +1,4 @@
-import { DOMAINS } from "../utils/constants.js";
+import { DOMAINS } from "../../utils/constants.js";
 import { fetchAdzunaJobs } from "./adzuna.service.js";
 import { mapAdzunaToOpportunity } from "./opportunity.mapper.js";
 import { upsertOpportunity } from "./opportunity.upsert.js";

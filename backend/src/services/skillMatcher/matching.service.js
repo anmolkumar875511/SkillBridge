@@ -1,10 +1,10 @@
-import ResumeParsed from "../models/resumeParsed.model.js";
-import Opportunity from "../models/opportunity.model.js";
-import SkillGapReport from "../models/skillGapReport.model.js";
-import apiError from "../utils/apiError.js";
-import { normalizeSkill } from "../utils/skillNormalizer.js";
-import { queryGroq } from "../utils/groqClient.js";
-import { safeJsonParse } from "../utils/safeJsonParse.js";
+import ResumeParsed from "../../models/resumeParsed.model.js";
+import Opportunity from "../../models/opportunity.model.js";
+import SkillGapReport from "../../models/skillGapReport.model.js";
+import apiError from "../../utils/apiError.js";
+import { normalizeSkill } from "../../utils/skillNormalizer.js";
+import { queryGroq } from "../../utils/groqClient.js";
+import { safeJsonParse } from "../../utils/safeJsonParse.js";
 import { matchingPrompt } from "./matchingPrompt.js";
 
 

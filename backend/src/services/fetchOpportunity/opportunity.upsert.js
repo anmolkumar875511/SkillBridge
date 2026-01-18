@@ -1,4 +1,4 @@
-import Opportunity from "../models/opportunity.model.js";
+import Opportunity from "../../models/opportunity.model.js";
 
 export const upsertOpportunity = async (data) => {
   return Opportunity.findOneAndUpdate(

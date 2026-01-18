@@ -2,7 +2,7 @@ import {
   mapOpportunityType,
   mapExperienceLevel,
   extractSkills
-} from "../utils/mappers.js";
+} from "../../utils/mappers.js";
 
 export const mapAdzunaToOpportunity = (job, domain) => {
   return {

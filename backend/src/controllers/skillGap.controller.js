@@ -1,7 +1,7 @@
 import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
-import { generateSkillGapReport } from "../skillMatcher/matching.service.js";
+import { generateSkillGapReport } from "../services/skillMatcher/matching.service.js";
 
 export const getMatchAnalysis = asyncHandler(async (req, res) => {
     const { opportunityId } = req.params;

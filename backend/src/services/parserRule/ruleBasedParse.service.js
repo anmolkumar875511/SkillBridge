@@ -1,5 +1,5 @@
-import { normalizeText } from "../utils/normalizeText.js";
-import { splitSections } from "../utils/splitSections.js";
+import { normalizeText } from "../../utils/normalizeText.js";
+import { splitSections } from "../../utils/splitSections.js";
 
 import { extractSkills } from "./extractSkills.service.js";
 import { extractEducation } from "./extractEducation.service.js";

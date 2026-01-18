@@ -3,7 +3,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
 import ResumeParsed from "../models/resumeParsed.model.js";
-import { parseResumeText } from "../resumeParser/index.js";
+import { parseResumeText } from "../services/resumeParser/index.js";
 
 export const uploadResume = asyncHandler(async (req, res) => {
   if (!req.file) {

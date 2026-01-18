@@ -1,5 +1,5 @@
 import axios from "axios";
-import apiError from "../utils/apiError.js";
+import apiError from "../../utils/apiError.js";
 
 const ADZUNA_APP_ID = process.env.ADZUNA_APP_ID?.trim();
 const ADZUNA_API_KEY = process.env.ADZUNA_API_KEY?.trim();

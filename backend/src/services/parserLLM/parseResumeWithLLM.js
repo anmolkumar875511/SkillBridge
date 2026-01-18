@@ -1,7 +1,7 @@
-import { queryGroq } from "../utils/groqClient.js";
-import { safeJsonParse } from "../utils/safeJsonParse.js";
+import { queryGroq } from "../../utils/groqClient.js";
+import { safeJsonParse } from "../../utils/safeJsonParse.js";
 import { resumePrompt } from "./resumePrompt.js";
-import { normalizeResumeParsed } from "../utils/normalizeResumeParsed.js";
+import { normalizeResumeParsed } from "../../utils/normalizeResumeParsed.js";
 
 export const parseResumeWithLLM = async (resumeText) => {
   try {

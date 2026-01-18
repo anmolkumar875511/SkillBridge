@@ -16,7 +16,7 @@
 
 
 import cron from "node-cron";
-import { ingestFindWorkJobs } from "../fetchOpportunity/finfWorkIngest.service.js";
+import { ingestFindWorkJobs } from "../services/fetchOpportunity/finfWorkIngest.service.js";
 
 const DOMAIN_KEYWORDS = {
   tech: [
