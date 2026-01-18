@@ -2,36 +2,37 @@ import mongoose from "mongoose";
 
 const opportunitySchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true
+    },
+    
+    opportunity: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Opportunity",
       required: true
     },
 
-    company: {
-      type: String,
-      required: true
+    roadmap: {
+      week: Number,
+      topic: String,
+      tasks: [
+        {
+          description: String,
+          isCompleted: {
+            type: Boolean,
+            default: false
+          }
+        }
+      ]
     },
 
-    type: {
-      type: String,
-      enum: ["Internship", "Job", "Freelance"],
-      required: true
-    },
-
-    experienceLevel: {
-      type: String,
-      enum: ["Fresher", "Junior", "Mid", "Senior"],
-      default: "Fresher"
-    },
-
-    description: {
-      type: String,
-      required: true
-    },
-
-    requiredSkills: {
-      type: [String],
-      required: true
+    progress: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100
     },
 
     isActive: {
@@ -43,11 +44,3 @@ const opportunitySchema = new mongoose.Schema(
 );
 
 export default mongoose.model("Opportunity", opportunitySchema);
-
-// 1. title
-// 2. company
-// 3. type
-// 4. experienceLevel
-// 5. description
-// 6. requiredSkills
-// 7. isActive
