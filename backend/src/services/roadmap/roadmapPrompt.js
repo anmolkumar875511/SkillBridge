@@ -1,21 +1,23 @@
-export const roadmapPrompt = (missingSkills, jobTitle) => `
-You are an expert technical mentor and career coach.
-A student is applying for the role: "${jobTitle}".
-They are missing these specific skills: [${missingSkills.join(", ")}].
+export const roadmapPrompt = (missingSkills, jobTitle, category) => `
+You are an expert mentor in the ${category.toUpperCase()} field. 
+A student is preparing for a career as a "${jobTitle}". 
+They have a skill gap in the following areas: [${missingSkills.join(", ")}].
 
-Create a highly actionable 4-week learning roadmap. 
-For each week, provide:
-1. A clear topic.
-2. 3-4 specific, measurable tasks (checkpoints).
-3. 2 learning resources (Search queries or documentation links).
+GOAL:
+Create a 4-week structured learning roadmap to master these missing skills.
 
-Return ONLY a JSON array in this exact format:
+RULES:
+1. Provide 3-4 specific, measurable tasks per week.
+2. Suggest 2 learning resources (Documentation, standard textbooks, or search keywords).
+3. Ensure the roadmap is tailored specifically to the "${category}" industry.
+
+RETURN ONLY JSON:
 [
   {
     "week": 1,
-    "topic": "Topic Name",
-    "tasks": ["Task description 1", "Task description 2"],
-    "resources": [{"title": "Resource Name", "url": "Link/Query"}]
+    "topic": "String",
+    "tasks": ["Task 1", "Task 2", "Task 3"],
+    "resources": [{"title": "String", "url": "String"}]
   }
 ]
 `;
