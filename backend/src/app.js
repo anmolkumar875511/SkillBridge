@@ -26,6 +26,9 @@ app.use("/api/v1/resume", resumeRoutes);
 import jobIngestRoutes from "./routes/jobIngest.routes.js";
 app.use("/api/v1/ingest", jobIngestRoutes);
 
+import opportunityRoutes from "./routes/opportunity.rotes.js";
+app.use("/api/v1/opportunity", opportunityRoutes);
+
 import skillGapRoutes from "./routes/skillGap.routes.js";
 app.use("/api/v1/skillgap", skillGapRoutes);
 
