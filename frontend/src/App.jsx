@@ -13,6 +13,8 @@ import Resume from './pages/Resume.jsx'
 import Forgetpassw from './pages/Forgetpassw.jsx'
 import Resetpassw from './pages/Resetpassw.jsx'
 import Contact from './pages/Contact.jsx'
+import Opportunities from './pages/Opportunities.jsx'
+import Report from './pages/Report.jsx'
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
           <Route element={<ProtectedRoute/>}>
           <Route path='/Dashboard' element={<Dashboard/>}/>
           <Route path='/Resume' element={<Resume/>}/>
+          <Route path='/Opportunities' element={<Opportunities/>}/>
+          <Route path='/analyze/:opportunityId' element={<Report/>}/>
           </Route>
 
 
