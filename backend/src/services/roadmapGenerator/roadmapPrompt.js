@@ -11,4 +11,5 @@ Return ONLY JSON:
     "resources": [{"title": "Resource Name", "url": "Query/URL"}]
   }
 ]
+STRICT LIMIT: Return only the object. If you add any text before or after the JSON, the system will crash.
 `;

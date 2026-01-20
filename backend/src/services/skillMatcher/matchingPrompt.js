@@ -22,4 +22,5 @@ OUTPUT FORMAT:
   "newMatches": ["Skill Name"],
   "stillMissing": ["Skill Name"]
 }
+STRICT LIMIT: Return only the object. If you add any text before or after the JSON, the system will crash.
 `;
