@@ -15,6 +15,7 @@ import Resetpassw from './pages/Resetpassw.jsx'
 import Contact from './pages/Contact.jsx'
 import Opportunities from './pages/Opportunities.jsx'
 import Report from './pages/Report.jsx'
+import Roadmap from './pages/Roadmap.jsx'
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path='/Resume' element={<Resume/>}/>
           <Route path='/Opportunities' element={<Opportunities/>}/>
           <Route path='/analyze/:opportunityId' element={<Report/>}/>
+          <Route path='/roadmap/:id' element={<Roadmap/>} />
           </Route>
 
 
