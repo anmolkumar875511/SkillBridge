@@ -4,7 +4,7 @@ import { createRoadmap, getRoadmap, toggleTaskStatus}  from "../controllers/road
 
 const router = Router();
 
-router.get("/gerenate/:opportunityId", verifyToken, createRoadmap);
+router.get("/generate/:opportunityId", verifyToken, createRoadmap);
 router.get("/", verifyToken, getRoadmap);
 router.put("/toggle/:roadmapId/:taskId", verifyToken, toggleTaskStatus);
 
