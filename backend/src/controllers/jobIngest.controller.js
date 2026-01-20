@@ -1,7 +1,7 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
-import { ingestFindWorkJobs } from "../services/fetchOpportunity/finfWorkIngest.service.js";
+import { ingestFindWorkJobs } from "../services/fetchOpportunity/findWorkIngest.service.js";
 
 export const ingestJobs = asyncHandler(async (req, res) => {
   const { keyword } = req.query;
