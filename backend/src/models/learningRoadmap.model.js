@@ -33,7 +33,12 @@ const learningRoadmapSchema = new mongoose.Schema(
       }
     ],
     
-    progress: { type: Number, default: 0 }
+    progress: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100
+    }
   },
   { timestamps: true }
 );

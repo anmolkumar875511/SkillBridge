@@ -29,9 +29,12 @@ export const createRoadmap = asyncHandler(async (req, res) => {
 export const getRoadmap = asyncHandler(async (req, res) => {
     const userId = req.user._id;
 
-    const roadmaps = await LearningRoadmap.find({ user: userId })
-        .populate("opportunity", "title company category") 
-        .sort({ createdAt: -1 });
+    const roadmaps = await LearningRoadmap.find({
+        user: userId,
+        progress: { $lt: 100}
+    })
+    .populate("opportunity", "title company category") 
+    .sort({ createdAt: -1 });
 
     if (roadmaps.length === 0) {
         return res.status(200).json(
@@ -50,7 +53,8 @@ export const toggleTaskStatus = asyncHandler(async (req, res) => {
 
     const roadmap = await LearningRoadmap.findOne({
         _id: roadmapId,
-        user: req.user._id
+        user: req.user._id,
+        progress: { $lt: 100}
     });
 
     if (!roadmap) {
@@ -89,4 +93,66 @@ export const toggleTaskStatus = asyncHandler(async (req, res) => {
             roadmap
         )
     );
+});
+
+
+export const getCompletedRoadmaps = asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+
+    const roadmaps = await LearningRoadmap.find({
+        user: userId,
+        progress: 100
+    })
+    .populate("opportunity", "title comapany category")
+    .sort({updatedAt: -1});
+
+    if(!roadmaps.length === 0) {
+        return res
+        .status(200)
+        .json(
+            new apiResponse(
+                200,
+                "No roadmap is completed till now",
+                []
+            )
+        );
+    }
+
+    return res
+    .status(200)
+    .json(
+        new apiResponse(
+            200,
+            "All completed roadmaps are fetched",
+            roadmaps
+        )
+    );
+});
+
+
+export const deletedRoadmap = asyncHandler(async(req, res) => {
+    const { roadmapId } = req.params;
+
+    try {
+            const roadmap = await LearningRoadmap.findOneAndDelete({
+                _id: roadmapId,
+                user: req.user._id
+            });
+        
+            if(! roadmap) {
+                throw new apiError(404, "No roadmap found");
+            }
+        
+            return res
+            .status(200)
+            .json(
+                new apiResponse(
+                    200,
+                    "Roadmap deleted successfully",
+                    null
+                )
+            );
+    } catch (error) {
+        throw new apiError(500, "Unable to delete roadmap", error);
+    }
 });
