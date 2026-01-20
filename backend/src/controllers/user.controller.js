@@ -289,7 +289,7 @@ export const updateUserProfile = asyncHandler(async (req, res, next) => {
   await req.user.save();
 
   res.status(200).json(
-    new apiResponse(200, "User profile updated successfully", {
+    new apiResponse(200, "User profile updated successfully",{
       user: req.user.toJSON()
     })
   );

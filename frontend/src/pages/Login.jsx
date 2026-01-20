@@ -87,7 +87,7 @@ const Login = () => {
                     { withCredentials: true }
                 );
                 await fetchUser();
-                toast.success("Login Successfully",{id:toastId})
+                toast.success("Login Successfully",{id:toastId , duration: 1000})
                 navigate(`/Dashboard`);
             }
         } catch (error) {

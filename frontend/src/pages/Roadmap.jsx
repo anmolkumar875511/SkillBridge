@@ -7,7 +7,8 @@ import {
   BookOpen, 
   ExternalLink, 
   ClipboardList, 
-  ArrowLeft 
+  ArrowLeft ,
+  PartyPopper
 } from 'lucide-react';
 
 const Roadmap = () => {
@@ -15,6 +16,7 @@ const Roadmap = () => {
   const navigate = useNavigate();
   const [roadmapData, setRoadmapData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showHurray, setShowHurray] = useState(false);
 
   const fetchSingleRoadmap = async () => {
     try {
@@ -29,6 +31,25 @@ const Roadmap = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    if (roadmapData && roadmapData.roadmap) {
+      const allTasks = roadmapData.roadmap.flatMap(week => week.tasks);
+      const isEverythingFinished = allTasks.every(task => task.isCompleted === true);
+
+      if (isEverythingFinished && allTasks.length > 0) {
+        handleCompletion();
+      }
+    }
+  }, [roadmapData]);
+
+  const handleCompletion = () => {
+    setShowHurray(true);
+    // Wait 3 seconds so they can celebrate, then go back to dashboard
+    setTimeout(() => {
+      navigate('/Dashboard');
+    }, 3500);
   };
 
   const toggleTask = async (weekIndex, taskId) => {
@@ -81,6 +102,19 @@ const Roadmap = () => {
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4">
       <div className="max-w-4xl mx-auto">
+        {/* Hurray Message Overlay */}
+      {showHurray && (
+        <div className="fixed inset-0 z-200 flex items-center justify-center bg-indigo-600/90 backdrop-blur-md animate-in fade-in duration-500">
+          <div className="text-center text-white p-8">
+            <div className="flex justify-center mb-6">
+              <PartyPopper size={80} className="animate-bounce" />
+            </div>
+            <h1 className="text-5xl font-black mb-4">HURRAY!</h1>
+            <p className="text-xl font-medium opacity-90">You have completed your entire roadmap!</p>
+            <p className="mt-2 text-indigo-200">Redirecting to your dashboard...</p>
+          </div>
+        </div>
+      )}
         {/* Back Button */}
         <button 
           onClick={() => navigate(-1)} 
