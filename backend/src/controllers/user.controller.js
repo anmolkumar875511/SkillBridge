@@ -233,15 +233,19 @@ export const logoutUser = asyncHandler(async (req, res) => {
 });
 
 
-
 export const refreshAccessToken = asyncHandler(async (req, res, next) => {
-  const refreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
+  const refreshToken = req.cookies?.refreshToken;
 
   if (!refreshToken) {
     return next(new apiError(401, "Refresh token missing"));
   }
 
-  const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+  let decoded;
+  try {
+    decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+  } catch {
+    return next(new apiError(401, "Refresh token expired"));
+  }
 
   const user = await User.findOne({
     _id: decoded.id,
@@ -261,20 +265,17 @@ export const refreshAccessToken = asyncHandler(async (req, res, next) => {
   const options = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "Lax"
+    sameSite: "Lax",
+    path: "/" // ⭐ REQUIRED
   };
 
   res
     .cookie("accessToken", newAccessToken, options)
     .cookie("refreshToken", newRefreshToken, options)
     .status(200)
-    .json(
-      new apiResponse(200, "Access token refreshed successfully", {
-        accessToken: newAccessToken,
-        refreshToken: newRefreshToken
-      })
-    );
+    .json({ success: true });
 });
+
 
 
 
