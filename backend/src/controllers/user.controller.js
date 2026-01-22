@@ -5,6 +5,8 @@ import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
 import { generateOTP } from "../utils/generateOTP.js";
 import { sendOTPEmail, sendWelcomeEmail, sendPasswordResetEmail } from "../utils/sendEmail.js";
+import { uploadImage } from "../utils/cloudinary.js";
+import fs from "fs";
 import crypto from "crypto";
 
 
@@ -391,4 +393,38 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
   res.status(200).json(
     new apiResponse(200, "Password reset successful")
   );
+});
+
+export const uploadAvatar = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    return next(new apiError(404, "User not found"));
+  }
+
+try {
+    let avatar;
+    if (req.file) {
+      const img = await uploadImage(req.file.path);
+      avatar = {
+        public_id: img.id,
+        url: img.url
+      }
+    }
+  
+    if(fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+  
+    user.avatar = avatar;
+    await user.save();
+  
+    res.status(200).json(
+      new apiResponse(200, "Avatar uploaded successfully", {
+        user: user.toJSON()
+      })
+    );
+} catch (error) {
+  throw new apiError(500, "Failed to upload avatar", error.message);
+}
 });

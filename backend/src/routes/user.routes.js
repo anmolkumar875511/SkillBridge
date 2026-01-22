@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { verifyToken } from "../middlewares/auth.middleware.js";
+import { uploadImage } from "../middlewares/upload.middleware.js";
 import {
   getUserProfile,
   updateUserProfile,
@@ -11,7 +12,8 @@ import {
   verifyEmailOTP,
   resendEmailOTP,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  uploadAvatar
 } from "../controllers/user.controller.js";
 
 const router = Router();
@@ -28,5 +30,6 @@ router.post("/logout", verifyToken, logoutUser);
 router.get("/profile", verifyToken, getUserProfile);
 router.put("/profile", verifyToken, updateUserProfile);
 router.put("/change-password", verifyToken, changeUserPassword);
+router.post("/avatar", verifyToken, uploadImage.single("avatar"), uploadAvatar);
 
 export default router;

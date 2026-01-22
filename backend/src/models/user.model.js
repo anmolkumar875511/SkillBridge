@@ -38,6 +38,11 @@ const userSchema = new mongoose.Schema(
       required: true
     },
 
+    avatar: {
+        url: { type: String, default: ""},
+        publicId: String,
+    },
+
     refreshToken: {
       type: String
     },
@@ -98,6 +103,9 @@ userSchema.methods.toJSON = function () {
   delete user.refreshToken;
   delete user.emailOTP;
   delete user.emailOTPExpires;
+  delete user.passwordResetToken;
+  delete user.passwordResetExpires;
+  delete user.isEmailVerified;
   return user;
 };
 
