@@ -34,9 +34,3 @@ const skillGapReportSchema = new mongoose.Schema(
 );
 
 export default mongoose.model('SkillGapReport', skillGapReportSchema);
-
-// 1. user
-// 2. internship
-// 3. matchedSkills
-// 4. missingSkills
-// 5. matchPercentage

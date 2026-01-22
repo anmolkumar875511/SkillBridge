@@ -6,6 +6,7 @@ import apiResponse from '../utils/apiResponse.js';
 import { generateOTP } from '../utils/generateOTP.js';
 import { sendOTPEmail, sendWelcomeEmail, sendPasswordResetEmail } from '../utils/sendEmail.js';
 import { uploadImage } from '../utils/cloudinary.js';
+import { logger } from '../utils/logger.js';
 import fs from 'fs';
 import crypto from 'crypto';
 
@@ -45,6 +46,13 @@ export const registerUser = asyncHandler(async (req, res, next) => {
     } catch (error) {
         return next(new apiError(400, 'Email address is invalid or cannot receive emails'));
     }
+
+    await logger({
+        level: 'info',
+        action: 'USER_REGISTER',
+        message: `User ${user.email} registered`,
+        req
+    })
 
     res.status(201).json(
         new apiResponse(201, 'OTP sent to email for verification', {
@@ -96,6 +104,13 @@ export const verifyEmailOTP = asyncHandler(async (req, res, next) => {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'Lax',
     };
+
+    await logger({
+        level: 'info',
+        action: 'EMAIL_VERIFIED',
+        message: `User ${user.email} verified email`,
+        req
+    });
 
     res.status(200)
         .cookie('accessToken', accessToken, {
@@ -174,6 +189,13 @@ export const loginUser = asyncHandler(async (req, res, next) => {
         sameSite: 'Lax',
     };
 
+    await logger({
+        level: 'info',
+        action: 'USER_LOGIN',
+        message: `User ${user.email} logged in`,
+        req
+    });
+
     res.status(200)
         .cookie('accessToken', accessToken, {
             ...options,
@@ -213,7 +235,12 @@ export const logoutUser = asyncHandler(async (req, res) => {
 
     res.clearCookie('accessToken', options);
     res.clearCookie('refreshToken', options);
-
+    await logger({
+        level: 'info',
+        action: 'USER_LOGOUT',
+        message: `User ${req.user.email} logged out`,
+        req
+    })
     res.status(200).json(new apiResponse(200, 'Logout successful'));
 });
 
@@ -277,7 +304,12 @@ export const updateUserProfile = asyncHandler(async (req, res, next) => {
 
     req.user.name = name;
     await req.user.save();
-
+    await logger({
+        level: 'info',
+        action: 'USER_UPDATE',
+        message: `User ${req.user.email} updated profile`,
+        req
+    })
     res.status(200).json(
         new apiResponse(200, 'User profile updated successfully', {
             user: req.user.toJSON(),
@@ -304,6 +336,13 @@ export const changeUserPassword = asyncHandler(async (req, res, next) => {
 
     user.password = newPassword;
     await user.save();
+
+    await logger({
+        level: 'info',
+        action: 'USER_PASSWORD_CHANGE',
+        message: `User ${user.email} changed password`,
+        req
+    })
 
     res.status(200).json(new apiResponse(200, 'Password changed successfully'));
 });
@@ -343,6 +382,13 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
         user.passwordResetExpires = undefined;
         await user.save({ validateBeforeSave: false });
 
+        await logger({
+            level: 'error',
+            action: 'USER_PASSWORD_RESET',
+            message: `Failed to send password reset email to ${user.email}`,
+            req
+        })
+
         return next(new apiError(500, 'Failed to send password reset email'));
     }
 });
@@ -381,6 +427,13 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
     
     await user.save();
 
+    await logger({
+        level: 'info',
+        action: 'USER_PASSWORD_RESET',
+        message: `User ${user.email} reset password`,
+        req
+    })
+
     res.status(200).json(new apiResponse(200, 'Password reset successful'));
 });
 
@@ -398,6 +451,13 @@ export const uploadAvatar = asyncHandler(async (req, res, next) => {
             { new: true, validateBeforeSave: false }
         );
 
+        await logger({
+            level: 'info',
+            action: 'USER_AVATAR_UPLOAD',
+            message: `User ${user.email} uploaded avatar`,
+            req
+        })
+
         res.status(200).json(
             new apiResponse(200, 'Avatar uploaded successfully', {
                 user: user.toJSON(),
@@ -407,6 +467,12 @@ export const uploadAvatar = asyncHandler(async (req, res, next) => {
         if (req.file?.path && fs.existsSync(req.file.path)) {
                     fs.unlinkSync(req.file.path);
         }
+        await logger({
+            level: 'error',
+            action: 'USER_AVATAR_UPLOAD',
+            message: `User ${req.user.email} failed to upload avatar`,
+            req
+        })
         throw new apiError(500, 'Failed to upload avatar', error.message);
     }
 });

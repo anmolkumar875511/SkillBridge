@@ -3,6 +3,7 @@ import asyncHandler from '../utils/asyncHandler.js';
 import apiError from '../utils/apiError.js';
 import apiResponse from '../utils/apiResponse.js';
 import { generateRoadmap } from '../services/roadmapGenerator/roadmap.service.js';
+import { logger } from '../utils/logger.js';
 
 export const createRoadmap = asyncHandler(async (req, res) => {
     const { opportunityId } = req.params;
@@ -13,6 +14,13 @@ export const createRoadmap = asyncHandler(async (req, res) => {
     if (!roadmap) {
         throw new apiError(404, 'Roadmap not found');
     }
+
+    await logger({
+        level: 'info',
+        action: 'ROADMAP_GENERATE',
+        message: `User ${req.user.email} generated roadmap for opportunity ${opportunityId}`,
+        req
+    })
 
     return res.status(201).json(new apiResponse(201, 'Roadmap Generated Successfully', roadmap));
 });
@@ -77,6 +85,13 @@ export const toggleTaskStatus = asyncHandler(async (req, res) => {
     roadmap.progress = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
 
     await roadmap.save();
+
+    await logger({
+        level: 'info',
+        action: 'TASK_STATUS_UPDATE',
+        message: `User ${req.user.email} updated task status for roadmap ${roadmapId}`,
+        req
+    })
 
     return res.status(200).json(new apiResponse(200, 'Task status updated successfully', roadmap));
 });

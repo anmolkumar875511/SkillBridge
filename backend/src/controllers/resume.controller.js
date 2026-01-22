@@ -4,6 +4,7 @@ import apiError from '../utils/apiError.js';
 import apiResponse from '../utils/apiResponse.js';
 import ResumeParsed from '../models/resumeParsed.model.js';
 import { parseResumeText } from '../services/resumeParser/index.js';
+import { logger } from '../utils/logger.js';
 
 export const uploadResume = asyncHandler(async (req, res) => {
     if (!req.file) {
@@ -33,6 +34,12 @@ export const uploadResume = asyncHandler(async (req, res) => {
             parsedAt: new Date(),
             parserVersion: 'v1.0',
         },
+    });
+    await logger ({
+        level: 'info',
+        action: 'RESUME_UPLOAD',
+        message: `User ${req.user.email} uploaded resume`,
+        req
     });
 
     return res.status(201).json(
@@ -74,6 +81,13 @@ export const updateResume = asyncHandler(async (req, res) => {
     if (projects) resume.projects = projects;
 
     await resume.save();
+
+    await logger ({
+        level: 'info',
+        action: 'RESUME_UPDATE',
+        message: `User ${req.user.email} updated resume`,
+        req
+    });
 
     return res.status(200).json(new apiResponse(200, 'Resume updated successfully', resume));
 });
