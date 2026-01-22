@@ -2,7 +2,7 @@ import Opportunity from "../../models/opportunity.model.js";
 import { fetchJobsFromFindWork } from "../fetchOpportunity/findWork.service.js";
 import { normalizeFindWorkJob } from "../../utils/findWorkNormalizer.js";
 
-export async function ingestFindWorkJobs(keyword) {
+export const ingestFindWorkJobs = async (keyword) => {
   const jobs = await fetchJobsFromFindWork(keyword);
 
   let saved = 0;

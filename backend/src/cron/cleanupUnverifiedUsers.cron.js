@@ -1,5 +1,4 @@
 import cron from "node-cron";
-import mongoose from "mongoose";
 import User from "../models/user.model.js";
 
 cron.schedule("0 3 * * *", async () => {

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function fetchJobsFromFindWork(keyword) {
+export const fetchJobsFromFindWork = async (keyword) => {
   const response = await axios.get(
     process.env.FINDWORK_BASE_URL,
     {

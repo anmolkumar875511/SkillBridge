@@ -109,3 +109,58 @@ export const DOMAIN_SKILLS = {
     "stakeholder management", "roadmapping"
   ]
 };
+
+
+export const DOMAIN_KEYWORDS = {
+  tech: [
+    "software developer",
+    "frontend developer",
+    "backend developer",
+    "full stack developer",
+    "data engineer",
+    "machine learning engineer",
+    "devops engineer"
+  ],
+
+  medical: [
+    "doctor",
+    "nurse",
+    "medical officer",
+    "clinical research",
+    "pharmacist"
+  ],
+
+  law: [
+    "lawyer",
+    "legal associate",
+    "advocate",
+    "paralegal"
+  ],
+
+  finance: [
+    "accountant",
+    "finance analyst",
+    "banking officer",
+    "investment analyst"
+  ],
+
+  education: [
+    "teacher",
+    "lecturer",
+    "professor",
+    "education coordinator"
+  ],
+
+  design: [
+    "ui designer",
+    "ux designer",
+    "graphic designer",
+    "product designer"
+  ],
+
+  management: [
+    "product manager",
+    "project manager",
+    "operations manager"
+  ]
+};
