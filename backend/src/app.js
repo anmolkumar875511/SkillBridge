@@ -37,6 +37,9 @@ app.use('/api/v1/skillgap', skillGapRoutes);
 import roadmapRoutes from './routes/roadmap.routes.js';
 app.use('/api/v1/roadmap', roadmapRoutes);
 
+import adminRoutes from './routes/admin.routes.js';
+app.use('/api/v1/admin', adminRoutes);
+
 app.use(errorHandler);
 
 export default app;

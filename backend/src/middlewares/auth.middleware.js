@@ -16,9 +16,21 @@ export const verifyToken = asyncHandler(async (req, res, next) => {
         if (!user) {
             return next(new apiError(401, 'Not authorized, user not found'));
         }
+
+        if(user.isBlacklisted) {
+            return next(new apiError(402, 'Your account is currently blacklisted by admin'));
+        }
+
+        if (!user.isEmailVerified) {
+            return next(new apiError(403, 'Please verify your email'));
+        }
+
         req.user = user;
         next();
     } catch (error) {
+        if (error.name === 'TokenExpiredError') {
+            return next(new apiError(401, 'Token expired'));
+        }
         return next(new apiError(401, 'Not authorized, token failed'));
     }
 });

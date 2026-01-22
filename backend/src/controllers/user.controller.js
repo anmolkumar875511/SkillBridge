@@ -22,27 +22,29 @@ export const registerUser = asyncHandler(async (req, res, next) => {
         return next(new apiError(400, 'Invalid email format'));
     }
 
-    const existingUser = await User.findOne({ email });
+    let user = await User.findOne({ email });
 
-    if (existingUser && existingUser.isEmailVerified) {
+    if (user && user.isEmailVerified) {
         return next(new apiError(400, 'User with this email already exists'));
     }
 
-    if (existingUser && !existingUser.isEmailVerified) {
-        await User.deleteOne({ _id: existingUser._id });
+    const otp = generateOTP();
+
+    if (!user) {
+        user = new User({ name, email, password });
+    } else {
+        user.name = name;
+        user.password = password;
     }
 
-    const otp = generateOTP();
-    const user = new User({ name, email, password });
     await user.setEmailOTP(otp);
 
     try {
         await sendOTPEmail(email, otp);
+        await user.save();
     } catch (error) {
         return next(new apiError(400, 'Email address is invalid or cannot receive emails'));
     }
-
-    await user.save();
 
     res.status(201).json(
         new apiResponse(201, 'OTP sent to email for verification', {
@@ -152,6 +154,10 @@ export const loginUser = asyncHandler(async (req, res, next) => {
         return next(new apiError(401, 'Invalid email or password'));
     }
 
+    if(user.isBlacklisted) {
+        return next(new apiError(402, 'Your account is currently blacklisted by admin'));
+    }
+
     if (!user.isEmailVerified) {
         return next(new apiError(403, 'Please verify your email before login'));
     }
@@ -234,6 +240,14 @@ export const refreshAccessToken = asyncHandler(async (req, res, next) => {
         return next(new apiError(401, 'Invalid refresh token'));
     }
 
+    if(user.isBlacklisted) {
+        return next(new apiError(402, 'Your account is currently blacklisted by admin'));
+    }
+
+    if (!user.isEmailVerified) {
+        return next(new apiError(403, 'Please verify your email'));
+    }
+
     const newAccessToken = user.generateAccessToken();
     const newRefreshToken = user.generateRefreshToken();
 
@@ -244,13 +258,14 @@ export const refreshAccessToken = asyncHandler(async (req, res, next) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'Lax',
-        path: '/', // ⭐ REQUIRED
+        path: '/',
     };
 
-    res.cookie('accessToken', newAccessToken, options)
-        .cookie('refreshToken', newRefreshToken, options)
-        .status(200)
-        .json({ success: true });
+    return res
+            .status(200)
+            .cookie('accessToken', newAccessToken, options)
+            .cookie('refreshToken', newRefreshToken, options)
+            .json(new apiResponse(200, "Token refreshed", { accessToken: newAccessToken }));
 });
 
 export const updateUserProfile = asyncHandler(async (req, res, next) => {
@@ -306,6 +321,14 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
         return next(new apiError(404, 'You are not registered with us'));
     }
 
+    if(user.isBlacklisted) {
+        return next(new apiError(402, 'Your account is currently blacklisted by admin'));
+    }
+
+    if (!user.isEmailVerified) {
+        return next(new apiError(403, 'Please verify your email'));
+    }
+
     const resetToken = user.generatePasswordResetToken();
     await user.save({ validateBeforeSave: false });
 
@@ -343,38 +366,37 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
         return next(new apiError(400, 'Invalid or expired reset token'));
     }
 
+
+    if(user.isBlacklisted) {
+        return next(new apiError(402, 'Your account is currently blacklisted by admin'));
+    }
+    
+    if (!user.isEmailVerified) {
+        return next(new apiError(403, 'Please verify your email'));
+    }
+    
     user.password = newPassword;
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
-
+    
     await user.save();
 
     res.status(200).json(new apiResponse(200, 'Password reset successful'));
 });
 
 export const uploadAvatar = asyncHandler(async (req, res, next) => {
-    const user = await User.findById(req.user._id);
-
-    if (!user) {
-        return next(new apiError(404, 'User not found'));
-    }
+    if (!req.file) return next(new apiError(400, "No file uploaded"));
 
     try {
-        let avatar;
-        if (req.file) {
-            const img = await uploadImage(req.file.path);
-            avatar = {
-                public_id: img.id,
-                url: img.url,
-            };
-        }
+        const img = await uploadImage(req.file.path);
 
-        if (fs.existsSync(req.file.path)) {
-            fs.unlinkSync(req.file.path);
-        }
+        fs.unlinkSync(req.file.path);
 
-        user.avatar = avatar;
-        await user.save();
+        const user = await User.findByIdAndUpdate(
+            req.user._id,
+            { avatar: { public_id: img.id, url: img.url } },
+            { new: true, validateBeforeSave: false }
+        );
 
         res.status(200).json(
             new apiResponse(200, 'Avatar uploaded successfully', {
@@ -382,6 +404,9 @@ export const uploadAvatar = asyncHandler(async (req, res, next) => {
             })
         );
     } catch (error) {
+        if (req.file?.path && fs.existsSync(req.file.path)) {
+                    fs.unlinkSync(req.file.path);
+        }
         throw new apiError(500, 'Failed to upload avatar', error.message);
     }
 });

@@ -30,6 +30,6 @@ router.post('/logout', verifyToken, logoutUser);
 router.get('/profile', verifyToken, getUserProfile);
 router.put('/profile', verifyToken, updateUserProfile);
 router.put('/change-password', verifyToken, changeUserPassword);
-router.post('/avatar', verifyToken, uploadImage.single('avatar'), uploadAvatar);
+router.patch('/avatar', verifyToken, uploadImage.single('avatar'), uploadAvatar);
 
 export default router;
