@@ -1,5 +1,5 @@
-import { v2 as cloudinary } from "cloudinary";
-import fs from "fs";
+import { v2 as cloudinary } from 'cloudinary';
+import fs from 'fs';
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -8,25 +8,24 @@ cloudinary.config({
 });
 
 export const uploadImage = async (filePath) => {
-    try{
-        if(!filePath) return null;
+    try {
+        if (!filePath) return null;
 
-        const result = await cloudinary.uploader.upload(filePath,{
-            resource_type: "image"
+        const result = await cloudinary.uploader.upload(filePath, {
+            resource_type: 'image',
         });
 
         return {
             url: result.secure_url,
-            id: result.public_id
+            id: result.public_id,
         };
-    }
-    catch(error){
-        console.error("Error uploading avatar to Cloudinary:", error.message);
+    } catch (error) {
+        console.error('Error uploading avatar to Cloudinary:', error.message);
 
-        if(fs.existsSync(filePath)) {
+        if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
         }
-        
+
         return null;
     }
 };

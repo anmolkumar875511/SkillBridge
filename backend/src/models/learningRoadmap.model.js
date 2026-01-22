@@ -1,46 +1,46 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const learningRoadmapSchema = new mongoose.Schema(
-  {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true
-    },
+    {
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        },
 
-    opportunity: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Opportunity",
-      required: true
-    },
+        opportunity: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Opportunity',
+            required: true,
+        },
 
-    skillGapReport: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "SkillGapReport"
-    },
+        skillGapReport: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'SkillGapReport',
+        },
 
-    roadmap: [
-      {
-        week: Number,
-        topic: String,
-        tasks: [
-          {
-            description: String,
-            isCompleted: { type: Boolean, default: false }
-          }
+        roadmap: [
+            {
+                week: Number,
+                topic: String,
+                tasks: [
+                    {
+                        description: String,
+                        isCompleted: { type: Boolean, default: false },
+                    },
+                ],
+                resources: [{ title: String, url: String }],
+            },
         ],
-        resources: [{ title: String, url: String }]
-      }
-    ],
-    
-    progress: {
-      type: Number,
-      default: 0,
-      min: 0,
-      max: 100
-    }
-  },
-  { timestamps: true }
+
+        progress: {
+            type: Number,
+            default: 0,
+            min: 0,
+            max: 100,
+        },
+    },
+    { timestamps: true }
 );
 
-export default mongoose.model("LearningRoadmap", learningRoadmapSchema);
+export default mongoose.model('LearningRoadmap', learningRoadmapSchema);

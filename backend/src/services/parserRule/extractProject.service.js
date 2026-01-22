@@ -1,21 +1,21 @@
-export const extractProjects = (sectionText = "") => {
-  if (!sectionText) return [];
+export const extractProjects = (sectionText = '') => {
+    if (!sectionText) return [];
 
-  const lines = sectionText.split("\n").filter(Boolean);
-  const projects = [];
+    const lines = sectionText.split('\n').filter(Boolean);
+    const projects = [];
 
-  let current = null;
+    let current = null;
 
-  lines.forEach(line => {
-    if (line.match(/20\d{2}/) && !line.startsWith("-")) {
-      if (current) projects.push(current);
-      current = { title: line.trim(), description: "" };
-    } else if (current) {
-      current.description += " " + line.trim();
-    }
-  });
+    lines.forEach((line) => {
+        if (line.match(/20\d{2}/) && !line.startsWith('-')) {
+            if (current) projects.push(current);
+            current = { title: line.trim(), description: '' };
+        } else if (current) {
+            current.description += ' ' + line.trim();
+        }
+    });
 
-  if (current) projects.push(current);
+    if (current) projects.push(current);
 
-  return projects;
+    return projects;
 };

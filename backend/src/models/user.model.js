@@ -1,144 +1,135 @@
-import mongoose from "mongoose";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import crypto from "crypto";
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
 const userSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-      trim: true
-    },
+    {
+        name: {
+            type: String,
+            required: true,
+            trim: true,
+        },
 
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      lowercase: true
-    },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+            lowercase: true,
+        },
 
-    password: {
-      type: String,
-      required: true,
-      minlength: 6,
-      select: false,
-      trim: true,
-      validate(value) {
-        if (value.toLowerCase().includes("password")) {
-          throw new Error('Password cannot contain the word "password"');
-        }
-      }
-    },
+        password: {
+            type: String,
+            required: true,
+            minlength: 6,
+            select: false,
+            trim: true,
+            validate(value) {
+                if (value.toLowerCase().includes('password')) {
+                    throw new Error('Password cannot contain the word "password"');
+                }
+            },
+        },
 
-    role: {
-      type: String,
-      enum: ["student", "admin"],
-      default: "student",
-      required: true
-    },
+        role: {
+            type: String,
+            enum: ['student', 'admin'],
+            default: 'student',
+            required: true,
+        },
 
-    avatar: {
-        url: String,
-        publicId: String,
-    },
+        avatar: {
+            url: String,
+            publicId: String,
+        },
 
-    refreshToken: {
-      type: String
-    },
+        refreshToken: {
+            type: String,
+        },
 
-    passwordResetToken: {
-      type: String,
-      select: false
-    },
-    
-    passwordResetExpires: {
-      type: Date,
-      select: false
-    },
+        passwordResetToken: {
+            type: String,
+            select: false,
+        },
 
-    isEmailVerified: {
-      type: Boolean,
-      default: false
-    },
+        passwordResetExpires: {
+            type: Date,
+            select: false,
+        },
 
-    emailOTP: {
-      type: String,
-      select: false
-    },
+        isEmailVerified: {
+            type: Boolean,
+            default: false,
+        },
 
-    emailOTPExpires: Date
-  },
-  { timestamps: true }
+        emailOTP: {
+            type: String,
+            select: false,
+        },
+
+        emailOTPExpires: Date,
+    },
+    { timestamps: true }
 );
 
-userSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
-  this.password = await bcrypt.hash(this.password, 11);
+userSchema.pre('save', async function () {
+    if (!this.isModified('password')) return;
+    this.password = await bcrypt.hash(this.password, 11);
 });
 
 userSchema.methods.isPasswordMatch = async function (password) {
-  return await bcrypt.compare(password, this.password);
+    return await bcrypt.compare(password, this.password);
 };
 
-
 userSchema.methods.setEmailOTP = async function (otp) {
-  this.emailOTP = await bcrypt.hash(otp, 10);
-  this.emailOTPExpires = Date.now() + 10 * 60 * 1000;
+    this.emailOTP = await bcrypt.hash(otp, 10);
+    this.emailOTPExpires = Date.now() + 10 * 60 * 1000;
 };
 
 userSchema.methods.isEmailOTPMatch = async function (otp) {
-  if (!this.emailOTP) return false;
-  return await bcrypt.compare(otp, this.emailOTP);
+    if (!this.emailOTP) return false;
+    return await bcrypt.compare(otp, this.emailOTP);
 };
 
 userSchema.methods.clearEmailOTP = function () {
-  this.emailOTP = undefined;
-  this.emailOTPExpires = undefined;
+    this.emailOTP = undefined;
+    this.emailOTPExpires = undefined;
 };
 
 userSchema.methods.toJSON = function () {
-  const user = this.toObject();
-  delete user.password;
-  delete user.refreshToken;
-  delete user.emailOTP;
-  delete user.emailOTPExpires;
-  delete user.passwordResetToken;
-  delete user.passwordResetExpires;
-  delete user.isEmailVerified;
-  return user;
+    const user = this.toObject();
+    delete user.password;
+    delete user.refreshToken;
+    delete user.emailOTP;
+    delete user.emailOTPExpires;
+    delete user.passwordResetToken;
+    delete user.passwordResetExpires;
+    delete user.isEmailVerified;
+    return user;
 };
 
 userSchema.methods.generateAccessToken = function () {
-  return jwt.sign(
-    { id: this._id, role: this.role },
-    process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN }
-  );
+    return jwt.sign({ id: this._id, role: this.role }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+    });
 };
 
 userSchema.methods.generateRefreshToken = function () {
-  return jwt.sign(
-    { id: this._id },
-    process.env.JWT_REFRESH_SECRET,
-    { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN }
-  );
+    return jwt.sign({ id: this._id }, process.env.JWT_REFRESH_SECRET, {
+        expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
+    });
 };
-
 
 userSchema.methods.generatePasswordResetToken = function () {
-  const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetToken = crypto.randomBytes(32).toString('hex');
 
-  this.passwordResetToken = crypto
-    .createHash("sha256")
-    .update(resetToken)
-    .digest("hex");
+    this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
 
-  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+    this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
 
-  return resetToken;
+    return resetToken;
 };
 
-userSchema.index({isEmailVerified: 1, createdAt: 1});
+userSchema.index({ isEmailVerified: 1, createdAt: 1 });
 
-export default mongoose.model("User", userSchema);
+export default mongoose.model('User', userSchema);

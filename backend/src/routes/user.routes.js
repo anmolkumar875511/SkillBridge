@@ -1,35 +1,35 @@
-import { Router } from "express";
-import { verifyToken } from "../middlewares/auth.middleware.js";
-import { uploadImage } from "../middlewares/upload.middleware.js";
+import { Router } from 'express';
+import { verifyToken } from '../middlewares/auth.middleware.js';
+import { uploadImage } from '../middlewares/upload.middleware.js';
 import {
-  getUserProfile,
-  updateUserProfile,
-  changeUserPassword,
-  registerUser,
-  loginUser,
-  refreshAccessToken,
-  logoutUser,
-  verifyEmailOTP,
-  resendEmailOTP,
-  forgotPassword,
-  resetPassword,
-  uploadAvatar
-} from "../controllers/user.controller.js";
+    getUserProfile,
+    updateUserProfile,
+    changeUserPassword,
+    registerUser,
+    loginUser,
+    refreshAccessToken,
+    logoutUser,
+    verifyEmailOTP,
+    resendEmailOTP,
+    forgotPassword,
+    resetPassword,
+    uploadAvatar,
+} from '../controllers/user.controller.js';
 
 const router = Router();
 
-router.post("/register", registerUser);
-router.post("/verify-email", verifyEmailOTP);
-router.post("/resend-otp", resendEmailOTP);
-router.post("/login", loginUser);
-router.post("/refresh-token", refreshAccessToken);
-router.post("/forgot-password", forgotPassword);
-router.post("/reset-password/:token", resetPassword);
+router.post('/register', registerUser);
+router.post('/verify-email', verifyEmailOTP);
+router.post('/resend-otp', resendEmailOTP);
+router.post('/login', loginUser);
+router.post('/refresh-token', refreshAccessToken);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password/:token', resetPassword);
 
-router.post("/logout", verifyToken, logoutUser);
-router.get("/profile", verifyToken, getUserProfile);
-router.put("/profile", verifyToken, updateUserProfile);
-router.put("/change-password", verifyToken, changeUserPassword);
-router.post("/avatar", verifyToken, uploadImage.single("avatar"), uploadAvatar);
+router.post('/logout', verifyToken, logoutUser);
+router.get('/profile', verifyToken, getUserProfile);
+router.put('/profile', verifyToken, updateUserProfile);
+router.put('/change-password', verifyToken, changeUserPassword);
+router.post('/avatar', verifyToken, uploadImage.single('avatar'), uploadAvatar);
 
 export default router;

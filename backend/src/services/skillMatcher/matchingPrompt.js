@@ -2,8 +2,8 @@ export const matchingPrompt = (userSkills, missingSkills) => `
 You are a technical recruitment engine specialized in semantic skill matching.
 
 CONTEXT:
-User Skills: [${userSkills.join(", ")}]
-Missing Job Skills: [${missingSkills.join(", ")}]
+User Skills: [${userSkills.join(', ')}]
+Missing Job Skills: [${missingSkills.join(', ')}]
 
 GOAL:
 Check if any of the "Missing Job Skills" are semantically covered by the "User Skills".

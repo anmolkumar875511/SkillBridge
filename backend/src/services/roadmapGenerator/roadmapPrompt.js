@@ -1,6 +1,6 @@
 export const roadmapPrompt = (missingSkills, jobTitle, category) => `
 You are an expert mentor in the field of ${category}.
-Provide a 4-week learning roadmap for a "${jobTitle}" candidate missing these skills: [${missingSkills.join(", ")}].
+Provide a 4-week learning roadmap for a "${jobTitle}" candidate missing these skills: [${missingSkills.join(', ')}].
 
 Return ONLY JSON:
 [

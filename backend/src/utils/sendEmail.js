@@ -1,31 +1,31 @@
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  },
-  tls: {
-    rejectUnauthorized: false
-  }
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    secure: false,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+    },
+    tls: {
+        rejectUnauthorized: false,
+    },
 });
 
 export const sendOTPEmail = async (to, otp) => {
-  await transporter.sendMail({
-    from: `"SkillBridge" <${process.env.EMAIL_USER}>`,
-    to,
-    subject: "Verify your SkillBridge email",
-    attachments: [
-      {
-        filename: "logo.png",
-        path: "./src/assets/logo.png", 
-        cid: "skillbridge-logo"
-      }
-    ],
-    html: `
+    await transporter.sendMail({
+        from: `"SkillBridge" <${process.env.EMAIL_USER}>`,
+        to,
+        subject: 'Verify your SkillBridge email',
+        attachments: [
+            {
+                filename: 'logo.png',
+                path: './src/assets/logo.png',
+                cid: 'skillbridge-logo',
+            },
+        ],
+        html: `
       <div style="background:#f8fafc;padding:30px;font-family:Arial,sans-serif">
         <div style="max-width:520px;margin:auto;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.08)">
           
@@ -70,23 +70,23 @@ export const sendOTPEmail = async (to, otp) => {
           </div>
         </div>
       </div>
-    `
-  });
+    `,
+    });
 };
 
 export const sendWelcomeEmail = async (to, name) => {
-  await transporter.sendMail({
-    from: `"SkillBridge" <${process.env.EMAIL_USER}>`,
-    to,
-    subject: "Welcome to SkillBridge",
-    attachments: [
-      {
-        filename: "logo.png",
-        path: "./src/assets/logo.png",
-        cid: "skillbridge-logo"
-      }
-    ],
-    html: `
+    await transporter.sendMail({
+        from: `"SkillBridge" <${process.env.EMAIL_USER}>`,
+        to,
+        subject: 'Welcome to SkillBridge',
+        attachments: [
+            {
+                filename: 'logo.png',
+                path: './src/assets/logo.png',
+                cid: 'skillbridge-logo',
+            },
+        ],
+        html: `
       <div style="background:#f8fafc;padding:30px;font-family:Arial,sans-serif">
         <div style="max-width:520px;margin:auto;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.08)">
           
@@ -133,17 +133,16 @@ export const sendWelcomeEmail = async (to, name) => {
           </div>
         </div>
       </div>
-    `
-  });
+    `,
+    });
 };
 
-
 export const sendPasswordResetEmail = async (to, resetLink) => {
-  await transporter.sendMail({
-    from: `"SkillBridge" <${process.env.EMAIL_USER}>`,
-    to,
-    subject: "SkillBridge Password Reset",
-    html: `
+    await transporter.sendMail({
+        from: `"SkillBridge" <${process.env.EMAIL_USER}>`,
+        to,
+        subject: 'SkillBridge Password Reset',
+        html: `
       <div style="background:#f8fafc;padding:30px;font-family:Arial,sans-serif">
         <div style="max-width:520px;margin:auto;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.08)">
           
@@ -190,6 +189,6 @@ export const sendPasswordResetEmail = async (to, resetLink) => {
           </div>
         </div>
       </div>
-    `
-  });
+    `,
+    });
 };
