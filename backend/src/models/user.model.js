@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema(
     },
 
     avatar: {
-        url: { type: String, default: ""},
+        url: String,
         publicId: String,
     },
 
