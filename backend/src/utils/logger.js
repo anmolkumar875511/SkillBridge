@@ -11,7 +11,7 @@ export const logger = async ({ level = 'info', message, action, req, userId, err
                 url: req?.originalUrl,
                 ip: req?.ip,
                 userAgent: req?.get('User-Agent'),
-                stack: error?.stack
+                stack: error?.stack,
             },
             user: userId || req?.user?._id || null,
         };

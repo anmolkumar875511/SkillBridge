@@ -17,7 +17,7 @@ export const verifyToken = asyncHandler(async (req, res, next) => {
             return next(new apiError(401, 'Not authorized, user not found'));
         }
 
-        if(user.isBlacklisted) {
+        if (user.isBlacklisted) {
             return next(new apiError(402, 'Your account is currently blacklisted by admin'));
         }
 

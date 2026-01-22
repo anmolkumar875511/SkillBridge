@@ -19,8 +19,8 @@ export const createRoadmap = asyncHandler(async (req, res) => {
         level: 'info',
         action: 'ROADMAP_GENERATE',
         message: `User ${req.user.email} generated roadmap for opportunity ${opportunityId}`,
-        req
-    })
+        req,
+    });
 
     return res.status(201).json(new apiResponse(201, 'Roadmap Generated Successfully', roadmap));
 });
@@ -90,8 +90,8 @@ export const toggleTaskStatus = asyncHandler(async (req, res) => {
         level: 'info',
         action: 'TASK_STATUS_UPDATE',
         message: `User ${req.user.email} updated task status for roadmap ${roadmapId}`,
-        req
-    })
+        req,
+    });
 
     return res.status(200).json(new apiResponse(200, 'Task status updated successfully', roadmap));
 });

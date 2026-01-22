@@ -35,11 +35,11 @@ export const uploadResume = asyncHandler(async (req, res) => {
             parserVersion: 'v1.0',
         },
     });
-    await logger ({
+    await logger({
         level: 'info',
         action: 'RESUME_UPLOAD',
         message: `User ${req.user.email} uploaded resume`,
-        req
+        req,
     });
 
     return res.status(201).json(
@@ -82,11 +82,11 @@ export const updateResume = asyncHandler(async (req, res) => {
 
     await resume.save();
 
-    await logger ({
+    await logger({
         level: 'info',
         action: 'RESUME_UPDATE',
         message: `User ${req.user.email} updated resume`,
-        req
+        req,
     });
 
     return res.status(200).json(new apiResponse(200, 'Resume updated successfully', resume));

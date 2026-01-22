@@ -1,34 +1,28 @@
 import Log from '../models/log.model.js';
 import User from '../models/user.model.js';
 import { runIngestion } from '../services/fetchOpportunity/ingestJob.service.js';
-import asyncHandler from "../utils/asyncHandler.js"
+import asyncHandler from '../utils/asyncHandler.js';
 import apiError from '../utils/apiError.js';
 import apiResponse from '../utils/apiResponse.js';
 import { logger } from '../utils/logger.js';
 
-export const ingest = asyncHandler(async(req, res) => {
+export const ingest = asyncHandler(async (req, res) => {
     try {
-        console.log("Admin is fetching opportunities...")
+        console.log('Admin is fetching opportunities...');
         await runIngestion();
-        console.log("Admin successfully fetched opportunities!!")
+        console.log('Admin successfully fetched opportunities!!');
         await logger({
-            level: "info",
-            action: "ADMIN_FETCHED_OPPORTUNITIES",
-            message: "Admin fetched opportunities",
-            req
-        })
-        return res
-        .status(200)
-        .json(
-            new apiResponse(200, "Fetched all opportunities")
-        )
-    }
-    catch (error) {
-        await logger({ level: "error", message: "Unable to fetch opportunities", error });
-        throw new apiError(500, "Unable to fetch opportunities", error);
+            level: 'info',
+            action: 'ADMIN_FETCHED_OPPORTUNITIES',
+            message: 'Admin fetched opportunities',
+            req,
+        });
+        return res.status(200).json(new apiResponse(200, 'Fetched all opportunities'));
+    } catch (error) {
+        await logger({ level: 'error', message: 'Unable to fetch opportunities', error });
+        throw new apiError(500, 'Unable to fetch opportunities', error);
     }
 });
-
 
 export const toggleBlacklist = asyncHandler(async (req, res) => {
     const { userId } = req.params;
@@ -36,32 +30,33 @@ export const toggleBlacklist = asyncHandler(async (req, res) => {
     const user = await User.findById(userId);
 
     if (!user) {
-        throw new apiError(404, "User not found");
+        throw new apiError(404, 'User not found');
     }
 
     user.isBlacklisted = !user.isBlacklisted;
     await user.save({ validateBeforeSave: false });
 
-    await logger({ 
-        level: "info", 
-        action: "USER_BLACKLIST_TOGGLE",
+    await logger({
+        level: 'info',
+        action: 'USER_BLACKLIST_TOGGLE',
         message: `User ${user.email} status changed to Blacklisted: ${user.isBlacklisted}`,
-        req 
+        req,
     });
 
     return res
         .status(200)
-        .json(new apiResponse(
-            200, 
-            { isBlacklisted: user.isBlacklisted }, 
-            `User has been ${user.isBlacklisted ? 'blacklisted' : 'whitelisted'}`
-        ));
+        .json(
+            new apiResponse(
+                200,
+                { isBlacklisted: user.isBlacklisted },
+                `User has been ${user.isBlacklisted ? 'blacklisted' : 'whitelisted'}`
+            )
+        );
 });
-
 
 export const getLogs = asyncHandler(async (req, res) => {
     const { level, action, page = 1, limit = 20 } = req.query;
-    
+
     const query = {};
     if (level) query.level = level;
     if (action) query['meta.action'] = action;
@@ -74,44 +69,44 @@ export const getLogs = asyncHandler(async (req, res) => {
 
     const count = await Log.countDocuments(query);
     await logger({
-        level: "info",
-        action: "ADMIN_FETCHED_LOGS",
+        level: 'info',
+        action: 'ADMIN_FETCHED_LOGS',
         message: `Admin fetched logs for level: ${level}, action: ${action}, page: ${page}, limit: ${limit}`,
-        req
+        req,
     });
 
-    res.status(200).json(new apiResponse(200, "Logs fetched", {
-        logs,
-        totalPages: Math.ceil(count / limit),
-        currentPage: page
-    }));
+    res.status(200).json(
+        new apiResponse(200, 'Logs fetched', {
+            logs,
+            totalPages: Math.ceil(count / limit),
+            currentPage: page,
+        })
+    );
 });
 
 export const exportLogs = asyncHandler(async (req, res) => {
-    const logs = await Log.find()
-        .sort({ createdAt: -1 })
-        .populate('user', 'email');
+    const logs = await Log.find().sort({ createdAt: -1 }).populate('user', 'email');
 
     let csv = 'Date,Level,Action,User,Message,URL\n';
 
-    logs.forEach(log => {
+    logs.forEach((log) => {
         const date = log.createdAt.toISOString();
         const user = log.user ? log.user.email : 'System';
         const action = log.meta?.action || 'N/A';
         const url = log.meta?.url || 'N/A';
 
         const cleanMsg = log.message.replace(/"/g, '""');
-        
+
         csv += `${date},${log.level},${action},${user},"${cleanMsg}",${url}\n`;
     });
 
     res.setHeader('Content-Type', 'text/csv');
     res.attachment('system-logs.csv');
     await logger({
-        level: "info",
-        action: "ADMIN_EXPORTED_LOGS",
-        message: "Admin exported logs",
-        req
+        level: 'info',
+        action: 'ADMIN_EXPORTED_LOGS',
+        message: 'Admin exported logs',
+        req,
     });
     return res.status(200).send(csv);
 });

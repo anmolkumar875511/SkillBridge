@@ -51,8 +51,8 @@ export const registerUser = asyncHandler(async (req, res, next) => {
         level: 'info',
         action: 'USER_REGISTER',
         message: `User ${user.email} registered`,
-        req
-    })
+        req,
+    });
 
     res.status(201).json(
         new apiResponse(201, 'OTP sent to email for verification', {
@@ -109,7 +109,7 @@ export const verifyEmailOTP = asyncHandler(async (req, res, next) => {
         level: 'info',
         action: 'EMAIL_VERIFIED',
         message: `User ${user.email} verified email`,
-        req
+        req,
     });
 
     res.status(200)
@@ -169,7 +169,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
         return next(new apiError(401, 'Invalid email or password'));
     }
 
-    if(user.isBlacklisted) {
+    if (user.isBlacklisted) {
         return next(new apiError(402, 'Your account is currently blacklisted by admin'));
     }
 
@@ -193,7 +193,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
         level: 'info',
         action: 'USER_LOGIN',
         message: `User ${user.email} logged in`,
-        req
+        req,
     });
 
     res.status(200)
@@ -239,8 +239,8 @@ export const logoutUser = asyncHandler(async (req, res) => {
         level: 'info',
         action: 'USER_LOGOUT',
         message: `User ${req.user.email} logged out`,
-        req
-    })
+        req,
+    });
     res.status(200).json(new apiResponse(200, 'Logout successful'));
 });
 
@@ -267,7 +267,7 @@ export const refreshAccessToken = asyncHandler(async (req, res, next) => {
         return next(new apiError(401, 'Invalid refresh token'));
     }
 
-    if(user.isBlacklisted) {
+    if (user.isBlacklisted) {
         return next(new apiError(402, 'Your account is currently blacklisted by admin'));
     }
 
@@ -289,10 +289,10 @@ export const refreshAccessToken = asyncHandler(async (req, res, next) => {
     };
 
     return res
-            .status(200)
-            .cookie('accessToken', newAccessToken, options)
-            .cookie('refreshToken', newRefreshToken, options)
-            .json(new apiResponse(200, "Token refreshed", { accessToken: newAccessToken }));
+        .status(200)
+        .cookie('accessToken', newAccessToken, options)
+        .cookie('refreshToken', newRefreshToken, options)
+        .json(new apiResponse(200, 'Token refreshed', { accessToken: newAccessToken }));
 });
 
 export const updateUserProfile = asyncHandler(async (req, res, next) => {
@@ -308,8 +308,8 @@ export const updateUserProfile = asyncHandler(async (req, res, next) => {
         level: 'info',
         action: 'USER_UPDATE',
         message: `User ${req.user.email} updated profile`,
-        req
-    })
+        req,
+    });
     res.status(200).json(
         new apiResponse(200, 'User profile updated successfully', {
             user: req.user.toJSON(),
@@ -341,8 +341,8 @@ export const changeUserPassword = asyncHandler(async (req, res, next) => {
         level: 'info',
         action: 'USER_PASSWORD_CHANGE',
         message: `User ${user.email} changed password`,
-        req
-    })
+        req,
+    });
 
     res.status(200).json(new apiResponse(200, 'Password changed successfully'));
 });
@@ -360,7 +360,7 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
         return next(new apiError(404, 'You are not registered with us'));
     }
 
-    if(user.isBlacklisted) {
+    if (user.isBlacklisted) {
         return next(new apiError(402, 'Your account is currently blacklisted by admin'));
     }
 
@@ -386,8 +386,8 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
             level: 'error',
             action: 'USER_PASSWORD_RESET',
             message: `Failed to send password reset email to ${user.email}`,
-            req
-        })
+            req,
+        });
 
         return next(new apiError(500, 'Failed to send password reset email'));
     }
@@ -412,33 +412,32 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
         return next(new apiError(400, 'Invalid or expired reset token'));
     }
 
-
-    if(user.isBlacklisted) {
+    if (user.isBlacklisted) {
         return next(new apiError(402, 'Your account is currently blacklisted by admin'));
     }
-    
+
     if (!user.isEmailVerified) {
         return next(new apiError(403, 'Please verify your email'));
     }
-    
+
     user.password = newPassword;
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
-    
+
     await user.save();
 
     await logger({
         level: 'info',
         action: 'USER_PASSWORD_RESET',
         message: `User ${user.email} reset password`,
-        req
-    })
+        req,
+    });
 
     res.status(200).json(new apiResponse(200, 'Password reset successful'));
 });
 
 export const uploadAvatar = asyncHandler(async (req, res, next) => {
-    if (!req.file) return next(new apiError(400, "No file uploaded"));
+    if (!req.file) return next(new apiError(400, 'No file uploaded'));
 
     try {
         const img = await uploadImage(req.file.path);
@@ -455,8 +454,8 @@ export const uploadAvatar = asyncHandler(async (req, res, next) => {
             level: 'info',
             action: 'USER_AVATAR_UPLOAD',
             message: `User ${user.email} uploaded avatar`,
-            req
-        })
+            req,
+        });
 
         res.status(200).json(
             new apiResponse(200, 'Avatar uploaded successfully', {
@@ -465,14 +464,14 @@ export const uploadAvatar = asyncHandler(async (req, res, next) => {
         );
     } catch (error) {
         if (req.file?.path && fs.existsSync(req.file.path)) {
-                    fs.unlinkSync(req.file.path);
+            fs.unlinkSync(req.file.path);
         }
         await logger({
             level: 'error',
             action: 'USER_AVATAR_UPLOAD',
             message: `User ${req.user.email} failed to upload avatar`,
-            req
-        })
+            req,
+        });
         throw new apiError(500, 'Failed to upload avatar', error.message);
     }
 });

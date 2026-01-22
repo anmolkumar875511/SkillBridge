@@ -17,8 +17,8 @@ export const getMatchAnalysis = asyncHandler(async (req, res) => {
         level: 'info',
         action: 'SKILL_GAP_REPORT_FETCH',
         message: `User ${req.user.email} fetched skill gap report for opportunity ${opportunityId}`,
-        req
-    })
+        req,
+    });
 
     return res.status(200).json(new apiResponse(200, 'Skill Gap Report Fetched', report));
 });
