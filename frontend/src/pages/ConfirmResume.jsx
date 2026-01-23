@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axiosInstance from "../axiosInstance";
+import { ResumeContext } from "../context/ResumeContext";
 
 const ConfirmResume = ({ resumeId }) => {
   const [isEdit, setIsEdit] = useState(false);
@@ -8,19 +9,35 @@ const ConfirmResume = ({ resumeId }) => {
   const [experience, setExperience] = useState([]);
   const [projects, setProjects] = useState([]);
 
-  const fetchData = async () => {
-    const res = await axiosInstance.get(`/resume/${resumeId}`);
-    console.log(res.data);
-    setSkills(res.data.data.skills);
-    setEducation(res.data.data.education);
-    setExperience(res.data.data.experience);
-    setProjects(res.data.data.projects);
-    console.log("Data Fetched Succesfully");
-  };
+  const {resume,fetchResume} = useContext(ResumeContext)
+
+  // const fetchData = async () => {
+  //   // const res = await axiosInstance.get(`/resume/${resumeId}`);
+  //   // console.log(res.data);
+  //   console.log(Resume)
+  //   setSkills(Resume.skills);
+  //   setEducation(Resume.education);
+  //   setExperience(Resume.experience);
+  //   setProjects(Resume.projects);
+  //   console.log("Data Fetched Succesfully");
+  // };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if(resumeId){
+    fetchResume(resumeId)
+    }
+
+  }, [resumeId]);
+
+  useEffect(() => {
+    if (resume && Object.keys(resume).length > 0) {
+      setSkills(resume.skills || []);
+      setEducation(resume.education || []);
+      setExperience(resume.experience || []);
+      setProjects(resume.projects || []);
+      console.log("Data loaded into local state:", resume);
+    }
+  }, [resume]);
 
   const colors = {
   blue: "#2A6FA8",      // lighter, softer blue
