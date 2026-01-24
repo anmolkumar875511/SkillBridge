@@ -12,7 +12,7 @@ const Banner = () => {
 };
 
   return (
-   <div className="w-full max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-12 mt-20">
+   <div className="w-full max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-12 ">
       <div className="relative overflow-hidden rounded-[2.5rem] bg-white border border-gray-100 shadow-[0_20px_50px_rgba(17,87,147,0.08)]">
         
         {/* Subtle Brand Accents in corners */}

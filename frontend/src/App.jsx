@@ -16,6 +16,8 @@ import Contact from './pages/Contact.jsx'
 import Opportunities from './pages/Opportunities.jsx'
 import Report from './pages/Report.jsx'
 import Roadmap from './pages/Roadmap.jsx'
+import CompletedRoadmap from './pages/CompletedRoadmap'
+import Contributors from './pages/Contributors'
 
 function App() {
   return (
@@ -30,6 +32,7 @@ function App() {
           <Route path="/forgetpassword" element={<Forgetpassw/>}/>
           <Route path='/reset-password/:token' element={<Resetpassw/>} />
           <Route path='/contact' element={<Contact/>} />
+          <Route path='/contributors' element={<Contributors/>}/>
           {/* Protected Routes */}
           <Route element={<ProtectedRoute/>}>
           <Route path='/Dashboard' element={<Dashboard/>}/>
@@ -37,6 +40,7 @@ function App() {
           <Route path='/Opportunities' element={<Opportunities/>}/>
           <Route path='/analyze/:opportunityId' element={<Report/>}/>
           <Route path='/roadmap/:id' element={<Roadmap/>} />
+          <Route path='/complete_roadmap' element={<CompletedRoadmap/>} />
           </Route>
 
 

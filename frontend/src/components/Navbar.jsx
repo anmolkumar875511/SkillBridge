@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect,useState,useRef } from 'react'
 import logo from '../assets/logo.png'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
@@ -20,6 +20,21 @@ function Navbar() {
   orange: "#F6A04D",    // lighter orange
   lightBlue: "#e7f0f7"
 };
+
+// ... inside your component
+const [isMenuOpen, setIsMenuOpen] = useState(false);
+const menuRef = useRef(null);
+
+// Close menu when clicking outside
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setIsMenuOpen(false);
+    }
+  };
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => document.removeEventListener("mousedown", handleClickOutside);
+}, []);
 
   return (
     <nav className="fixed top-0 left-0 right-0 w-full z-100 h-24 bg-white/70 backdrop-blur-xl border-b border-gray-100 shadow-sm">
@@ -71,16 +86,70 @@ function Navbar() {
         {/* ----- Right: Action Button ----- */}
         <div className="flex-1 flex justify-end">
           {user ? (
+            <div className="relative" ref={menuRef}>
+            {/* AVATAR TRIGGER */}
             <button
-              onClick={logout}
-              className="group flex items-center gap-2 px-6 py-2.5 rounded-2xl font-black text-sm transition-all shadow-lg hover:shadow-rose-100 active:scale-95 border-2 border-transparent hover:border-rose-100"
-              style={{ backgroundColor: colors.lightBlue, color: colors.blue }}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="flex items-center justify-center w-12 h-12 rounded-2xl border-2 border-transparent hover:border-blue-100 transition-all active:scale-95 shadow-md overflow-hidden"
+              style={{ backgroundColor: colors.lightBlue }}
             >
-              <span className="group-hover:text-rose-600 transition-colors tracking-widest">LOG OUT</span>
-              <svg className="w-4 h-4 group-hover:text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-              </svg>
+              {user.photoURL ? (
+                <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
+              ) : (
+                <span className="font-black text-lg" style={{ color: colors.blue }}>
+                  {user.displayName?.charAt(0) || 'U'}
+                </span>
+              )}
             </button>
+    
+            {/* DROPDOWN MENU */}
+            {isMenuOpen && (
+              <div className="absolute right-0 mt-3 w-64 bg-white rounded-3xl shadow-2xl border border-gray-50 p-2 z-50 animate-in fade-in zoom-in duration-200 origin-top-right">
+                <div className="px-4 py-3 border-b border-gray-50 mb-2">
+                  <p className="text-xs font-bold text-gray-400 tracking-widest uppercase">Account</p>
+                  <p className="text-sm font-black truncate" style={{ color: colors.blue }}>{user.displayName || user.email}</p>
+                </div>
+    
+                <div className="flex flex-col gap-1">
+                  {/* Profile Button */}
+                  <button
+                    onClick={() => { navigate('/Profile'); setIsMenuOpen(false); }}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 transition-colors font-bold text-sm text-gray-700 group"
+                  >
+                    <div className="p-2 rounded-lg bg-blue-50 group-hover:bg-blue-100 transition-colors">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                    </div>
+                    User Profile
+                  </button>
+    
+                  {/* Roadmaps Button */}
+                  <button
+                    onClick={() => { navigate('/complete_roadmap'); setIsMenuOpen(false); }}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 transition-colors font-bold text-sm text-gray-700 group"
+                  >
+                    <div className="p-2 rounded-lg bg-green-50 group-hover:bg-green-100 transition-colors">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    Completed Roadmaps
+                  </button>
+    
+                  <hr className="my-1 border-gray-50" />
+    
+                  {/* Logout Button (Styled as requested) */}
+                  <button
+                    onClick={logout}
+                    className="group flex items-center justify-between w-full px-4 py-3 rounded-xl font-black text-sm transition-all hover:bg-rose-50 active:scale-95"
+                    style={{ color: colors.blue }}
+                  >
+                    <span className="group-hover:text-rose-600 transition-colors tracking-widest">LOG OUT</span>
+                    <svg className="w-4 h-4 group-hover:text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
           ) : (
             <button
               onClick={() => navigate('/Login')}

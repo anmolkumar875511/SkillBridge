@@ -12,7 +12,7 @@ const Report = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const {resume} = useContext(ResumeContext)
-  
+   
   const { opportunityId } = useParams();
   const navigate = useNavigate();
 
