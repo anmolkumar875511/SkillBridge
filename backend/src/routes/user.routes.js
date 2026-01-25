@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import passport from 'passport';
 import { verifyToken } from '../middlewares/auth.middleware.js';
 import { uploadImage } from '../middlewares/upload.middleware.js';
 import {
@@ -14,6 +15,7 @@ import {
     forgotPassword,
     resetPassword,
     uploadAvatar,
+    handleGoogleCallback
 } from '../controllers/user.controller.js';
 
 const router = Router();
@@ -25,6 +27,8 @@ router.post('/login', loginUser);
 router.post('/refresh-token', refreshAccessToken);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password/:token', resetPassword);
+router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'], session: false }));
+router.get('/auth/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/login' }), handleGoogleCallback);
 
 router.post('/logout', verifyToken, logoutUser);
 router.get('/profile', verifyToken, getUserProfile);

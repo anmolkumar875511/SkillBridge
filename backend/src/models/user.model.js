@@ -19,16 +19,22 @@ const userSchema = new mongoose.Schema(
         },
 
         password: {
-            type: String,
-            required: true,
-            minlength: 6,
-            select: false,
-            trim: true,
-            validate(value) {
-                if (value.toLowerCase().includes('password')) {
-                    throw new Error('Password cannot contain the word "password"');
-                }
+                type: String,
+                required: function() { return !this.googleId; }, 
+                minlength: 6,
+                select: false,
+                trim: true,
+                validate(value) {
+                    if (value && value.toLowerCase().includes('password')) {
+                        throw new Error('Password cannot contain the word "password"');
+                    }
+                },
             },
+
+        googleId: {
+            type: String,
+            unique: true,
+            sparse: true,
         },
 
         role: {
@@ -78,10 +84,9 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre('save', async function () {
-    if (!this.isModified('password')) return;
+    if (!this.isModified('password') || !this.password) return;
     this.password = await bcrypt.hash(this.password, 11);
 });
-
 userSchema.methods.isPasswordMatch = async function (password) {
     return await bcrypt.compare(password, this.password);
 };
