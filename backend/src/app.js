@@ -25,9 +25,6 @@ app.use('/api/v1/user', userRoutes);
 import resumeRoutes from './routes/resume.routes.js';
 app.use('/api/v1/resume', resumeRoutes);
 
-import jobIngestRoutes from './routes/jobIngest.routes.js';
-app.use('/api/v1/ingest', jobIngestRoutes);
-
 import opportunityRoutes from './routes/opportunity.routes.js';
 app.use('/api/v1/opportunity', opportunityRoutes);
 
