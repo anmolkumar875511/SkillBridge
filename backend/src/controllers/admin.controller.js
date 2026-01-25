@@ -1,6 +1,9 @@
 import Log from '../models/log.model.js';
 import User from '../models/user.model.js';
-import { runIngestion } from '../services/fetchOpportunity/ingestJob.service.js';
+import Opportunity from '../models/opportunity.model.js';
+import ResumeParsed from '../models/resumeParsed.model.js';
+import LearningRoadmap from '../models/learningRoadmap.model.js';
+import { runIngestion } from '../services/fetchOpportunity/ingestJob.service.js'; // Assuming this path exists based on your snippet
 import asyncHandler from '../utils/asyncHandler.js';
 import apiError from '../utils/apiError.js';
 import apiResponse from '../utils/apiResponse.js';
@@ -109,4 +112,33 @@ export const exportLogs = asyncHandler(async (req, res) => {
         req,
     });
     return res.status(200).send(csv);
+});
+
+
+export const getDashboardStats = asyncHandler(async (req, res) => {
+    const [
+        totalUsers,
+        totalOpportunities,
+        activeOpportunities,
+        totalResumes,
+        totalRoadmaps,
+        recentLogs
+    ] = await Promise.all([
+        User.countDocuments({ role: 'student' }),
+        Opportunity.countDocuments(),
+        Opportunity.countDocuments({ isActive: true }),
+        ResumeParsed.countDocuments(),
+        LearningRoadmap.countDocuments(),
+        Log.find().sort({ createdAt: -1 }).limit(5).select('level message createdAt meta.action')
+    ]);
+
+    const stats = {
+        users: { total: totalUsers },
+        opportunities: { total: totalOpportunities, active: activeOpportunities },
+        resumes: totalResumes,
+        roadmaps: totalRoadmaps,
+        recentLogs
+    };
+
+    return res.status(200).json(new apiResponse(200, stats, 'Dashboard statistics fetched successfully'));
 });
