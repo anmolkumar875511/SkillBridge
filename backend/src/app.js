@@ -4,12 +4,16 @@ import cookieParser from 'cookie-parser';
 import errorHandler from './middlewares/errorHandler.middleware.js';
 import { startFindWorkCron } from './cron/findwork.cron.js';
 import './cron/cleanupUnverifiedUsers.cron.js';
+import './utils/passport.js';
+import passport from 'passport';
+
 
 startFindWorkCron();
 
 const app = express();
 
 app.use(express.json({ limit: '32kb' }));
+app.use(passport.initialize());
 app.use(express.urlencoded({ extended: true, limit: '32kb' }));
 app.use(cookieParser());
 app.use(

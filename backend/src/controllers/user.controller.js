@@ -475,3 +475,38 @@ export const uploadAvatar = asyncHandler(async (req, res, next) => {
         throw new apiError(500, 'Failed to upload avatar', error.message);
     }
 });
+
+export const handleGoogleCallback = asyncHandler(async (req, res) => {
+    const user = req.user;
+
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
+
+    user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
+
+    const options = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Lax',
+    };
+
+    await logger({
+        level: 'info',
+        action: 'USER_LOGIN_GOOGLE',
+        message: `User ${user.email} logged in via Google`,
+        req,
+    });
+
+    res
+        .status(200)
+        .cookie('accessToken', accessToken, {
+            ...options,
+            maxAge: 1000 * 60 * 15,
+        })
+        .cookie('refreshToken', refreshToken, {
+            ...options,
+            maxAge: 1000 * 60 * 60 * 24 * 7,
+        })
+        .redirect(`${process.env.FRONTEND_URL}/Dashboard`); 
+});
