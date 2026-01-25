@@ -3,17 +3,30 @@ import logo from '../assets/logo.png'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
 import axiosInstance from '../axiosInstance'
+import avatar from "../assets/avatar.svg"
 
 function Navbar() {
   const navigate = useNavigate()
   const {user, setUser} = useContext(AuthContext)
 
-   const logout = async () =>{
-      const res = await axiosInstance.post("/user/logout",{
-        user
-      })
-      setUser(null)
-    }
+const logout = async () => {
+  try {
+    // 1. Attempt the server-side logout
+    await axiosInstance.post("/user/logout", { user });
+  } catch (error) {
+    // 2. We catch the error but don't let it crash the app.
+    // If the error is 401, the user is already logged out on the server.
+    console.warn("Server logout failed, but clearing local session anyway.", error);
+  } finally {
+    // 3. This ALWAYS runs. 
+    // It clears your local state and redirects the user, 
+    // which effectively "fixes" the UI.
+    setUser(null);
+    
+    // Optional: If you use localStorage, clear it here too
+    // localStorage.removeItem("token"); 
+  }
+};
    
     const colors = {
   blue: "#2A6FA8",      // lighter, softer blue
@@ -93,11 +106,11 @@ useEffect(() => {
               className="flex items-center justify-center w-12 h-12 rounded-2xl border-2 border-transparent hover:border-blue-100 transition-all active:scale-95 shadow-md overflow-hidden"
               style={{ backgroundColor: colors.lightBlue }}
             >
-              {user.photoURL ? (
-                <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
+              {user.avatar.url ? (
+                <img src={user.avatar.url} alt="Profile" className="w-full h-full object-cover" />
               ) : (
                 <span className="font-black text-lg" style={{ color: colors.blue }}>
-                  {user.displayName?.charAt(0) || 'U'}
+                  {<img src={avatar} alt="" /> || 'U'}
                 </span>
               )}
             </button>

@@ -19,7 +19,7 @@ axiosInstance.interceptors.response.use(
                 // Call your backend refresh endpoint
                 // Note: We use the base 'axios' here to avoid an infinite loop
                 await axios.post(
-                    "http://localhost:5000/api/v1/users/refresh-token", 
+                    "http://localhost:5000/api/v1/user/refresh-token", 
                     {}, 
                     { withCredentials: true }
                 );

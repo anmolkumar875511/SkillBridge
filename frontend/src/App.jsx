@@ -18,6 +18,7 @@ import Report from './pages/Report.jsx'
 import Roadmap from './pages/Roadmap.jsx'
 import CompletedRoadmap from './pages/CompletedRoadmap'
 import Contributors from './pages/Contributors'
+import Profile from './pages/Profile.jsx'
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           <Route path='/analyze/:opportunityId' element={<Report/>}/>
           <Route path='/roadmap/:id' element={<Roadmap/>} />
           <Route path='/complete_roadmap' element={<CompletedRoadmap/>} />
+          <Route path='/Profile' element={<Profile/>} />
           </Route>
 
 
