@@ -50,17 +50,20 @@ export const uploadResume = asyncHandler(async (req, res) => {
     );
 });
 
-export const getResumeById = asyncHandler(async (req, res) => {
+export const getLatestResume = asyncHandler(async (req, res) => {
     const resume = await ResumeParsed.findOne({
-        _id: req.params.id,
         user: req.user._id,
-    });
+    }).sort({ createdAt: -1 });
 
     if (!resume) {
-        throw new apiError(404, 'Resume not found');
+        return res
+            .status
+            .json( new apiResponse(201, 'No resume found, please uplaod resume'));
     }
 
-    return res.status(200).json(new apiResponse(200, 'Resume fetched', resume));
+    return res
+        .status(200)
+        .json(new apiResponse(200, 'Latest resume fetched', resume));
 });
 
 export const updateResume = asyncHandler(async (req, res) => {
