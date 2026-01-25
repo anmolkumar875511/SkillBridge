@@ -3,7 +3,7 @@ import User from '../models/user.model.js';
 import Opportunity from '../models/opportunity.model.js';
 import ResumeParsed from '../models/resumeParsed.model.js';
 import LearningRoadmap from '../models/learningRoadmap.model.js';
-import { runIngestion } from '../services/fetchOpportunity/ingestJob.service.js'; // Assuming this path exists based on your snippet
+import { runIngestion } from '../services/fetchOpportunity/ingestJob.service.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import apiError from '../utils/apiError.js';
 import apiResponse from '../utils/apiResponse.js';

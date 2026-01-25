@@ -28,10 +28,7 @@ export const createRoadmap = asyncHandler(async (req, res) => {
 export const getRoadmap = asyncHandler(async (req, res) => {
     const userId = req.user._id;
 
-    const roadmaps = await LearningRoadmap.find({
-        user: userId,
-        progress: { $lt: 100 },
-    })
+    const roadmaps = await LearningRoadmap.find({ user: userId })
         .populate('opportunity', 'title company category')
         .sort({ createdAt: -1 });
 

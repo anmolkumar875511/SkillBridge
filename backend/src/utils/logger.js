@@ -1,3 +1,5 @@
+import Log from '../models/log.model.js';
+
 export const logger = async ({ level = 'info', message, action, req, userId, error }) => {
     try {
         const finalMessage = error ? `${message} | Error: ${error.message}` : message;
