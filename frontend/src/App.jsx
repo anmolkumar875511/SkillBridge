@@ -19,6 +19,7 @@ import Roadmap from './pages/Roadmap.jsx'
 import CompletedRoadmap from './pages/CompletedRoadmap'
 import Contributors from './pages/Contributors'
 import Profile from './pages/Profile.jsx'
+import AdminDashboard from './pages/AdminDashboard.jsx'
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path='/contributors' element={<Contributors/>}/>
           {/* Protected Routes */}
           <Route element={<ProtectedRoute/>}>
+          <Route path='/AdminDashboard' element={<AdminDashboard/>} />
           <Route path='/Dashboard' element={<Dashboard/>}/>
           <Route path='/Resume' element={<Resume/>}/>
           <Route path='/Opportunities' element={<Opportunities/>}/>

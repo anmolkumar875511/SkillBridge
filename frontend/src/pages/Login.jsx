@@ -25,7 +25,12 @@ const Login = () => {
   useEffect(() => {
     // If the context updates and we have a user, leave this page immediately
     if (user) {
-        navigate("/Dashboard", { replace: true });
+        if(user.role === "student"){
+          navigate("/Dashboard", { replace: true });
+        }
+        else{
+          navigate("/AdminDashboard", { replace: true })
+        }   
     }
 }, [user, navigate]);
 
@@ -81,14 +86,22 @@ const Login = () => {
                 setState("Middle"); 
                 toast.success("OTP Sent To your Email",{id:toastId})
             } else {
-                await axiosInstance.post(
+                const response = await axiosInstance.post(
                     "/user/login",
                     { email, password },
                     { withCredentials: true }
                 );
+                const loggedInuser = response.data.data.user
                 await fetchUser();
                 toast.success("Login Successfully",{id:toastId , duration: 1000})
-                navigate(`/Dashboard`);
+                
+                if(loggedInuser.role === "student"){
+                   navigate(`/Dashboard`);
+                }
+                else{
+                  navigate("/AdminDashboard")
+                }
+                
             }
         } catch (error) {
             console.log(error);
