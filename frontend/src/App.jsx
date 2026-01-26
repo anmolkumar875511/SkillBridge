@@ -22,6 +22,7 @@ import Profile from './pages/Profile.jsx'
 import AdminDashboard from './pages/AdminDashboard.jsx'
 import Logger from './pages/Logger.jsx'
 import AllUsers from './pages/AllUsers.jsx'
+import AccountSuspended from './pages/AccountSuspended.jsx'
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path='/reset-password/:token' element={<Resetpassw/>} />
           <Route path='/contact' element={<Contact/>} />
           <Route path='/contributors' element={<Contributors/>}/>
+          <Route path='/account-suspended' element={<AccountSuspended/>} />
           {/* Protected Routes */}
           <Route element={<ProtectedRoute/>}>
           <Route path='/AdminDashboard' element={<AdminDashboard/>} />
