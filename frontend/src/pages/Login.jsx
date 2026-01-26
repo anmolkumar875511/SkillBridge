@@ -22,6 +22,11 @@ const Login = () => {
 
     const { fetchUser, user } = useContext(AuthContext);
 
+    // Google OAuth Handler
+    const handleGoogleLogin = () => {
+        // Manually set to 5000 to match your running server
+        window.location.href = `http://localhost:5000/api/v1/user/auth/google`;
+    };
   useEffect(() => {
     // If the context updates and we have a user, leave this page immediately
     if (user) {
@@ -184,6 +189,16 @@ const Login = () => {
               style={{ backgroundColor: colors.blue, boxShadow: `0 10px 20px -5px ${colors.blue}44` }}
             >
               {state === "Sign Up" ? "GET STARTED" : "LOGIN NOW"}
+            </button>
+
+            {/* Google OAuth Button */}
+            <button
+              type="button"
+              onClick={handleGoogleLogin}
+              className="w-full py-4 bg-white border border-gray-200 text-gray-700 font-bold rounded-2xl transition-all hover:bg-gray-50 flex items-center justify-center gap-3 shadow-sm"
+            >
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5" />
+              CONTINUE WITH GOOGLE
             </button>
 
             <div className="space-y-3 pt-2">
