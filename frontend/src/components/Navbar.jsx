@@ -212,7 +212,7 @@ const LogoSection = (
             {/* AVATAR TRIGGER */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="flex items-center justify-center w-12 h-12 rounded-2xl border-2 border-transparent hover:border-blue-100 transition-all active:scale-95 shadow-md overflow-hidden"
+              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-transparent hover:border-blue-100 transition-all active:scale-95 shadow-md overflow-hidden"
               style={{ backgroundColor: colors.lightBlue }}
             >
               {user.avatar.url ? (
