@@ -142,3 +142,18 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
 
     return res.status(200).json(new apiResponse(200, stats, 'Dashboard statistics fetched successfully'));
 });
+
+
+export const getAllUsers = asyncHandler(async (req, res) => {
+
+    const users = await User.find({ role: 'student' })
+        .lean();
+
+    if (!users || users.length === 0) {
+        return res.status(200).json(new apiResponse(200, 'No students found', []));
+    }
+
+    return res.status(200).json(
+        new apiResponse(200, 'Users fetched successfully', users)
+    );
+});

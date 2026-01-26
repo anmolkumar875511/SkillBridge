@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { ingest, toggleBlacklist, getLogs, exportLogs, getDashboardStats } from '../controllers/admin.controller.js';
+import { ingest, toggleBlacklist, getLogs, exportLogs, getDashboardStats, getAllUsers } from '../controllers/admin.controller.js';
 import { verifyToken, authorizeRoles } from '../middlewares/auth.middleware.js';
 
 const router = Router();
@@ -11,5 +11,6 @@ router.get('/fetch', ingest);
 router.patch('/blacklist/:userId', toggleBlacklist);
 router.get('/logs', getLogs);
 router.get('/logs/export', exportLogs);
+router.get('/users', getAllUsers);
 
 export default router;
