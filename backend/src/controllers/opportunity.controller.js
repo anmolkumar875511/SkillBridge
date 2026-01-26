@@ -27,7 +27,8 @@ export const getOpportunity = asyncHandler(async (req, res) => {
 
     const matchedOpportunities = await Opportunity.find({
         category: { $in: categoryNames },
-    }).sort({ createdAt: -1 });
+    }).sort({ createdAt: -1 })
+        .limit(50);
 
     return res
         .status(200)
