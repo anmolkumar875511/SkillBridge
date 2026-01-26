@@ -90,7 +90,7 @@ const Roadmap = () => {
     return (
       <div className="flex items-center justify-center min-h-screen bg-slate-50">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-12 h-12  rounded-full animate-spin mx-auto mb-4" style={{ borderColor: `${colors.blue} transparent ${colors.blue} ${colors.blue}` }}></div>
           <p className="text-slate-500 font-medium">Loading your personalized path...</p>
         </div>
       </div>
@@ -101,25 +101,31 @@ const Roadmap = () => {
     return (
       <div className="p-10 text-center">
         <h2 className="text-xl font-bold">Roadmap not found</h2>
-        <button onClick={() => navigate(backPath)} className="mt-4 text-indigo-600 underline">
+        <button onClick={() => navigate(backPath)} className="mt-4 underline" style={{ color: colors.blue }}>
           {backLabel}
         </button>
       </div>
     );
   }
 
+  const colors = {
+  blue: "#2A6FA8",      // lighter, softer blue
+  orange: "#F6A04D",    // lighter orange
+  lightBlue: "#e7f0f7"
+};
+
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4">
       <div className="max-w-4xl mx-auto">
         {showHurray && (
-          <div className="fixed inset-0 z-200 flex items-center justify-center bg-indigo-600/90 backdrop-blur-md animate-in fade-in duration-500">
+          <div className="fixed inset-0 z-200 flex items-center justify-center backdrop-blur-md animate-in fade-in duration-500" style={{ backgroundColor: `${colors.blue}E6` }}>
             <div className="text-center text-white p-8">
               <div className="flex justify-center mb-6">
                 <PartyPopper size={80} className="animate-bounce" />
               </div>
               <h1 className="text-5xl font-black mb-4">HURRAY!</h1>
               <p className="text-xl font-medium opacity-90">You have completed your entire roadmap!</p>
-              <p className="mt-2 text-indigo-200">Redirecting to your dashboard...</p>
+              <p className="mt-2 " style={{ color: colors.lightBlue }}>Redirecting to your dashboard...</p>
             </div>
           </div>
         )}
@@ -127,7 +133,10 @@ const Roadmap = () => {
         {/* Dynamic Back Button */}
         <button 
           onClick={() => navigate(backPath)} 
-          className="group flex items-center gap-2 text-slate-500 hover:text-indigo-600 font-bold mb-8 transition-colors"
+          className="group flex items-center gap-2 text-slate-500  font-bold mb-8 transition-colors"
+          style={{ '--hover-color': colors.blue }}
+          onMouseEnter={(e) => e.currentTarget.style.color = colors.blue}
+          onMouseLeave={(e) => e.currentTarget.style.color = ''}
         >
           <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" /> 
           {backLabel}
@@ -146,7 +155,7 @@ const Roadmap = () => {
             </p>
           </div>
           <div className="text-right">
-            <div className={`text-4xl font-black ${isReadonly ? 'text-emerald-500' : 'text-indigo-600'}`}>
+            <div className="text-4xl font-black" style={{ color: isReadonly ? '#10b981' : colors.blue }}>
                 {roadmapData.progress || 0}%
             </div>
             <div className="text-xs font-bold text-slate-400 uppercase tracking-tighter">
@@ -155,13 +164,13 @@ const Roadmap = () => {
           </div>
         </header>
 
-        <div className="relative border-l-2 border-indigo-100 ml-4 md:ml-8 space-y-12">
+        <div className="relative border-l-2  ml-4 md:ml-8 space-y-12" style={{ borderColor: colors.lightBlue }}>
           {roadmapData.roadmap.map((item, weekIndex) => (
             <div key={weekIndex} className="relative pl-8 md:pl-12">
-              <div className={`absolute -left-2.25 top-0 w-4 h-4 rounded-full border-4 border-white shadow-md ${isReadonly ? 'bg-emerald-500' : 'bg-indigo-500'}`}></div>
+              <div className={`absolute -left-2.25 top-0 w-4 h-4 rounded-full border-4 border-white shadow-md`} style={{ backgroundColor: isReadonly ? '#10b981' : colors.blue }}></div>
 
               <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden transition-all hover:shadow-md">
-                <div className={`${isReadonly ? 'bg-emerald-600' : 'bg-indigo-600'} p-4 flex justify-between items-center text-white`}>
+                <div className={` p-4 flex justify-between items-center text-white`} style={{ backgroundColor: isReadonly ? '#059669' : colors.blue }}>
                   <span className="text-xs font-black uppercase tracking-[0.2em]">Week {item.week}</span>
                   <BookOpen size={18} className="opacity-70" />
                 </div>
@@ -171,7 +180,7 @@ const Roadmap = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                     <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-indigo-600 font-bold text-sm uppercase tracking-wide">
+                      <div className="flex items-center gap-2  font-bold text-sm uppercase tracking-wide" style={{ color: colors.blue }}>
                         <ExternalLink size={16} /> 
                         Learning Resources
                       </div>
@@ -182,12 +191,24 @@ const Roadmap = () => {
                             href={resource.url} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl group hover:bg-indigo-50 transition-all border border-transparent hover:border-indigo-100"
+                            className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl group  transition-all border border-transparent "
+                            style={{ 
+                                transition: '0.3s'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.backgroundColor = colors.lightBlue;
+                                e.currentTarget.style.borderColor = colors.blue + '33';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.backgroundColor = '';
+                                e.currentTarget.style.borderColor = 'transparent';
+                            }}
                           >
-                            <span className="text-sm font-semibold text-slate-700 group-hover:text-indigo-700 line-clamp-1">
+                            <span className="text-sm font-semibold text-slate-700 group-hover:text-blue-900 line-clamp-1">
                               {resource.title}
                             </span>
-                            <ExternalLink size={14} className="text-slate-400 group-hover:text-indigo-400 shrink-0" />
+                            
+                            <ExternalLink size={14} className="text-slate-400 group-hover:text-blue-900 shrink-0" />
                           </a>
                         ))}
                       </div>

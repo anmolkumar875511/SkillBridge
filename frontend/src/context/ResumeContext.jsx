@@ -6,9 +6,9 @@ export const ResumeContext = createContext();
 export const ResumeProvider = ({children}) =>{
     const [resume,setResume] = useState([])
 
-    const fetchResume = async (id) =>{
+    const fetchResume = async () =>{
         try {
-            const res = await axiosInstance.get(`/resume/${id}`)
+            const res = await axiosInstance.get(`/resume/`)
             setResume(res.data.data)
         } catch (error) {
             console.log(error)

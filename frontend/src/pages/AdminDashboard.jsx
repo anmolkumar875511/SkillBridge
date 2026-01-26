@@ -13,16 +13,16 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import axiosInstance from '../axiosInstance';
+import { useNavigate } from 'react-router-dom';
 
-// Helper for API calls (replace with your axios instance)
-const api = axios.create({ baseURL: 'http://localhost:5000/api/v1' }); 
 
 const AdminDashboard = () => {
     const [stats, setStats] = useState(null);
-    const [logs, setLogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [ingesting, setIngesting] = useState(false);
-    const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'logs'
+
+    const navigate = useNavigate()
+
 
     // Fetch Dashboard Data
     const fetchDashboardData = async () => {
@@ -35,19 +35,11 @@ const AdminDashboard = () => {
         }
     };
 
-    // Fetch Logs
-    const fetchLogs = async () => {
-        try {
-            const res = await axiosInstance.get('/admin/logs?limit=10');
-            setLogs(res.data.data.logs);
-        } catch (error) {
-            console.error("Failed to load logs", error);
-        }
-    };
+
 
     useEffect(() => {
         setLoading(true);
-        Promise.all([fetchDashboardData(), fetchLogs()]).finally(() => setLoading(false));
+        fetchDashboardData().finally(() => setLoading(false));
     }, []);
 
     // Handle Ingestion Trigger
@@ -64,10 +56,6 @@ const AdminDashboard = () => {
         }
     };
 
-    // Handle Log Export
-    const handleExportLogs = () => {
-        window.open('http://localhost:5000/api/v1/admin/logs/export', '_blank');
-    };
 
     if (loading) return <div className="flex h-screen items-center justify-center text-gray-500">Loading Dashboard...</div>;
 
@@ -77,24 +65,10 @@ const AdminDashboard = () => {
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 
-                {/* Tabs */}
-                <div className="flex space-x-4 mb-8 border-b border-gray-200">
-                    <button 
-                        onClick={() => setActiveTab('overview')}
-                        className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${activeTab === 'overview' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
-                    >
-                        Overview
-                    </button>
-                    <button 
-                        onClick={() => setActiveTab('logs')}
-                        className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${activeTab === 'logs' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
-                    >
-                        System Logs
-                    </button>
-                </div>
+                
 
                 {/* OVERVIEW CONTENT */}
-                {activeTab === 'overview' && (
+
                     <div className="space-y-6">
                         {/* Action Bar */}
                         <div className="flex justify-end">
@@ -141,7 +115,7 @@ const AdminDashboard = () => {
                         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                             <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
                                 <h3 className="font-semibold text-gray-800">Recent System Activity</h3>
-                                <button onClick={() => setActiveTab('logs')} className="text-sm text-blue-600 hover:underline">View All</button>
+                                <button onClick={() => navigate('/logger')} className="text-sm text-blue-600 hover:underline">View All</button>
                             </div>
                             <div className="divide-y divide-gray-100">
                                 {stats?.recentLogs?.map((log) => (
@@ -157,47 +131,6 @@ const AdminDashboard = () => {
                             </div>
                         </div>
                     </div>
-                )}
-
-                {/* LOGS CONTENT */}
-                {activeTab === 'logs' && (
-                    <div className="space-y-4">
-                        <div className="flex justify-between items-center">
-                            <h2 className="text-lg font-semibold text-gray-800">System Logs</h2>
-                            <button 
-                                onClick={handleExportLogs}
-                                className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 text-gray-700"
-                            >
-                                <Download className="w-4 h-4" /> Export CSV
-                            </button>
-                        </div>
-
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                            <table className="w-full text-left border-collapse">
-                                <thead className="bg-gray-50 text-gray-500 text-xs uppercase font-semibold">
-                                    <tr>
-                                        <th className="px-6 py-3">Timestamp</th>
-                                        <th className="px-6 py-3">Level</th>
-                                        <th className="px-6 py-3">Action</th>
-                                        <th className="px-6 py-3">User</th>
-                                        <th className="px-6 py-3">Message</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-100 text-sm">
-                                    {logs.map((log) => (
-                                        <tr key={log._id} className="hover:bg-gray-50">
-                                            <td className="px-6 py-3 text-gray-500 whitespace-nowrap">{new Date(log.createdAt).toLocaleString()}</td>
-                                            <td className="px-6 py-3"><LogLevelBadge level={log.level} /></td>
-                                            <td className="px-6 py-3 font-medium text-gray-700">{log.meta?.action || '-'}</td>
-                                            <td className="px-6 py-3 text-gray-600">{log.user?.email || 'System'}</td>
-                                            <td className="px-6 py-3 text-gray-600 max-w-xs truncate" title={log.message}>{log.message}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                )}
             </main>
         </div>
     );

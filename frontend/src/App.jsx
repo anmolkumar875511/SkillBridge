@@ -20,6 +20,7 @@ import CompletedRoadmap from './pages/CompletedRoadmap'
 import Contributors from './pages/Contributors'
 import Profile from './pages/Profile.jsx'
 import AdminDashboard from './pages/AdminDashboard.jsx'
+import Logger from './pages/Logger.jsx'
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           {/* Protected Routes */}
           <Route element={<ProtectedRoute/>}>
           <Route path='/AdminDashboard' element={<AdminDashboard/>} />
+          <Route path='/logger' element={<Logger/>} />
           <Route path='/Dashboard' element={<Dashboard/>}/>
           <Route path='/Resume' element={<Resume/>}/>
           <Route path='/Opportunities' element={<Opportunities/>}/>

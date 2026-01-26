@@ -60,6 +60,10 @@ const LogoSection = (
     </div>
   );
 
+  useEffect(() => {
+  setIsMenuOpen(false);
+}, [user]);
+
   // --- ADMIN VIEW ---
   if (user?.role === "admin") {
     return (
@@ -81,6 +85,50 @@ const LogoSection = (
               {({ isActive }) => (
                 <>
                   ADMIN PANEL
+                  {/* Animated underline / dot matching student style */}
+                  <span 
+                    className={`absolute bottom-2 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full transition-all duration-300
+                    group-hover:w-4 group-hover:bg-[#F48C31]
+                    ${isActive ? 'w-4 bg-[#F48C31]' : 'w-0 bg-transparent'}`}
+                  />
+                </>
+              )}
+            </NavLink>
+
+            <NavLink
+              to="/logger"
+              className={({ isActive }) =>
+                `relative px-5 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-all duration-300 group
+                ${isActive 
+                  ? 'text-[#115793] bg-[#115793]/5' 
+                  : 'text-gray-500 hover:text-[#115793] hover:bg-gray-50'}`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  System Logs
+                  {/* Animated underline / dot matching student style */}
+                  <span 
+                    className={`absolute bottom-2 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full transition-all duration-300
+                    group-hover:w-4 group-hover:bg-[#F48C31]
+                    ${isActive ? 'w-4 bg-[#F48C31]' : 'w-0 bg-transparent'}`}
+                  />
+                </>
+              )}
+            </NavLink>
+
+            <NavLink
+              to="/users"
+              className={({ isActive }) =>
+                `relative px-5 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-all duration-300 group
+                ${isActive 
+                  ? 'text-[#115793] bg-[#115793]/5' 
+                  : 'text-gray-500 hover:text-[#115793] hover:bg-gray-50'}`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  All Users
                   {/* Animated underline / dot matching student style */}
                   <span 
                     className={`absolute bottom-2 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full transition-all duration-300

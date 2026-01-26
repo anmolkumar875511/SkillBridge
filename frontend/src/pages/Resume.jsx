@@ -136,7 +136,7 @@ const Resume = () => {
           <div className="min-h-100 bg-white rounded-[2.5rem] shadow-xl shadow-gray-200/50 p-8 border border-gray-50 relative overflow-hidden">
             {isContent ? (
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <ConfirmResume key={resumeId} resumeId={resumeId} />
+                <ConfirmResume />
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center h-full space-y-4 py-20">

@@ -2,12 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import axiosInstance from "../axiosInstance";
 import { ResumeContext } from "../context/ResumeContext";
 
-const ConfirmResume = ({ resumeId }) => {
+const ConfirmResume = ({}) => {
   const [isEdit, setIsEdit] = useState(false);
   const [skills, setSkills] = useState([]);
   const [education, setEducation] = useState([]);
   const [experience, setExperience] = useState([]);
   const [projects, setProjects] = useState([]);
+  const [id, setId] = useState("");
 
   const {resume,fetchResume} = useContext(ResumeContext)
 
@@ -22,12 +23,20 @@ const ConfirmResume = ({ resumeId }) => {
   //   console.log("Data Fetched Succesfully");
   // };
 
-  useEffect(() => {
-    if(resumeId){
-    fetchResume(resumeId)
+  const updateData = async ()=>{
+    try {
+    const res = await axiosInstance.put(`/resume/${id}`, {skills,education,experience,projects})
+    console.log("Update successfull",res.data.data)
+    await fetchResume()
+    setIsEdit(false);
+    } catch (error) {
+      console.log(error)
     }
+  }
 
-  }, [resumeId]);
+  useEffect(() => {
+    fetchResume()
+  }, []);
 
   useEffect(() => {
     if (resume && Object.keys(resume).length > 0) {
@@ -35,6 +44,7 @@ const ConfirmResume = ({ resumeId }) => {
       setEducation(resume.education || []);
       setExperience(resume.experience || []);
       setProjects(resume.projects || []);
+      setId(resume._id || "");
       console.log("Data loaded into local state:", resume);
     }
   }, [resume]);
@@ -185,7 +195,15 @@ const ConfirmResume = ({ resumeId }) => {
       {/* FLOATING ACTION BUTTON */}
       <div className="fixed bottom-10 right-10 z-50">
         <button
-          onClick={() => setIsEdit(!isEdit)}
+          onClick={() => {
+            if (isEdit) {
+              // If already editing, save the data
+              updateData();
+            } else {
+              // If not editing, enter edit mode
+              setIsEdit(true);
+            }
+          }}
           className="flex items-center gap-3 px-8 py-4 rounded-2xl font-black text-white shadow-2xl hover:scale-105 active:scale-95 transition-all"
           style={{ backgroundColor: isEdit ? '#10b981' : colors.blue }}
         >
