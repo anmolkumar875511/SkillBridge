@@ -30,7 +30,7 @@ const Profile = () => {
     if (!name || !email) return toast.error("Name and Email are required");
     
     try {
-      await axiosInstance.put("/user/profile", { name, email });
+      await axiosInstance.put("/user/profile", { name });
       toast.success("Profile updated successfully!");
       if (fetchUser) await fetchUser(); // Refresh global context
       setIsEditing(false);
@@ -94,13 +94,7 @@ const Profile = () => {
                   className="w-full text-2xl font-bold p-2 border-b-2 border-black outline-none"
                   placeholder="Your Name"
                 />
-                <input 
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full text-lg text-gray-500 p-2 border-b-2 border-gray-200 outline-none"
-                  placeholder="Your Email"
-                />
+                
                 <div className="flex gap-2 pt-2">
                   <button onClick={handleUpdateProfile} className="px-4 py-2 bg-black text-white rounded-lg text-sm">Save Changes</button>
                   <button onClick={() => setIsEditing(false)} className="px-4 py-2 bg-gray-200 rounded-lg text-sm">Cancel</button>
@@ -163,10 +157,24 @@ const Profile = () => {
               alt="Profile" 
               className="w-48 h-48 rounded-2xl object-cover shadow-2xl transform transition-transform group-hover:scale-[1.02]"
             />
-            <label className="absolute -bottom-4 -right-4 bg-white p-3 rounded-xl shadow-lg cursor-pointer hover:bg-gray-50 transition-colors border border-gray-100">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              <input type="file" className="hidden" onChange={handleImageUpload} disabled={loading} />
-            </label>
+           <label className="absolute -bottom-2 -right-2 bg-white p-3 rounded-2xl shadow-xl cursor-pointer hover:bg-gray-50 transition-all border border-gray-100 active:scale-90 group/icon">
+      {/* Pencil Icon (Lucide-style Edit path) */}
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        width="20" 
+        height="20" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="#2A6FA8" /* Using your brand blue */
+        strokeWidth="2.5" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+        className="group-hover/icon:rotate-12 transition-transform"
+      >
+        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+      </svg>
+      <input type="file" className="hidden" onChange={handleImageUpload} disabled={loading} />
+    </label>
           </div>
           <p className="mt-8 text-sm text-gray-400 font-medium">Click icon to update photo</p>
         </div>

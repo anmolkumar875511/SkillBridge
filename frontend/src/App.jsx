@@ -21,6 +21,7 @@ import Contributors from './pages/Contributors'
 import Profile from './pages/Profile.jsx'
 import AdminDashboard from './pages/AdminDashboard.jsx'
 import Logger from './pages/Logger.jsx'
+import AllUsers from './pages/AllUsers.jsx'
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
           <Route element={<ProtectedRoute/>}>
           <Route path='/AdminDashboard' element={<AdminDashboard/>} />
           <Route path='/logger' element={<Logger/>} />
+          <Route path='/users' element={<AllUsers/>} />
           <Route path='/Dashboard' element={<Dashboard/>}/>
           <Route path='/Resume' element={<Resume/>}/>
           <Route path='/Opportunities' element={<Opportunities/>}/>
