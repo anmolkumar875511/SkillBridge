@@ -37,6 +37,13 @@ const Roadmap = () => {
     }
   };
 
+    const colors = {
+  blue: "#2A6FA8",      // lighter, softer blue
+  orange: "#F6A04D",    // lighter orange
+  lightBlue: "#e7f0f7"
+};
+
+
   useEffect(() => {
     // Only trigger celebration if we aren't already viewing a long-completed roadmap
     if (roadmapData && roadmapData.roadmap && !isReadonly) {
@@ -108,11 +115,6 @@ const Roadmap = () => {
     );
   }
 
-  const colors = {
-  blue: "#2A6FA8",      // lighter, softer blue
-  orange: "#F6A04D",    // lighter orange
-  lightBlue: "#e7f0f7"
-};
 
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4">
