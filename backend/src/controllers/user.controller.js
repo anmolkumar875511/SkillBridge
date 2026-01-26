@@ -479,6 +479,16 @@ export const uploadAvatar = asyncHandler(async (req, res, next) => {
 export const handleGoogleCallback = asyncHandler(async (req, res) => {
     const user = req.user;
 
+    if (user.isBlacklisted) {
+        await logger({
+            level: 'warn',
+            action: 'USER_LOGIN_ATTEMPT_BLACKLISTED',
+            message: `Blacklisted user ${user.email} attempted login`,
+            req,
+        });
+        return res.redirect(`${process.env.FRONTEND_URL}/account-suspended`);
+    }
+
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
 

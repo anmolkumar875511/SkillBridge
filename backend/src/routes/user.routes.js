@@ -28,7 +28,7 @@ router.post('/refresh-token', refreshAccessToken);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password/:token', resetPassword);
 router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'], session: false }));
-router.get('/auth/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/login' }), handleGoogleCallback);
+router.get('/auth/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/login', failureMessage: "Something went wrong" }), handleGoogleCallback);
 
 router.post('/logout', verifyToken, logoutUser);
 router.get('/profile', verifyToken, getUserProfile);
