@@ -23,12 +23,13 @@ import AdminDashboard from './pages/AdminDashboard.jsx'
 import Logger from './pages/Logger.jsx'
 import AllUsers from './pages/AllUsers.jsx'
 import AccountSuspended from './pages/AccountSuspended.jsx'
+import { theme } from './theme';
 
 function App() {
   return (
-    <div>
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: theme.colors.bgLight }}>
       <Navbar />
-      <Toaster richColors position="top-center" />
+      <Toaster duration={2000} richColors position="top-center" />
       <main className="no-scrollbar overflow-y-auto h-screen pt-30">
         <Routes>
           {/* Public Routes */}

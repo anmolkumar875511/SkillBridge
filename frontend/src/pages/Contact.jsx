@@ -1,12 +1,9 @@
 import React from 'react'
+import { theme } from '../theme';
+import { Mail, Phone, MapPin, Instagram, Facebook, Linkedin } from 'lucide-react';
 
 const Contact = () => {
-  // Brand Colors from Logo
-     const colors = {
-  blue: "#2A6FA8",      // lighter, softer blue
-  orange: "#F6A04D",    // lighter orange
-  lightBlue: "#e7f0f7"
-};
+  
 
 
   const contactInfo = [
@@ -44,21 +41,24 @@ const Contact = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#fafbfc] py-24 px-6 animate-fade-in mt-10">
+   <div className="min-h-screen py-16 px-6" style={{ backgroundColor: theme.colors.bgLight }}>
       <div className="max-w-6xl mx-auto space-y-12">
         
-        {/* Header Section */}
-        <div className="text-center space-y-4">
-          <h1 className="text-5xl font-black tracking-tight text-gray-900">
-            Get in <span style={{ color: colors.blue }}>Touch</span>
+        {/* Section Header - Clean & Balanced */}
+        <div className="text-center space-y-3">
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: theme.colors.secondary }}>
+            Contact Us
+          </p>
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight" style={{ color: theme.colors.textMain }}>
+            Get in <span style={{ color: theme.colors.primary }}>Touch</span>
           </h1>
-          <p className="text-gray-500 text-lg max-w-2xl mx-auto font-medium leading-relaxed">
-            We are <span className="font-bold" style={{ color: colors.orange }}>SkillBridge</span>. We’d love to hear from you. 
+          <p className="text-sm md:text-lg max-w-2xl mx-auto font-medium leading-relaxed" style={{ color: theme.colors.textMuted }}>
+            We are <span className="font-bold" style={{ color: theme.colors.textMain }}>SkillBridge</span>. We’d love to hear from you. 
             Connect with us through any of these platforms!
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           
           {/* Left: Contact Info Cards */}
           <div className="space-y-4">
@@ -66,58 +66,52 @@ const Contact = () => {
               <a 
                 href={info.link} 
                 key={index}
-                className="group flex items-center p-6 bg-white border border-gray-100 rounded-[2rem] shadow-xl shadow-blue-900/5 transition-all hover:scale-[1.02] hover:shadow-blue-900/10"
+                className="group flex items-center p-5 bg-white border border-slate-200 rounded-2xl shadow-sm transition-all hover:border-blue-400 hover:shadow-md"
               >
                 <div 
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center transition-colors group-hover:bg-opacity-20"
-                  style={{ backgroundColor: colors.lightBlue, color: colors.blue }}
+                  className="w-12 h-12 rounded-xl flex items-center justify-center transition-colors"
+                  style={{ backgroundColor: `${theme.colors.primary}10`, color: theme.colors.primary }}
                 >
                   {info.icon}
                 </div>
-                <div className="ml-6">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">{info.label}</p>
-                  <p className="text-lg font-bold text-gray-800 group-hover:text-orange-500 transition-colors">{info.value}</p>
+                <div className="ml-5">
+                  <p className="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1" style={{ color: theme.colors.textMuted }}>{info.label}</p>
+                  <p className="text-base font-bold transition-colors group-hover:text-blue-600" style={{ color: theme.colors.textMain }}>{info.value}</p>
                 </div>
               </a>
             ))}
           </div>
 
-          {/* Right: Social Logos Section */}
-          <div className="bg-white border border-gray-100 rounded-[2.5rem] p-10 shadow-xl shadow-blue-900/5 flex flex-col justify-center space-y-10 relative overflow-hidden">
+          {/* Right: Social Connect Section */}
+          <div className="bg-white border border-slate-200 rounded-3xl p-8 md:p-10 shadow-sm flex flex-col justify-between min-h-85">
             <div>
-              <h3 className="text-2xl font-black mb-2" style={{ color: colors.blue }}>Follow Our Journey</h3>
-              <p className="text-gray-400 font-medium">Connect with us on social media for updates.</p>
+              <h3 className="text-xl font-bold mb-2" style={{ color: theme.colors.textMain }}>Follow Our Journey</h3>
+              <p className="text-sm font-medium" style={{ color: theme.colors.textMuted }}>Stay updated with our latest milestones and student stories.</p>
             </div>
 
-            <div className="flex items-center gap-6">
-              {/* Instagram Logo */}
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="p-4 bg-gray-50 rounded-2xl hover:scale-110 transition-transform shadow-sm group">
-                <svg className="w-8 h-8 group-hover:text-pink-600 transition-colors" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                </svg>
+            <div className="flex items-center gap-4 py-8">
+              {/* Instagram */}
+              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="p-4 bg-slate-50 rounded-2xl hover:bg-rose-50 hover:text-rose-600 transition-all border border-transparent hover:border-rose-100 group">
+                <Instagram size={24} />
               </a>
 
-              {/* Facebook Logo */}
-              <a href="https://facebook.com" target="_blank" rel="noreferrer" className="p-4 bg-gray-50 rounded-2xl hover:scale-110 transition-transform shadow-sm group">
-                <svg className="w-8 h-8 group-hover:text-blue-700 transition-colors" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
+              {/* Facebook */}
+              <a href="https://facebook.com" target="_blank" rel="noreferrer" className="p-4 bg-slate-50 rounded-2xl hover:bg-blue-50 hover:text-blue-700 transition-all border border-transparent hover:border-blue-100 group">
+                <Facebook size={24} />
               </a>
 
-              {/* LinkedIn Logo */}
-              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="p-4 bg-gray-50 rounded-2xl hover:scale-110 transition-transform shadow-sm group">
-                <svg className="w-8 h-8 group-hover:text-blue-600 transition-colors" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                </svg>
+              {/* LinkedIn */}
+              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="p-4 bg-slate-50 rounded-2xl hover:bg-blue-50 hover:text-blue-600 transition-all border border-transparent hover:border-blue-100 group">
+                <Linkedin size={24} />
               </a>
             </div>
 
-            {/* Bottom Graphic Detail */}
-            <div className="pt-8 mt-8 border-t border-gray-100 flex items-center justify-between">
-              <span className="text-xs font-bold text-gray-300 uppercase tracking-[0.3em]">SkillBridge Global</span>
-              <div className="flex gap-2">
-                <div className="h-2 w-8 rounded-full" style={{ backgroundColor: colors.blue }} />
-                <div className="h-2 w-2 rounded-full" style={{ backgroundColor: colors.orange }} />
+            {/* Bottom Graphic Detail - Simplified */}
+            <div className="pt-6 border-t border-slate-100 flex items-center justify-between">
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] opacity-30" style={{ color: theme.colors.textMain }}>SkillBridge Global</span>
+              <div className="flex gap-1.5">
+                <div className="h-1.5 w-6 rounded-full" style={{ backgroundColor: theme.colors.primary }} />
+                <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: theme.colors.secondary }} />
               </div>
             </div>
           </div>

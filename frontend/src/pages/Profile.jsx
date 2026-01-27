@@ -3,6 +3,8 @@ import { AuthContext } from "../context/AuthContext";
 import axiosInstance from "../axiosInstance";
 import { toast } from "sonner";
 import assetLogo from "../assets/avatar.svg"; 
+import { theme } from "../theme";
+import { Pencil, Key, Save, X, Camera } from 'lucide-react';
 
 const Profile = () => {
   const { user, fetchUser } = useContext(AuthContext);
@@ -75,108 +77,111 @@ const Profile = () => {
   };
 
   if (!user) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2" style={{ borderColor: theme.colors.primary }}></div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center p-6">
-      <div className="w-full max-w-4xl bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row border border-gray-100">
+    <div className="min-h-screen py-12 px-6" style={{ backgroundColor: theme.colors.bgLight }}>
+      <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-sm border overflow-hidden flex flex-col md:flex-row" style={{ borderColor: theme.colors.border }}>
         
         {/* Left Side: Info & Actions */}
-        <div className="flex-1 p-8 md:p-12 space-y-6">
-          <div className="space-y-4">
+        <div className="flex-1 p-8 md:p-12 space-y-8">
+          <div className="space-y-6">
             {isEditing ? (
-              <div className="space-y-3 animate-in fade-in duration-300">
-                <input 
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full text-2xl font-bold p-2 border-b-2 border-black outline-none"
-                  placeholder="Your Name"
-                />
+              <div className="space-y-4 animate-in fade-in duration-300">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold uppercase tracking-widest opacity-50" style={{ color: theme.colors.textMuted }}>Full Name</label>
+                  <input 
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full text-xl font-bold p-3 bg-slate-50 border rounded-xl outline-none transition-all focus:border-blue-500"
+                    placeholder="Your Name"
+                    style={{ color: theme.colors.textMain }}
+                  />
+                </div>
                 
-                <div className="flex gap-2 pt-2">
-                  <button onClick={handleUpdateProfile} className="px-4 py-2 bg-black text-white rounded-lg text-sm">Save Changes</button>
-                  <button onClick={() => setIsEditing(false)} className="px-4 py-2 bg-gray-200 rounded-lg text-sm">Cancel</button>
+                <div className="flex gap-3">
+                  <button onClick={handleUpdateProfile} className="flex items-center gap-2 px-6 py-2.5 text-white rounded-xl text-xs font-bold uppercase tracking-widest shadow-md transition-all active:scale-95" style={{ backgroundColor: theme.colors.primary }}>
+                    <Save size={14} /> Save
+                  </button>
+                  <button onClick={() => setIsEditing(false)} className="px-6 py-2.5 bg-slate-100 rounded-xl text-xs font-bold uppercase tracking-widest transition-all" style={{ color: theme.colors.textMain }}>
+                    Cancel
+                  </button>
                 </div>
               </div>
             ) : (
-              <div>
-                <h1 className="text-4xl font-bold text-gray-900 tracking-tight">{user?.name}</h1>
-                <p className="text-lg text-gray-500 mt-1">{user?.email}</p>
+              <div className="space-y-1">
+                <h1 className="text-3xl md:text-4xl font-bold tracking-tight" style={{ color: theme.colors.textMain }}>{user?.name}</h1>
+                <p className="text-base font-medium" style={{ color: theme.colors.textMuted }}>{user?.email}</p>
                 <button 
                   onClick={() => setIsEditing(true)} 
-                  className="mt-3 text-sm font-semibold text-blue-600 hover:underline"
+                  className="mt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-all hover:opacity-70"
+                  style={{ color: theme.colors.primary }}
                 >
-                  Edit Profile Info
+                  <Pencil size={14} /> Edit Profile Info
                 </button>
               </div>
             )}
           </div>
 
-          <div className="space-y-4 pt-4 border-t border-gray-100">
+          <div className="space-y-4 pt-8 border-t" style={{ borderColor: theme.colors.border }}>
             <button 
               onClick={() => setShowPassFields(!showPassFields)}
-              className="px-6 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all"
+              className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all border shadow-sm"
+              style={{ color: theme.colors.textMain, backgroundColor: theme.colors.white, borderColor: theme.colors.border }}
             >
-              {showPassFields ? "Cancel Change" : "Change Password"}
+              <Key size={14} /> {showPassFields ? "Cancel Change" : "Update Password"}
             </button>
 
             {showPassFields && (
-              <div className="space-y-3 p-5 bg-gray-50 rounded-2xl border border-gray-200 animate-in fade-in slide-in-from-top-4 duration-300">
+              <div className="space-y-3 p-6 bg-slate-50 rounded-2xl border animate-in fade-in slide-in-from-top-4 duration-300" style={{ borderColor: theme.colors.border }}>
                 <input 
                   type="password"
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black outline-none"
+                  className="w-full px-4 py-3 rounded-xl border bg-white outline-none focus:border-blue-500 transition-all text-sm"
                   placeholder="Current Password"
                 />
                 <input 
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black outline-none"
+                  className="w-full px-4 py-3 rounded-xl border bg-white outline-none focus:border-blue-500 transition-all text-sm"
                   placeholder="New Password"
                 />
                 <button 
                   onClick={changePassword}
-                  className="w-full py-2 bg-black text-white rounded-lg font-medium hover:bg-gray-800"
+                  className="w-full py-3 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-md transition-all active:scale-95"
+                  style={{ backgroundColor: theme.colors.primary }}
                 >
-                  Save Password
+                  Save New Password
                 </button>
               </div>
             )}
           </div>
         </div>
 
-        {/* Right Side: Profile Picture */}
-        <div className="w-full md:w-2/5 bg-gray-50 flex flex-col items-center justify-center p-12 border-l border-gray-100">
+        {/* Right Side: Profile Picture - Minimalist Style */}
+        <div className="w-full md:w-2/5 flex flex-col items-center justify-center p-12 border-l" style={{ backgroundColor: theme.colors.bgLight, borderColor: theme.colors.border }}>
           <div className="relative group">
-            <img 
-              src={user?.avatar?.url || assetLogo} 
-              alt="Profile" 
-              className="w-48 h-48 rounded-2xl object-cover shadow-2xl transform transition-transform group-hover:scale-[1.02]"
-            />
-           <label className="absolute -bottom-2 -right-2 bg-white p-3 rounded-2xl shadow-xl cursor-pointer hover:bg-gray-50 transition-all border border-gray-100 active:scale-90 group/icon">
-      {/* Pencil Icon (Lucide-style Edit path) */}
-      <svg 
-        xmlns="http://www.w3.org/2000/svg" 
-        width="20" 
-        height="20" 
-        viewBox="0 0 24 24" 
-        fill="none" 
-        stroke="#2A6FA8" /* Using your brand blue */
-        strokeWidth="2.5" 
-        strokeLinecap="round" 
-        strokeLinejoin="round"
-        className="group-hover/icon:rotate-12 transition-transform"
-      >
-        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-      </svg>
-      <input type="file" className="hidden" onChange={handleImageUpload} disabled={loading} />
-    </label>
+            <div className="w-44 h-44 rounded-3xl overflow-hidden border-4 border-white shadow-lg">
+              <img 
+                src={user?.avatar?.url || assetLogo} 
+                alt="Profile" 
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <label className="absolute -bottom-3 -right-3 p-3 rounded-2xl shadow-lg cursor-pointer transition-all active:scale-90 border-2 border-white group" style={{ backgroundColor: theme.colors.primary }}>
+              <Camera size={18} className="text-white transition-transform group-hover:rotate-12" />
+              <input type="file" className="hidden" onChange={handleImageUpload} disabled={loading} />
+            </label>
           </div>
-          <p className="mt-8 text-sm text-gray-400 font-medium">Click icon to update photo</p>
+          <p className="mt-6 text-[10px] font-bold uppercase tracking-widest opacity-40" style={{ color: theme.colors.textMain }}>Update Photo</p>
         </div>
 
       </div>

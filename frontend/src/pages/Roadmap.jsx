@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axiosInstance from '../axiosInstance';
+import { theme } from '../theme';
 import { 
   CheckCircle, 
   Circle, 
@@ -37,11 +38,7 @@ const Roadmap = () => {
     }
   };
 
-    const colors = {
-  blue: "#2A6FA8",      // lighter, softer blue
-  orange: "#F6A04D",    // lighter orange
-  lightBlue: "#e7f0f7"
-};
+
 
 
   useEffect(() => {
@@ -55,6 +52,13 @@ const Roadmap = () => {
       }
     }
   }, [roadmapData]);
+
+  const calculateProgress = (roadmap) => {
+  const allTasks = roadmap.flatMap(week => week.tasks);
+  if (allTasks.length === 0) return 0;
+  const completedTasks = allTasks.filter(task => task.isCompleted).length;
+  return Math.round((completedTasks / allTasks.length) * 100);
+};
 
   const handleCompletion = () => {
     setShowHurray(true);
@@ -73,6 +77,7 @@ const Roadmap = () => {
     
     if (task) {
       task.isCompleted = !task.isCompleted;
+      updatedData.progress = calculateProgress(updatedData.roadmap);
       setRoadmapData(updatedData);
     }
 
@@ -93,23 +98,31 @@ const Roadmap = () => {
   const backLabel = isFromCompleted ? "Back to Completed Roadmaps" : "Back to Dashboard";
   const backPath = isFromCompleted ? "/complete_roadmap" : "/Dashboard";
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-50">
-        <div className="text-center">
-          <div className="w-12 h-12  rounded-full animate-spin mx-auto mb-4" style={{ borderColor: `${colors.blue} transparent ${colors.blue} ${colors.blue}` }}></div>
-          <p className="text-slate-500 font-medium">Loading your personalized path...</p>
-        </div>
+ if (loading) return (
+    <div className="flex items-center justify-center min-h-screen" style={{ backgroundColor: theme.colors.bgLight }}>
+      <div className="text-center">
+        <div className="w-10 h-10 rounded-full animate-spin mx-auto mb-4 border-t-2" style={{ borderColor: theme.colors.primary }}></div>
+        <p className="text-sm font-medium" style={{ color: theme.colors.textMuted }}>Curating your path...</p>
       </div>
-    );
-  }
+    </div>
+  );
 
   if (!roadmapData) {
     return (
-      <div className="p-10 text-center">
-        <h2 className="text-xl font-bold">Roadmap not found</h2>
-        <button onClick={() => navigate(backPath)} className="mt-4 underline" style={{ color: colors.blue }}>
-          {backLabel}
+      <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center" style={{ backgroundColor: theme.colors.bgLight }}>
+        <div className="p-6 rounded-full bg-white shadow-sm mb-6">
+          <SearchX size={48} className="opacity-20" style={{ color: theme.colors.textMain }} />
+        </div>
+        <h2 className="text-2xl font-bold mb-2" style={{ color: theme.colors.textMain }}>Roadmap Not Found</h2>
+        <p className="text-sm font-medium mb-8 max-w-xs mx-auto" style={{ color: theme.colors.textMuted }}>
+          The roadmap you're looking for doesn't exist or has been moved.
+        </p>
+        <button 
+          onClick={() => navigate("/Dashboard")} 
+          className="px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-widest text-white transition-all hover:opacity-90 active:scale-95 shadow-md"
+          style={{ backgroundColor: theme.colors.primary }}
+        >
+          Back to Dashboard
         </button>
       </div>
     );
@@ -117,74 +130,75 @@ const Roadmap = () => {
 
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4">
+    <div className="min-h-screen py-12 px-4" style={{ backgroundColor: theme.colors.bgLight }}>
       <div className="max-w-4xl mx-auto">
+        
         {showHurray && (
-          <div className="fixed inset-0 z-200 flex items-center justify-center backdrop-blur-md animate-in fade-in duration-500" style={{ backgroundColor: `${colors.blue}E6` }}>
+          <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md animate-in fade-in duration-500" style={{ backgroundColor: `${theme.colors.primary}F2` }}>
             <div className="text-center text-white p-8">
-              <div className="flex justify-center mb-6">
-                <PartyPopper size={80} className="animate-bounce" />
-              </div>
-              <h1 className="text-5xl font-black mb-4">HURRAY!</h1>
-              <p className="text-xl font-medium opacity-90">You have completed your entire roadmap!</p>
-              <p className="mt-2 " style={{ color: colors.lightBlue }}>Redirecting to your dashboard...</p>
+              <PartyPopper size={64} className="mx-auto mb-6 animate-bounce" />
+              <h1 className="text-4xl font-bold mb-2">Congratulations!</h1>
+              <p className="text-lg opacity-90">You've mastered this roadmap.</p>
             </div>
           </div>
         )}
 
-        {/* Dynamic Back Button */}
         <button 
           onClick={() => navigate(backPath)} 
-          className="group flex items-center gap-2 text-slate-500  font-bold mb-8 transition-colors"
-          style={{ '--hover-color': colors.blue }}
-          onMouseEnter={(e) => e.currentTarget.style.color = colors.blue}
-          onMouseLeave={(e) => e.currentTarget.style.color = ''}
+          className="group flex items-center gap-2 font-bold mb-8 transition-all text-xs uppercase tracking-widest"
+          style={{ color: theme.colors.textMuted }}
+          onMouseEnter={(e) => e.currentTarget.style.color = theme.colors.primary}
+          onMouseLeave={(e) => e.currentTarget.style.color = theme.colors.textMuted}
         >
-          <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" /> 
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> 
           {backLabel}
         </button>
         
-        <header className="mb-12 bg-white p-8 rounded-4xl shadow-sm border border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <div className="flex items-center gap-2">
-                <h1 className="text-3xl font-black text-slate-900 uppercase tracking-tight leading-tight">
-                {roadmapData.opportunity?.title || "Skill Roadmap"}
+        <header className="mb-10 bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-1">
+            <div className="flex items-center gap-3">
+                <h1 className="text-2xl md:text-3xl font-bold tracking-tight" style={{ color: theme.colors.textMain }}>
+                  {roadmapData.opportunity?.title || "Skill Roadmap"}
                 </h1>
-                {isReadonly && <Lock size={20} className="text-slate-300" title="Completed Roadmap" />}
+                {isReadonly && <Lock size={18} className="opacity-30" />}
             </div>
-            <p className="text-slate-400 font-bold mt-1 uppercase tracking-widest text-xs">
-              {roadmapData.opportunity?.company?.name || "Career Goal"}
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: theme.colors.secondary }}>
+              {roadmapData.opportunity?.company?.name || "Target Goal"}
             </p>
           </div>
-          <div className="text-right">
-            <div className="text-4xl font-black" style={{ color: isReadonly ? '#10b981' : colors.blue }}>
+          <div className="md:text-right">
+            <div className="text-4xl font-bold" style={{ color: isReadonly ? '#10b981' : theme.colors.primary }}>
                 {roadmapData.progress || 0}%
             </div>
-            <div className="text-xs font-bold text-slate-400 uppercase tracking-tighter">
-                {isReadonly ? 'Certification Ready' : 'Total Completion'}
-            </div>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                {isReadonly ? 'Roadmap Mastered' : 'Current Progress'}
+            </p>
           </div>
         </header>
 
-        <div className="relative border-l-2  ml-4 md:ml-8 space-y-12" style={{ borderColor: colors.lightBlue }}>
+        <div className="relative border-l-2 ml-4 md:ml-6 space-y-10" style={{ borderColor: theme.colors.border }}>
           {roadmapData.roadmap.map((item, weekIndex) => (
-            <div key={weekIndex} className="relative pl-8 md:pl-12">
-              <div className={`absolute -left-2.25 top-0 w-4 h-4 rounded-full border-4 border-white shadow-md`} style={{ backgroundColor: isReadonly ? '#10b981' : colors.blue }}></div>
+            <div key={weekIndex} className="relative pl-8 md:pl-10">
+              {/* Timeline Dot */}
+              <div 
+                className="absolute -left-2.25 top-0 w-4 h-4 rounded-full border-4 border-white shadow-sm" 
+                style={{ backgroundColor: isReadonly ? '#10b981' : theme.colors.primary }}
+              ></div>
 
-              <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden transition-all hover:shadow-md">
-                <div className={` p-4 flex justify-between items-center text-white`} style={{ backgroundColor: isReadonly ? '#059669' : colors.blue }}>
-                  <span className="text-xs font-black uppercase tracking-[0.2em]">Week {item.week}</span>
-                  <BookOpen size={18} className="opacity-70" />
+              <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+                <div className="px-6 py-3 flex justify-between items-center text-white" style={{ backgroundColor: isReadonly ? '#059669' : theme.colors.textMain }}>
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em]">Week {item.week}</span>
+                  <BookOpen size={14} className="opacity-50" />
                 </div>
 
                 <div className="p-6 md:p-8">
-                  <h2 className="text-2xl font-bold text-slate-800 mb-6">{item.topic}</h2>
+                  <h2 className="text-xl font-bold mb-8" style={{ color: theme.colors.textMain }}>{item.topic}</h2>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* Resources */}
                     <div className="space-y-4">
-                      <div className="flex items-center gap-2  font-bold text-sm uppercase tracking-wide" style={{ color: colors.blue }}>
-                        <ExternalLink size={16} /> 
-                        Learning Resources
+                      <div className="flex items-center gap-2 font-bold text-[11px] uppercase tracking-widest" style={{ color: theme.colors.primary }}>
+                        <ExternalLink size={14} /> Learning Material
                       </div>
                       <div className="space-y-2">
                         {item.resources.map((resource, rIndex) => (
@@ -193,52 +207,40 @@ const Roadmap = () => {
                             href={resource.url} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl group  transition-all border border-transparent "
-                            style={{ 
-                                transition: '0.3s'
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundColor = colors.lightBlue;
-                                e.currentTarget.style.borderColor = colors.blue + '33';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor = '';
-                                e.currentTarget.style.borderColor = 'transparent';
-                            }}
+                            className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-transparent hover:border-blue-100 hover:bg-white transition-all group"
                           >
-                            <span className="text-sm font-semibold text-slate-700 group-hover:text-blue-900 line-clamp-1">
+                            <span className="text-sm font-semibold text-slate-700 group-hover:text-blue-700 line-clamp-1">
                               {resource.title}
                             </span>
-                            
-                            <ExternalLink size={14} className="text-slate-400 group-hover:text-blue-900 shrink-0" />
+                            <ExternalLink size={14} className="text-slate-300 group-hover:text-blue-700 shrink-0" />
                           </a>
                         ))}
                       </div>
                     </div>
 
+                    {/* Tasks */}
                     <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-emerald-600 font-bold text-sm uppercase tracking-wide">
-                        <ClipboardList size={16} />
-                        Action Tasks {isReadonly && "(Locked)"}
+                      <div className="flex items-center gap-2 font-bold text-[11px] uppercase tracking-widest" style={{ color: '#059669' }}>
+                        <ClipboardList size={14} /> Action Plan
                       </div>
                       <div className="space-y-2">
                         {item.tasks.map((task, tIndex) => (
                           <div 
                             key={tIndex}
                             onClick={() => toggleTask(weekIndex, task._id)}
-                            className={`flex items-start gap-4 p-4 rounded-2xl border transition-all duration-300 ${
-                                isReadonly ? "cursor-default" : "cursor-pointer"
+                            className={`flex items-start gap-4 p-4 rounded-xl border transition-all ${
+                              isReadonly ? "cursor-default" : "cursor-pointer"
                             } ${
                               task.isCompleted 
-                                ? "bg-emerald-50 border-emerald-100" 
+                                ? "bg-emerald-50/50 border-emerald-100" 
                                 : "bg-white border-slate-100 hover:border-emerald-200"
                             }`}
                           >
                             <div className="mt-0.5">
                               {task.isCompleted ? (
-                                <CheckCircle size={22} className="text-emerald-500 fill-emerald-50" />
+                                <CheckCircle size={20} className="text-emerald-500" />
                               ) : (
-                                <Circle size={22} className="text-slate-200" />
+                                <Circle size={20} className="text-slate-200" />
                               )}
                             </div>
                             <span className={`text-sm font-medium leading-relaxed ${
