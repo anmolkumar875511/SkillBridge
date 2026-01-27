@@ -29,7 +29,6 @@ const Roadmap = () => {
       setLoading(true);
       const res = await axiosInstance.get(`/roadmap`);
       const selected = res.data.data.find(r => r._id === id);
-      console.log(selected)
       setRoadmapData(selected);
     } catch (error) {
       console.error("Error fetching roadmap details:", error);

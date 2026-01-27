@@ -25,13 +25,6 @@ const Login = () => {
 
     const { fetchUser, user } = useContext(AuthContext);
 
-    const colors = {
-        blue: "#1E40AF",      
-        orange: "#EA580C",    
-        slate: "#0F172A",     
-        lightSlate: "#64748B",
-        bg: "#F8FAFC"
-    };
 
     // Google OAuth Handler
     const handleGoogleLogin = () => {

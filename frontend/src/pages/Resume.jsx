@@ -57,12 +57,6 @@ const Resume = () => {
     
   },[resumeId])
 
-  const colors = {
-  blue: "#2A6FA8",      // lighter, softer blue
-  orange: "#F6A04D",    // lighter orange
-  lightBlue: "#e7f0f7"
-};
-
   return (
 
 <div className="min-h-screen py-12 px-6" style={{ backgroundColor: theme.colors.bgLight }}>

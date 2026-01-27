@@ -32,7 +32,6 @@ const ConfirmResume = ({}) => {
   const updateData = async ()=>{
     try {
     const res = await axiosInstance.put(`/resume/${id}`, {skills,education,experience,projects})
-    console.log("Update successfull",res.data.data)
     await fetchResume()
     setIsEdit(false);
     } catch (error) {
@@ -49,7 +48,6 @@ const ConfirmResume = ({}) => {
       setExperience(resume.experience || []);
       setProjects(resume.projects || []);
       setId(resume._id || "");
-      console.log("Data loaded into local state:", resume);
     }
   }, [resume]);
 

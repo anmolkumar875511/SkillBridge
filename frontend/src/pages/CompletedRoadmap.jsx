@@ -15,7 +15,6 @@ const CompletedRoadmap = () => {
       setLoading(true);
       const res = await axiosInstance.get("/roadmap/completed");
       // Assuming your API returns data in the same structure: res.data.data
-      console.log(res.data.data)
       setCompleted(res.data.data || []);
     } catch (error) {
       console.error("Error fetching completed roadmaps:", error);

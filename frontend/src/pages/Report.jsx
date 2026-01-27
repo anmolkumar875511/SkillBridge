@@ -47,7 +47,6 @@ const Report = () => {
   const createRoadmap = async () => {
     try {
       const res = await axiosInstance.get(`/roadmap/generate/${opportunityId}`);
-      console.log("Roadmap Generated:", res.data);
       // Optional: navigate to the roadmap view
       navigate('/Dashboard')
     } catch (error) {

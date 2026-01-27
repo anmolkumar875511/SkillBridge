@@ -8,12 +8,6 @@ const AllUsers = () => {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
 
-    const colors = {
-        blue: "#2A6FA8",
-        orange: "#F6A04D",
-        lightBlue: "#e7f0f7",
-        slate: "#1e293b"
-    };
 
     const fetchData = async () => {
         try {

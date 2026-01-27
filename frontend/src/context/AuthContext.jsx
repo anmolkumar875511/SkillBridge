@@ -14,7 +14,6 @@ export const AuthProvider = ({children}) =>{
             const res = await axiosInstance.get("/user/profile",{
                 withCredentials: true,
             })
-            console.log("Fetched User:", res.data.data.user);
             setUser(res.data.data.user)
         } catch (error) {
             setUser(null)

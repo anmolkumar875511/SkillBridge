@@ -32,7 +32,6 @@ const AdminDashboard = () => {
         try {
             const res = await axiosInstance.get('/admin/dashboard');
             setStats(res.data.message);
-            console.log(res.data)
         } catch (error) {
             console.error("Failed to load stats", error);
         }

@@ -18,7 +18,6 @@ const Dashboard = () => {
     try {
       setLoading(true);
       const res = await axiosInstance.get("/roadmap/");
-      console.log(res.data.data)
       setRoadmaps(res.data.data || []);
     } catch (error) {
       console.error("Error fetching roadmaps:", error);
@@ -37,11 +36,6 @@ const Dashboard = () => {
     </div>
   );
 
-   const colors = {
-  blue: "#2A6FA8",      // lighter, softer blue
-  orange: "#F6A04D",    // lighter orange
-  lightBlue: "#e7f0f7"
-};
 
   return (
  <div className="min-h-screen py-12 px-6" style={{ backgroundColor: theme.colors.bgLight }}>
