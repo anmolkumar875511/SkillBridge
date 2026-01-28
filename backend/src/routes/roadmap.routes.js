@@ -1,19 +1,23 @@
 import { Router } from 'express';
-import { verifyToken } from '../middlewares/auth.middleware.js';
 import {
     createRoadmap,
     getRoadmap,
     toggleTaskStatus,
+    deleteRoadmap,
+    setTargetAndGenerateRoadmap,
     getCompletedRoadmaps,
-    deletedRoadmap,
 } from '../controllers/roadmap.controller.js';
+import { verifyToken } from '../middlewares/auth.middleware.js';
 
 const router = Router();
 
-router.get('/generate/:opportunityId', verifyToken, createRoadmap);
-router.get('/completed', verifyToken, getCompletedRoadmaps);
-router.get('/', verifyToken, getRoadmap);
-router.put('/toggle/:roadmapId/:taskId', verifyToken, toggleTaskStatus);
-router.delete('/:roadmapId', verifyToken, deletedRoadmap);
+router.use(verifyToken);
+
+router.get('/completed', getCompletedRoadmaps);
+router.get('/', getRoadmap);
+router.post('/generate/:opportunityId', createRoadmap);
+router.post('/custom-target', setTargetAndGenerateRoadmap);
+router.patch('/:roadmapId/task/:taskId', toggleTaskStatus);
+router.delete('/:roadmapId', deleteRoadmap);
 
 export default router;

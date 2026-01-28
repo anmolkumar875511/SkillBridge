@@ -1,8 +1,12 @@
 import LearningRoadmap from '../models/learningRoadmap.model.js';
+import TargetSkill from '../models/targetSkill.model.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import apiError from '../utils/apiError.js';
 import apiResponse from '../utils/apiResponse.js';
-import { generateRoadmap } from '../services/roadmapGenerator/roadmap.service.js';
+import {
+    generateRoadmap,
+    generateCustomTargetRoadmap,
+} from '../services/roadmapGenerator/roadmap.service.js';
 import { logger } from '../utils/logger.js';
 
 export const createRoadmap = asyncHandler(async (req, res) => {
@@ -25,23 +29,41 @@ export const createRoadmap = asyncHandler(async (req, res) => {
     return res.status(201).json(new apiResponse(201, 'Roadmap Generated Successfully', roadmap));
 });
 
+export const setTargetAndGenerateRoadmap = asyncHandler(async (req, res) => {
+    const { targetRole, category, specificSkills } = req.body;
+    const userId = req.user._id;
+
+    const target = await TargetSkill.create({
+        user: userId,
+        targetRole,
+        category,
+        specificSkills,
+    });
+
+    const roadmap = await generateCustomTargetRoadmap(userId, target._id);
+
+    await logger({
+        level: 'info',
+        action: 'TARGET_ROADMAP_GENERATE',
+        message: `User ${req.user.email} set personal target: ${targetRole}`,
+        req,
+    });
+
+    return res
+        .status(201)
+        .json(new apiResponse(201, 'Target Roadmap Generated', { target, roadmap }));
+});
+
 export const getRoadmap = asyncHandler(async (req, res) => {
     const userId = req.user._id;
 
     const roadmaps = await LearningRoadmap.find({ user: userId })
         .populate('opportunity', 'title company category')
+        .populate('targetSkill', 'targetRole category specificSkills')
         .sort({ createdAt: -1 });
 
     if (roadmaps.length === 0) {
-        return res
-            .status(200)
-            .json(
-                new apiResponse(
-                    200,
-                    'No roadmaps found. Start a skill gap analysis to generate one!',
-                    []
-                )
-            );
+        return res.status(200).json(new apiResponse(200, 'No roadmaps found.', []));
     }
 
     return res.status(200).json(new apiResponse(200, 'Roadmaps fetched successfully', roadmaps));
@@ -112,7 +134,7 @@ export const getCompletedRoadmaps = asyncHandler(async (req, res) => {
         .json(new apiResponse(200, 'All completed roadmaps are fetched', roadmaps));
 });
 
-export const deletedRoadmap = asyncHandler(async (req, res) => {
+export const deleteRoadmap = asyncHandler(async (req, res) => {
     const { roadmapId } = req.params;
 
     try {

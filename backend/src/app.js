@@ -3,10 +3,9 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import errorHandler from './middlewares/errorHandler.middleware.js';
 import { startFindWorkCron } from './cron/findwork.cron.js';
-import './cron/cleanupUnverifiedUsers.cron.js';
+import './cron/databaseMaintenance.cron.js';
 import './utils/passport.js';
 import passport from 'passport';
-
 
 startFindWorkCron();
 

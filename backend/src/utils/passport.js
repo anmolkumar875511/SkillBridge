@@ -33,9 +33,9 @@ passport.use(
                     isEmailVerified: true,
                     avatar: {
                         url: profile.photos[0]?.value,
-                        publicId: `google_${profile.id}`
+                        publicId: `google_${profile.id}`,
                     },
-                    role: 'student'
+                    role: 'student',
                 });
 
                 return done(null, newUser);

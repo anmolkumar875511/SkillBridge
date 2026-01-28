@@ -1,207 +1,366 @@
-import React, { useContext, useEffect, useState } from "react";
-import axiosInstance from "../axiosInstance";
-import { ResumeContext } from "../context/ResumeContext";
-import { theme } from "../theme";
+import React, { useContext, useEffect, useState } from 'react';
+import axiosInstance from '../axiosInstance';
+import { ResumeContext } from '../context/ResumeContext';
+import { theme } from '../theme';
 import { Code2, Briefcase, GraduationCap, Laptop, Check, Pencil } from 'lucide-react';
 
 const ConfirmResume = ({}) => {
-  const [isEdit, setIsEdit] = useState(false);
-  const [skills, setSkills] = useState([]);
-  const [education, setEducation] = useState([]);
-  const [experience, setExperience] = useState([]);
-  const [projects, setProjects] = useState([]);
-  const [id, setId] = useState("");
+    const [isEdit, setIsEdit] = useState(false);
+    const [skills, setSkills] = useState([]);
+    const [education, setEducation] = useState([]);
+    const [experience, setExperience] = useState([]);
+    const [projects, setProjects] = useState([]);
+    const [id, setId] = useState('');
 
-  const {resume,fetchResume} = useContext(ResumeContext)
+    const { resume, fetchResume } = useContext(ResumeContext);
 
-  // const fetchData = async () => {
-  //   // const res = await axiosInstance.get(`/resume/${resumeId}`);
-  //   // console.log(res.data);
-  //   console.log(Resume)
-  //   setSkills(Resume.skills);
-  //   setEducation(Resume.education);
-  //   setExperience(Resume.experience);
-  //   setProjects(Resume.projects);
-  //   console.log("Data Fetched Succesfully");
-  // };
+    // const fetchData = async () => {
+    //   // const res = await axiosInstance.get(`/resume/${resumeId}`);
+    //   // console.log(res.data);
+    //   console.log(Resume)
+    //   setSkills(Resume.skills);
+    //   setEducation(Resume.education);
+    //   setExperience(Resume.experience);
+    //   setProjects(Resume.projects);
+    //   console.log("Data Fetched Succesfully");
+    // };
 
-  useEffect(() => {
-    fetchResume()
-  }, []);
+    useEffect(() => {
+        fetchResume();
+    }, []);
 
-  const updateData = async ()=>{
-    try {
-    const res = await axiosInstance.put(`/resume/${id}`, {skills,education,experience,projects})
-    await fetchResume()
-    setIsEdit(false);
-    } catch (error) {
-      console.log(error)
-    }
-  }
+    const updateData = async () => {
+        try {
+            const res = await axiosInstance.put(`/resume/${id}`, {
+                skills,
+                education,
+                experience,
+                projects,
+            });
+            await fetchResume();
+            setIsEdit(false);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-  
+    useEffect(() => {
+        if (resume && Object.keys(resume).length > 0) {
+            setSkills(resume.skills || []);
+            setEducation(resume.education || []);
+            setExperience(resume.experience || []);
+            setProjects(resume.projects || []);
+            setId(resume._id || '');
+        }
+    }, [resume]);
 
-  useEffect(() => {
-    if (resume && Object.keys(resume).length > 0) {
-      setSkills(resume.skills || []);
-      setEducation(resume.education || []);
-      setExperience(resume.experience || []);
-      setProjects(resume.projects || []);
-      setId(resume._id || "");
-    }
-  }, [resume]);
-
- 
-
-  return (
-    <div className="w-full max-w-6xl mx-auto space-y-8 animate-fade-in pb-20">
-      
-      {/* SKILLS SECTION - Clean Grid */}
-      <section className="bg-white border rounded-3xl p-8 shadow-sm" style={{ borderColor: theme.colors.border }}>
-        <div className="flex items-center gap-3 mb-6">
-          <Code2 size={20} style={{ color: theme.colors.primary }} />
-          <h3 className="text-xl font-bold" style={{ color: theme.colors.textMain }}>Technical Skills</h3>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-h-72 overflow-y-auto pr-2 custom-scrollbar">
-          {skills.map((item, index) => (
-            <div key={index} className={`p-4 rounded-xl border transition-all ${isEdit ? 'bg-slate-50 border-orange-200' : 'bg-white border-slate-100'}`}>
-              {isEdit ? (
-                <div className="space-y-2">
-                  <input
-                    className="w-full bg-white border rounded-lg px-2 py-1.5 text-xs font-bold outline-none focus:ring-1 focus:ring-orange-400"
-                    value={item.name}
-                    onChange={(e) => setSkills(prev => prev.map((s, i) => i === index ? { ...s, name: e.target.value } : s))}
-                  />
-                  <input
-                    className="w-full bg-white border rounded-lg px-2 py-1 text-[10px] outline-none"
-                    value={item.level}
-                    onChange={(e) => setSkills(prev => prev.map((s, i) => i === index ? { ...s, level: e.target.value } : s))}
-                  />
+    return (
+        <div className="w-full max-w-6xl mx-auto space-y-8 animate-fade-in pb-20">
+            {/* SKILLS SECTION - Clean Grid */}
+            <section
+                className="bg-white border rounded-3xl p-8 shadow-sm"
+                style={{ borderColor: theme.colors.border }}
+            >
+                <div className="flex items-center gap-3 mb-6">
+                    <Code2 size={20} style={{ color: theme.colors.primary }} />
+                    <h3 className="text-xl font-bold" style={{ color: theme.colors.textMain }}>
+                        Technical Skills
+                    </h3>
                 </div>
-              ) : (
-                <>
-                  <p className="text-[9px] font-bold uppercase tracking-wider mb-1" style={{ color: theme.colors.secondary }}>{item.level}</p>
-                  <p className="text-sm font-bold" style={{ color: theme.colors.textMain }}>{item.name}</p>
-                </>
-              )}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        
-        {/* PROJECTS SECTION - Professional Blue Card */}
-        <div className="rounded-3xl p-8 text-white shadow-sm" style={{ backgroundColor: theme.colors.primary }}>
-          <div className="flex items-center gap-3 mb-6">
-            <Laptop size={20} className="opacity-80" />
-            <h3 className="text-lg font-bold">Key Projects</h3>
-          </div>
-          <div className="space-y-4">
-            {projects.map((item, index) => (
-              <div key={index} className="p-5 bg-white/10 rounded-2xl border border-white/10">
-                {isEdit ? (
-                  <div className="space-y-3">
-                    <input 
-                      className="w-full bg-white/20 rounded-lg p-2 outline-none border border-white/20 text-white text-sm font-bold"
-                      value={item.title}
-                      onChange={(e) => setProjects(prev => prev.map((p, i) => i === index ? { ...p, title: e.target.value } : p))}
-                    />
-                    <textarea 
-                      className="w-full bg-white/20 rounded-lg p-2 outline-none border border-white/20 text-white text-xs h-20 resize-none"
-                      value={item.description}
-                      onChange={(e) => setProjects(prev => prev.map((p, i) => i === index ? { ...p, description: e.target.value } : p))}
-                    />
-                  </div>
-                ) : (
-                  <>
-                    <h4 className="text-sm font-bold mb-2" style={{ color: theme.colors.secondary }}>{item.title}</h4>
-                    <p className="text-xs leading-relaxed opacity-80" style={{ color: theme.colors.bgLight }}>{item.description}</p>
-                  </>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-8">
-          {/* EXPERIENCE SECTION - Decent & Muted */}
-          <div className="bg-white rounded-3xl p-8 border shadow-sm" style={{ borderColor: theme.colors.border }}>
-            <div className="flex items-center gap-3 mb-6">
-              <Briefcase size={20} style={{ color: theme.colors.primary }} />
-              <h3 className="text-lg font-bold" style={{ color: theme.colors.textMain }}>Professional Experience</h3>
-            </div>
-            <div className="space-y-5">
-              {experience.map((item, index) => (
-                <div key={index} className="pl-4 border-l-2" style={{ borderColor: theme.colors.secondary }}>
-                  {isEdit ? (
-                    <div className="space-y-2">
-                      <input className="w-full border rounded-lg p-2 text-xs" value={item.role} onChange={(e) => setExperience(prev => prev.map((ex, i) => i === index ? { ...ex, role: e.target.value } : ex))} />
-                      <input className="w-full border rounded-lg p-2 text-xs font-bold" value={item.company} style={{ color: theme.colors.primary }} onChange={(e) => setExperience(prev => prev.map((ex, i) => i === index ? { ...ex, company: e.target.value } : ex))} />
-                    </div>
-                  ) : (
-                    <div>
-                      <p className="text-sm font-bold" style={{ color: theme.colors.textMain }}>{item.role}</p>
-                      <p className="text-xs font-semibold" style={{ color: theme.colors.primary }}>{item.company}</p>
-                    </div>
-                  )}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-h-72 overflow-y-auto pr-2 custom-scrollbar">
+                    {skills.map((item, index) => (
+                        <div
+                            key={index}
+                            className={`p-4 rounded-xl border transition-all ${isEdit ? 'bg-slate-50 border-orange-200' : 'bg-white border-slate-100'}`}
+                        >
+                            {isEdit ? (
+                                <div className="space-y-2">
+                                    <input
+                                        className="w-full bg-white border rounded-lg px-2 py-1.5 text-xs font-bold outline-none focus:ring-1 focus:ring-orange-400"
+                                        value={item.name}
+                                        onChange={(e) =>
+                                            setSkills((prev) =>
+                                                prev.map((s, i) =>
+                                                    i === index ? { ...s, name: e.target.value } : s
+                                                )
+                                            )
+                                        }
+                                    />
+                                    <input
+                                        className="w-full bg-white border rounded-lg px-2 py-1 text-[10px] outline-none"
+                                        value={item.level}
+                                        onChange={(e) =>
+                                            setSkills((prev) =>
+                                                prev.map((s, i) =>
+                                                    i === index
+                                                        ? { ...s, level: e.target.value }
+                                                        : s
+                                                )
+                                            )
+                                        }
+                                    />
+                                </div>
+                            ) : (
+                                <>
+                                    <p
+                                        className="text-[9px] font-bold uppercase tracking-wider mb-1"
+                                        style={{ color: theme.colors.secondary }}
+                                    >
+                                        {item.level}
+                                    </p>
+                                    <p
+                                        className="text-sm font-bold"
+                                        style={{ color: theme.colors.textMain }}
+                                    >
+                                        {item.name}
+                                    </p>
+                                </>
+                            )}
+                        </div>
+                    ))}
                 </div>
-              ))}
-            </div>
-          </div>
+            </section>
 
-          {/* EDUCATION SECTION - Balanced Orange Accent */}
-          <div className="rounded-3xl p-8 text-white shadow-sm" style={{ backgroundColor: theme.colors.secondary }}>
-            <div className="flex items-center gap-3 mb-6">
-              <GraduationCap size={20} className="opacity-80" />
-              <h3 className="text-lg font-bold">Academic Background</h3>
-            </div>
-            {education.map((item, index) => (
-              <div key={index}>
-                {isEdit ? (
-                  <div className="grid grid-cols-2 gap-2">
-                    <input className="bg-white/20 border border-white/20 rounded-lg p-2 text-xs text-white" value={item.degree} onChange={(e) => setEducation(prev => prev.map((ed, i) => i === index ? { ...ed, degree: e.target.value } : ed))} />
-                    <input className="bg-white/20 border border-white/20 rounded-lg p-2 text-xs text-white" value={item.institute} onChange={(e) => setEducation(prev => prev.map((ed, i) => i === index ? { ...ed, institute: e.target.value } : ed))} />
-                    <input className="bg-white/20 border border-white/20 rounded-lg p-2 text-xs text-white col-span-2" value={item.year} onChange={(e) => setEducation(prev => prev.map((ed, i) => i === index ? { ...ed, year: e.target.value } : ed))} />
-                  </div>
-                ) : (
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="text-sm font-bold">{item.degree}</p>
-                      <p className="text-xs opacity-80" style={{ color: theme.colors.bgLight }}>{item.institute}</p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* PROJECTS SECTION - Professional Blue Card */}
+                <div
+                    className="rounded-3xl p-8 text-white shadow-sm"
+                    style={{ backgroundColor: theme.colors.primary }}
+                >
+                    <div className="flex items-center gap-3 mb-6">
+                        <Laptop size={20} className="opacity-80" />
+                        <h3 className="text-lg font-bold">Key Projects</h3>
                     </div>
-                    <span className="bg-white/20 px-2 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider">
-                      {item.year}
-                    </span>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+                    <div className="space-y-4">
+                        {projects.map((item, index) => (
+                            <div
+                                key={index}
+                                className="p-5 bg-white/10 rounded-2xl border border-white/10"
+                            >
+                                {isEdit ? (
+                                    <div className="space-y-3">
+                                        <input
+                                            className="w-full bg-white/20 rounded-lg p-2 outline-none border border-white/20 text-white text-sm font-bold"
+                                            value={item.title}
+                                            onChange={(e) =>
+                                                setProjects((prev) =>
+                                                    prev.map((p, i) =>
+                                                        i === index
+                                                            ? { ...p, title: e.target.value }
+                                                            : p
+                                                    )
+                                                )
+                                            }
+                                        />
+                                        <textarea
+                                            className="w-full bg-white/20 rounded-lg p-2 outline-none border border-white/20 text-white text-xs h-20 resize-none"
+                                            value={item.description}
+                                            onChange={(e) =>
+                                                setProjects((prev) =>
+                                                    prev.map((p, i) =>
+                                                        i === index
+                                                            ? { ...p, description: e.target.value }
+                                                            : p
+                                                    )
+                                                )
+                                            }
+                                        />
+                                    </div>
+                                ) : (
+                                    <>
+                                        <h4
+                                            className="text-sm font-bold mb-2"
+                                            style={{ color: theme.colors.secondary }}
+                                        >
+                                            {item.title}
+                                        </h4>
+                                        <p
+                                            className="text-xs leading-relaxed opacity-80"
+                                            style={{ color: theme.colors.bgLight }}
+                                        >
+                                            {item.description}
+                                        </p>
+                                    </>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
-      {/* FLOATING ACTION BUTTON - Decent & Fixed */}
-      <div className="fixed bottom-10 right-10 z-50">
-        <button
-          onClick={() => isEdit ? updateData() : setIsEdit(true)}
-          className="flex items-center gap-3 px-6 py-3.5 rounded-2xl font-bold text-white shadow-lg hover:opacity-90 active:scale-95 transition-all text-xs uppercase tracking-widest"
-          style={{ backgroundColor: isEdit ? '#10b981' : theme.colors.textMain }}
-        >
-          <span>{isEdit ? "Save Changes" : "Edit Profile"}</span>
-          {isEdit ? <Check size={16} /> : <Pencil size={16} />}
-        </button>
-      </div>
+                <div className="space-y-8">
+                    {/* EXPERIENCE SECTION - Decent & Muted */}
+                    <div
+                        className="bg-white rounded-3xl p-8 border shadow-sm"
+                        style={{ borderColor: theme.colors.border }}
+                    >
+                        <div className="flex items-center gap-3 mb-6">
+                            <Briefcase size={20} style={{ color: theme.colors.primary }} />
+                            <h3
+                                className="text-lg font-bold"
+                                style={{ color: theme.colors.textMain }}
+                            >
+                                Professional Experience
+                            </h3>
+                        </div>
+                        <div className="space-y-5">
+                            {experience.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className="pl-4 border-l-2"
+                                    style={{ borderColor: theme.colors.secondary }}
+                                >
+                                    {isEdit ? (
+                                        <div className="space-y-2">
+                                            <input
+                                                className="w-full border rounded-lg p-2 text-xs"
+                                                value={item.role}
+                                                onChange={(e) =>
+                                                    setExperience((prev) =>
+                                                        prev.map((ex, i) =>
+                                                            i === index
+                                                                ? { ...ex, role: e.target.value }
+                                                                : ex
+                                                        )
+                                                    )
+                                                }
+                                            />
+                                            <input
+                                                className="w-full border rounded-lg p-2 text-xs font-bold"
+                                                value={item.company}
+                                                style={{ color: theme.colors.primary }}
+                                                onChange={(e) =>
+                                                    setExperience((prev) =>
+                                                        prev.map((ex, i) =>
+                                                            i === index
+                                                                ? { ...ex, company: e.target.value }
+                                                                : ex
+                                                        )
+                                                    )
+                                                }
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <p
+                                                className="text-sm font-bold"
+                                                style={{ color: theme.colors.textMain }}
+                                            >
+                                                {item.role}
+                                            </p>
+                                            <p
+                                                className="text-xs font-semibold"
+                                                style={{ color: theme.colors.primary }}
+                                            >
+                                                {item.company}
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
 
-      <style dangerouslySetInnerHTML={{ __html: `
+                    {/* EDUCATION SECTION - Balanced Orange Accent */}
+                    <div
+                        className="rounded-3xl p-8 text-white shadow-sm"
+                        style={{ backgroundColor: theme.colors.secondary }}
+                    >
+                        <div className="flex items-center gap-3 mb-6">
+                            <GraduationCap size={20} className="opacity-80" />
+                            <h3 className="text-lg font-bold">Academic Background</h3>
+                        </div>
+                        {education.map((item, index) => (
+                            <div key={index}>
+                                {isEdit ? (
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <input
+                                            className="bg-white/20 border border-white/20 rounded-lg p-2 text-xs text-white"
+                                            value={item.degree}
+                                            onChange={(e) =>
+                                                setEducation((prev) =>
+                                                    prev.map((ed, i) =>
+                                                        i === index
+                                                            ? { ...ed, degree: e.target.value }
+                                                            : ed
+                                                    )
+                                                )
+                                            }
+                                        />
+                                        <input
+                                            className="bg-white/20 border border-white/20 rounded-lg p-2 text-xs text-white"
+                                            value={item.institute}
+                                            onChange={(e) =>
+                                                setEducation((prev) =>
+                                                    prev.map((ed, i) =>
+                                                        i === index
+                                                            ? { ...ed, institute: e.target.value }
+                                                            : ed
+                                                    )
+                                                )
+                                            }
+                                        />
+                                        <input
+                                            className="bg-white/20 border border-white/20 rounded-lg p-2 text-xs text-white col-span-2"
+                                            value={item.year}
+                                            onChange={(e) =>
+                                                setEducation((prev) =>
+                                                    prev.map((ed, i) =>
+                                                        i === index
+                                                            ? { ...ed, year: e.target.value }
+                                                            : ed
+                                                    )
+                                                )
+                                            }
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <p className="text-sm font-bold">{item.degree}</p>
+                                            <p
+                                                className="text-xs opacity-80"
+                                                style={{ color: theme.colors.bgLight }}
+                                            >
+                                                {item.institute}
+                                            </p>
+                                        </div>
+                                        <span className="bg-white/20 px-2 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider">
+                                            {item.year}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* FLOATING ACTION BUTTON - Decent & Fixed */}
+            <div className="fixed bottom-10 right-10 z-50">
+                <button
+                    onClick={() => (isEdit ? updateData() : setIsEdit(true))}
+                    className="flex items-center gap-3 px-6 py-3.5 rounded-2xl font-bold text-white shadow-lg hover:opacity-90 active:scale-95 transition-all text-xs uppercase tracking-widest"
+                    style={{
+                        backgroundColor: isEdit ? '#10b981' : theme.colors.textMain,
+                    }}
+                >
+                    <span>{isEdit ? 'Save Changes' : 'Edit Profile'}</span>
+                    {isEdit ? <Check size={16} /> : <Pencil size={16} />}
+                </button>
+            </div>
+
+            <style
+                dangerouslySetInnerHTML={{
+                    __html: `
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: ${theme.colors.border}; border-radius: 10px; }
         @keyframes fade-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fade-in 0.5s ease-out; }
-      `}} />
-    </div>
-  );
+      `,
+                }}
+            />
+        </div>
+    );
 };
-
 
 export default ConfirmResume;

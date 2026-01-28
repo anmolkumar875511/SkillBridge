@@ -4,6 +4,8 @@ import { getOpportunity } from '../controllers/opportunity.controller.js';
 
 const router = Router();
 
-router.get('/', verifyToken, getOpportunity);
+router.use(verifyToken);
+
+router.get('/', getOpportunity);
 
 export default router;

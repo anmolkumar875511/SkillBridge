@@ -1,53 +1,60 @@
-import React, { useState } from 'react'
-import axiosInstance from '../axiosInstance'
-import { useNavigate, useParams } from 'react-router-dom'
-import { toast } from 'sonner'
+import React, { useState } from 'react';
+import axiosInstance from '../axiosInstance';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 import { theme } from '../theme';
 import { Lock, ShieldCheck, ArrowRight } from 'lucide-react';
 
 const Resetpassw = () => {
-    const [newPassword, setPassword] = useState("")
-    const [confpassword, setConfPassword] = useState("")
-    const {token} = useParams()
-    const navigate = useNavigate()
+    const [newPassword, setPassword] = useState('');
+    const [confpassword, setConfPassword] = useState('');
+    const { token } = useParams();
+    const navigate = useNavigate();
 
-    const submithandler = async (e) =>{
-        e.preventDefault()
-        if(newPassword === confpassword){
-            toast.promise(axiosInstance.post(`/user/reset-password/${token}`,{newPassword}),{
-              loading: "Processing....",
-              success: (res) =>{
-                return "Your Password Has been changed Successfully"
-              },
-              error: (err) =>{
-                console.log(err)
-                return err.message
-              }
-            })   
+    const submithandler = async (e) => {
+        e.preventDefault();
+        if (newPassword === confpassword) {
+            toast.promise(axiosInstance.post(`/user/reset-password/${token}`, { newPassword }), {
+                loading: 'Processing....',
+                success: (res) => {
+                    return 'Your Password Has been changed Successfully';
+                },
+                error: (err) => {
+                    console.log(err);
+                    return err.message;
+                },
+            });
         }
-    }
+    };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: theme.colors.bgLight }}>
-            
+    return (
+        <div
+            className="min-h-screen flex items-center justify-center px-4"
+            style={{ backgroundColor: theme.colors.bgLight }}
+        >
             <div className="w-full max-w-100 bg-white rounded-3xl p-8 shadow-sm border border-slate-100 z-10 animate-fade-in">
-                
                 <form className="space-y-6" onSubmit={submithandler}>
-                    
                     {/* Icon & Header - Clean & Centered */}
                     <div className="text-center space-y-2">
-                        <div 
+                        <div
                             className="w-12 h-12 mx-auto rounded-2xl flex items-center justify-center mb-4"
                             style={{ backgroundColor: `${theme.colors.primary}10` }}
                         >
                             <ShieldCheck size={24} style={{ color: theme.colors.primary }} />
                         </div>
-                        
-                        <h2 className="text-2xl font-bold tracking-tight" style={{ color: theme.colors.textMain }}>
+
+                        <h2
+                            className="text-2xl font-bold tracking-tight"
+                            style={{ color: theme.colors.textMain }}
+                        >
                             Reset Password
                         </h2>
-                        <p className="text-xs font-medium leading-relaxed opacity-60" style={{ color: theme.colors.textMuted }}>
-                            Secure your account with a <span style={{ color: theme.colors.secondary }}>new password</span>.
+                        <p
+                            className="text-xs font-medium leading-relaxed opacity-60"
+                            style={{ color: theme.colors.textMuted }}
+                        >
+                            Secure your account with a{' '}
+                            <span style={{ color: theme.colors.secondary }}>new password</span>.
                         </p>
                     </div>
 
@@ -87,20 +94,22 @@ const Resetpassw = () => {
                         Update Password
                         <ArrowRight size={16} />
                     </button>
-
                 </form>
             </div>
 
-            <style dangerouslySetInnerHTML={{ __html: `
+            <style
+                dangerouslySetInnerHTML={{
+                    __html: `
                 @keyframes fade-in { 
                     from { opacity: 0; transform: translateY(10px); } 
                     to { opacity: 1; transform: translateY(0); } 
                 }
                 .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
-            `}} />
+            `,
+                }}
+            />
         </div>
+    );
+};
 
-  )
-}
-
-export default Resetpassw
+export default Resetpassw;

@@ -508,8 +508,7 @@ export const handleGoogleCallback = asyncHandler(async (req, res) => {
         req,
     });
 
-    res
-        .status(200)
+    res.status(200)
         .cookie('accessToken', accessToken, {
             ...options,
             maxAge: 1000 * 60 * 15,
@@ -518,5 +517,5 @@ export const handleGoogleCallback = asyncHandler(async (req, res) => {
             ...options,
             maxAge: 1000 * 60 * 60 * 24 * 7,
         })
-        .redirect(`${process.env.FRONTEND_URL}/Dashboard`); 
+        .redirect(`${process.env.FRONTEND_URL}/Dashboard`);
 });

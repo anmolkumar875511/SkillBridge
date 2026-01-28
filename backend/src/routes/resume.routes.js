@@ -5,10 +5,10 @@ import { verifyToken } from '../middlewares/auth.middleware.js';
 
 const router = Router();
 
-router.get('/', verifyToken, getLatestResume);
+router.use(verifyToken);
 
-router.post('/upload', verifyToken, uploadResumeMiddleware.single('resume'), uploadResume);
-
-router.put('/:id', verifyToken, updateResume);
+router.get('/', getLatestResume);
+router.post('/upload', uploadResumeMiddleware.single('resume'), uploadResume);
+router.put('/:id', updateResume);
 
 export default router;

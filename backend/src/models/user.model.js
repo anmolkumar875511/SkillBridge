@@ -19,17 +19,19 @@ const userSchema = new mongoose.Schema(
         },
 
         password: {
-                type: String,
-                required: function() { return !this.googleId; }, 
-                minlength: 6,
-                select: false,
-                trim: true,
-                validate(value) {
-                    if (value && value.toLowerCase().includes('password')) {
-                        throw new Error('Password cannot contain the word "password"');
-                    }
-                },
+            type: String,
+            required: function () {
+                return !this.googleId;
             },
+            minlength: 6,
+            select: false,
+            trim: true,
+            validate(value) {
+                if (value && value.toLowerCase().includes('password')) {
+                    throw new Error('Password cannot contain the word "password"');
+                }
+            },
+        },
 
         googleId: {
             type: String,

@@ -1,3 +1,5 @@
+import TargetSkill from '../../models/targetSkill.model.js';
+import ResumeParsed from '../../models/resumeParsed.model.js';
 import SkillGapReport from '../../models/skillGapReport.model.js';
 import LearningRoadmap from '../../models/learningRoadmap.model.js';
 import Opportunity from '../../models/opportunity.model.js';
@@ -39,5 +41,50 @@ export const generateRoadmap = async (userId, opportunityId) => {
         });
     } catch (err) {
         throw new apiError(500, `Roadmap Error: ${err.message}`);
+    }
+};
+
+export const generateCustomTargetRoadmap = async (userId, targetSkillId) => {
+    const target = await TargetSkill.findById(targetSkillId);
+    const userResume = await ResumeParsed.findOne({ user: userId }).sort({
+        createdAt: -1,
+    });
+
+    const currentSkills = userResume ? userResume.skills.map((s) => s.name) : [];
+
+    const prompt = roadmapPrompt(
+        target.specificSkills,
+        target.targetRole,
+        target.category,
+        currentSkills
+    );
+
+    try {
+        const raw = await queryGroq(prompt);
+        const roadmapData = safeJsonParse(raw);
+
+        const trackableRoadmap = roadmapData.map((week) => ({
+            ...week,
+            tasks: week.tasks.map((taskDesc) => ({
+                description: taskDesc,
+                isCompleted: false,
+            })),
+
+            resources: week.resources.map((res) => ({
+                title: res.title,
+                url: res.url.startsWith('http')
+                    ? res.url
+                    : `https://www.youtube.com/results?search_query=${encodeURIComponent(res.title)}`,
+            })),
+        }));
+
+        return await LearningRoadmap.create({
+            user: userId,
+            targetSkill: targetSkillId,
+            roadmap: trackableRoadmap,
+            progress: 0,
+        });
+    } catch (err) {
+        throw new apiError(500, `Roadmap Generation Failed: ${err.message}`);
     }
 };

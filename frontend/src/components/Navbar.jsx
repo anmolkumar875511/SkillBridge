@@ -60,14 +60,24 @@ function Navbar() {
     );
 
     return (
-        <nav className="fixed top-0 left-0 right-0 w-full z-50 h-20 bg-white/90 backdrop-blur-md border-b" style={{ borderColor: theme.colors.border }}>
+        <nav
+            className="fixed top-0 left-0 right-0 w-full z-50 h-20 bg-white/90 backdrop-blur-md border-b"
+            style={{ borderColor: theme.colors.border }}
+        >
             <div className="max-w-7xl mx-auto h-full flex items-center justify-between px-6">
-                
                 {/* Logo Section */}
                 <div className="flex-1 flex justify-start">
                     <img
                         className="h-9 md:h-11 w-auto cursor-pointer object-contain transition-transform active:scale-95"
-                        onClick={() => navigate(user?.role === 'admin' ? '/AdminDashboard' : user ? '/Dashboard' : '/')}
+                        onClick={() =>
+                            navigate(
+                                user?.role === 'admin'
+                                    ? '/AdminDashboard'
+                                    : user
+                                      ? '/Dashboard'
+                                      : '/'
+                            )
+                        }
                         src={logo}
                         alt="SkillBridge"
                     />
@@ -83,9 +93,17 @@ function Navbar() {
                                   { name: 'ALL USERS', path: '/users' },
                               ]
                             : [
-                                  { name: user ? 'DASHBOARD' : 'HOME', path: user ? '/Dashboard' : '/' },
-                                  { name: user ? 'RESUME' : 'CONTRIBUTORS', path: user ? '/Resume' : '/contributors' },
-                                  ...(user ? [{ name: 'OPPORTUNITIES', path: '/Opportunities' }] : []),
+                                  {
+                                      name: user ? 'DASHBOARD' : 'HOME',
+                                      path: user ? '/Dashboard' : '/',
+                                  },
+                                  {
+                                      name: user ? 'RESUME' : 'CONTRIBUTORS',
+                                      path: user ? '/Resume' : '/contributors',
+                                  },
+                                  ...(user
+                                      ? [{ name: 'OPPORTUNITIES', path: '/Opportunities' }]
+                                      : []),
                                   ...(!user ? [{ name: 'CONTACT US', path: '/contact' }] : []),
                               ]),
                     ].map((link) => (
@@ -117,7 +135,7 @@ function Navbar() {
                         <div className="relative" ref={menuRef}>
                             <button
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                                className="w-10 h-10 rounded-xl border flex items-center justify-center overflow-hidden transition-all hover:shadow-md"
+                                className="w-10 h-10 rounded-full border flex items-center justify-center overflow-hidden transition-all hover:shadow-md"
                                 style={{ borderColor: theme.colors.border }}
                             >
                                 <img
@@ -128,25 +146,51 @@ function Navbar() {
                             </button>
 
                             {isMenuOpen && (
-                                <div className="absolute right-0 mt-4 w-60 bg-white rounded-2xl shadow-xl border p-2 z-50 animate-in fade-in zoom-in-95 duration-200" style={{ borderColor: theme.colors.border }}>
-                                    <div className="px-4 py-3 border-b mb-1" style={{ borderColor: theme.colors.bgLight }}>
-                                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Signed in as</p>
-                                        <p className="text-xs font-bold truncate" style={{ color: theme.colors.primary }}>
+                                <div
+                                    className="absolute right-0 mt-4 w-60 bg-white rounded-2xl shadow-xl border p-2 z-50 animate-in fade-in zoom-in-95 duration-200"
+                                    style={{ borderColor: theme.colors.border }}
+                                >
+                                    <div
+                                        className="px-4 py-3 border-b mb-1"
+                                        style={{ borderColor: theme.colors.bgLight }}
+                                    >
+                                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                                            Signed in as
+                                        </p>
+                                        <p
+                                            className="text-xs font-bold truncate"
+                                            style={{ color: theme.colors.primary }}
+                                        >
                                             {user.name || user.email}
                                         </p>
                                     </div>
-                                    
-                                    <DropdownLink onClick={() => navigate('/Profile')} icon={<User size={14}/>} label="My Profile" />
-                                    
+
+                                    <DropdownLink
+                                        onClick={() => navigate('/Profile')}
+                                        icon={<User size={14} />}
+                                        label="My Profile"
+                                    />
+
                                     {/* BUG FIX: Only show to students, not admins */}
                                     {user.role === 'student' && (
-                                        <DropdownLink onClick={() => navigate('/complete_roadmap')} icon={<CheckCircle size={14}/>} label="Completed Roadmaps" />
+                                        <DropdownLink
+                                            onClick={() => navigate('/complete_roadmap')}
+                                            icon={<CheckCircle size={14} />}
+                                            label="Completed Roadmaps"
+                                        />
                                     )}
 
-                                    <DropdownLink onClick={() => navigate('/contact')} icon={<Phone size={14}/>} label="Contact Us" />
-                                    
-                                    <div className="my-1 border-t" style={{ borderColor: theme.colors.bgLight }} />
-                                    
+                                    <DropdownLink
+                                        onClick={() => navigate('/contact')}
+                                        icon={<Phone size={14} />}
+                                        label="Contact Us"
+                                    />
+
+                                    <div
+                                        className="my-1 border-t"
+                                        style={{ borderColor: theme.colors.bgLight }}
+                                    />
+
                                     <button
                                         onClick={logout}
                                         className="w-full flex items-center gap-3 px-4 py-2.5 text-[10px] font-bold text-rose-500 hover:bg-rose-50 rounded-lg transition-colors uppercase tracking-widest"
@@ -181,6 +225,5 @@ const DropdownLink = ({ onClick, icon, label }) => (
         {label}
     </button>
 );
-
 
 export default Navbar;

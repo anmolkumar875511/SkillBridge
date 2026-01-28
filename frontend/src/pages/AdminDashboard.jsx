@@ -1,31 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { 
-    LayoutDashboard, 
-    FileText, 
-    Briefcase, 
-    Users, 
-    Activity, 
-    RefreshCw, 
-    Download, 
-    AlertCircle, 
+import {
+    LayoutDashboard,
+    FileText,
+    Briefcase,
+    Users,
+    Activity,
+    RefreshCw,
+    Download,
+    AlertCircle,
     CheckCircle,
     ChevronRight,
-    History
+    History,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import axiosInstance from '../axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import { theme } from '../theme';
 
-
 const AdminDashboard = () => {
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
     const [ingesting, setIngesting] = useState(false);
 
-    const navigate = useNavigate()
-
+    const navigate = useNavigate();
 
     // Fetch Dashboard Data
     const fetchDashboardData = async () => {
@@ -33,11 +31,9 @@ const AdminDashboard = () => {
             const res = await axiosInstance.get('/admin/dashboard');
             setStats(res.data.message);
         } catch (error) {
-            console.error("Failed to load stats", error);
+            console.error('Failed to load stats', error);
         }
     };
-
-
 
     useEffect(() => {
         setLoading(true);
@@ -58,25 +54,40 @@ const AdminDashboard = () => {
         }
     };
 
-
-    if (loading) return <div className="flex h-screen items-center justify-center text-gray-500">Loading Dashboard...</div>;
+    if (loading)
+        return (
+            <div className="flex h-screen items-center justify-center text-gray-500">
+                Loading Dashboard...
+            </div>
+        );
 
     return (
-        <div className="min-h-screen py-12 px-4 md:px-8" style={{ backgroundColor: theme.colors.bgLight }}>
+        <div
+            className="min-h-screen py-12 px-4 md:px-8"
+            style={{ backgroundColor: theme.colors.bgLight }}
+        >
             <main className="max-w-7xl mx-auto space-y-10">
-                
                 {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div className="relative pl-5 border-l-4" style={{ borderColor: theme.colors.secondary }}>
-                        <h1 className="text-3xl md:text-4xl font-bold tracking-tight" style={{ color: theme.colors.textMain }}>
+                    <div
+                        className="relative pl-5 border-l-4"
+                        style={{ borderColor: theme.colors.secondary }}
+                    >
+                        <h1
+                            className="text-3xl md:text-4xl font-bold tracking-tight"
+                            style={{ color: theme.colors.textMain }}
+                        >
                             System <span style={{ color: theme.colors.primary }}>Overview</span>
                         </h1>
-                        <p className="mt-2 text-sm md:text-lg font-medium" style={{ color: theme.colors.textMuted }}>
+                        <p
+                            className="mt-2 text-sm md:text-lg font-medium"
+                            style={{ color: theme.colors.textMuted }}
+                        >
                             Manage platform resources and monitor system health.
                         </p>
                     </div>
 
-                    <button 
+                    <button
                         onClick={handleIngest}
                         disabled={ingesting}
                         className={`flex items-center gap-2 px-6 py-3 text-white rounded-xl shadow-md transition-all active:scale-95 text-xs font-bold uppercase tracking-widest ${ingesting ? 'opacity-70 cursor-not-allowed' : 'hover:opacity-90'}`}
@@ -89,26 +100,26 @@ const AdminDashboard = () => {
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <StatCard 
+                    <StatCard
                         icon={<Users className="w-5 h-5" />}
                         title="Total Students"
                         value={stats?.users?.total || 0}
                         brandColor={theme.colors.primary}
                     />
-                    <StatCard 
+                    <StatCard
                         icon={<Briefcase className="w-5 h-5" />}
                         title="Active Jobs"
                         value={stats?.opportunities?.active || 0}
                         subtext={`of ${stats?.opportunities?.total} total`}
                         brandColor={theme.colors.secondary}
                     />
-                    <StatCard 
+                    <StatCard
                         icon={<FileText className="w-5 h-5" />}
                         title="Resumes Parsed"
                         value={stats?.resumes || 0}
                         brandColor={theme.colors.textMain}
                     />
-                    <StatCard 
+                    <StatCard
                         icon={<Activity className="w-5 h-5" />}
                         title="Roadmaps Created"
                         value={stats?.roadmaps || 0}
@@ -117,14 +128,25 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Recent Logs Preview */}
-                <div className="bg-white rounded-3xl shadow-sm border overflow-hidden" style={{ borderColor: theme.colors.border }}>
-                    <div className="px-8 py-6 border-b flex justify-between items-center" style={{ borderColor: theme.colors.border }}>
+                <div
+                    className="bg-white rounded-3xl shadow-sm border overflow-hidden"
+                    style={{ borderColor: theme.colors.border }}
+                >
+                    <div
+                        className="px-8 py-6 border-b flex justify-between items-center"
+                        style={{ borderColor: theme.colors.border }}
+                    >
                         <div className="flex items-center gap-2">
                             <History size={18} style={{ color: theme.colors.primary }} />
-                            <h3 className="font-bold text-lg" style={{ color: theme.colors.textMain }}>System Activity</h3>
+                            <h3
+                                className="font-bold text-lg"
+                                style={{ color: theme.colors.textMain }}
+                            >
+                                System Activity
+                            </h3>
                         </div>
-                        <button 
-                            onClick={() => navigate('/logger')} 
+                        <button
+                            onClick={() => navigate('/logger')}
                             className="text-xs font-bold uppercase tracking-widest hover:underline flex items-center gap-1"
                             style={{ color: theme.colors.primary }}
                         >
@@ -133,19 +155,31 @@ const AdminDashboard = () => {
                     </div>
                     <div className="divide-y" style={{ borderColor: theme.colors.border }}>
                         {stats?.recentLogs?.map((log) => (
-                            <div key={log._id} className="px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-50 transition-colors">
+                            <div
+                                key={log._id}
+                                className="px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-50 transition-colors"
+                            >
                                 <div className="flex items-center gap-4">
                                     <LogLevelBadge level={log.level} />
                                     <div className="flex flex-col">
-                                        <span className="text-sm font-bold" style={{ color: theme.colors.textMain }}>
+                                        <span
+                                            className="text-sm font-bold"
+                                            style={{ color: theme.colors.textMain }}
+                                        >
                                             {log.meta?.action || 'System Event'}
                                         </span>
-                                        <span className="text-xs font-medium truncate max-w-lg" style={{ color: theme.colors.textMuted }}>
+                                        <span
+                                            className="text-xs font-medium truncate max-w-lg"
+                                            style={{ color: theme.colors.textMuted }}
+                                        >
                                             {log.message}
                                         </span>
                                     </div>
                                 </div>
-                                <span className="text-[10px] font-bold uppercase tracking-wider opacity-40 whitespace-nowrap" style={{ color: theme.colors.textMain }}>
+                                <span
+                                    className="text-[10px] font-bold uppercase tracking-wider opacity-40 whitespace-nowrap"
+                                    style={{ color: theme.colors.textMain }}
+                                >
                                     {new Date(log.createdAt).toLocaleString()}
                                 </span>
                             </div>
@@ -159,16 +193,33 @@ const AdminDashboard = () => {
 
 // Sub-components
 const StatCard = ({ icon, title, value, subtext, brandColor }) => (
-    <div 
+    <div
         className="p-6 rounded-3xl border bg-white flex items-start justify-between transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-1"
         style={{ borderColor: theme.colors.border }}
     >
         <div className="space-y-1">
-            <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: theme.colors.textMuted }}>{title}</p>
-            <h3 className="text-3xl font-bold" style={{ color: theme.colors.textMain }}>{value}</h3>
-            {subtext && <p className="text-[10px] font-medium opacity-60" style={{ color: theme.colors.textMuted }}>{subtext}</p>}
+            <p
+                className="text-[10px] font-bold uppercase tracking-widest"
+                style={{ color: theme.colors.textMuted }}
+            >
+                {title}
+            </p>
+            <h3 className="text-3xl font-bold" style={{ color: theme.colors.textMain }}>
+                {value}
+            </h3>
+            {subtext && (
+                <p
+                    className="text-[10px] font-medium opacity-60"
+                    style={{ color: theme.colors.textMuted }}
+                >
+                    {subtext}
+                </p>
+            )}
         </div>
-        <div className="p-3 rounded-xl shadow-sm text-white" style={{ backgroundColor: brandColor }}>
+        <div
+            className="p-3 rounded-xl shadow-sm text-white"
+            style={{ backgroundColor: brandColor }}
+        >
             {icon}
         </div>
     </div>
@@ -184,7 +235,7 @@ const LogLevelBadge = ({ level }) => {
     const current = config[level] || config.info;
 
     return (
-        <span 
+        <span
             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[9px] font-bold uppercase tracking-wider"
             style={{ backgroundColor: `${current.color}15`, color: current.color }}
         >

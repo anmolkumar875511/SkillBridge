@@ -22,7 +22,11 @@ export const ingest = asyncHandler(async (req, res) => {
         });
         return res.status(200).json(new apiResponse(200, 'Fetched all opportunities'));
     } catch (error) {
-        await logger({ level: 'error', message: 'Unable to fetch opportunities', error });
+        await logger({
+            level: 'error',
+            message: 'Unable to fetch opportunities',
+            error,
+        });
         throw new apiError(500, 'Unable to fetch opportunities', error);
     }
 });
@@ -114,7 +118,6 @@ export const exportLogs = asyncHandler(async (req, res) => {
     return res.status(200).send(csv);
 });
 
-
 export const getDashboardStats = asyncHandler(async (req, res) => {
     const [
         totalUsers,
@@ -122,14 +125,14 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
         activeOpportunities,
         totalResumes,
         totalRoadmaps,
-        recentLogs
+        recentLogs,
     ] = await Promise.all([
         User.countDocuments({ role: 'student' }),
         Opportunity.countDocuments(),
         Opportunity.countDocuments({ isActive: true }),
         ResumeParsed.countDocuments(),
         LearningRoadmap.countDocuments(),
-        Log.find().sort({ createdAt: -1 }).limit(5).select('level message createdAt meta.action')
+        Log.find().sort({ createdAt: -1 }).limit(5).select('level message createdAt meta.action'),
     ]);
 
     const stats = {
@@ -137,23 +140,20 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
         opportunities: { total: totalOpportunities, active: activeOpportunities },
         resumes: totalResumes,
         roadmaps: totalRoadmaps,
-        recentLogs
+        recentLogs,
     };
 
-    return res.status(200).json(new apiResponse(200, stats, 'Dashboard statistics fetched successfully'));
+    return res
+        .status(200)
+        .json(new apiResponse(200, stats, 'Dashboard statistics fetched successfully'));
 });
 
-
 export const getAllUsers = asyncHandler(async (req, res) => {
-
-    const users = await User.find({ role: 'student' })
-        .lean();
+    const users = await User.find({ role: 'student' }).lean();
 
     if (!users || users.length === 0) {
         return res.status(200).json(new apiResponse(200, 'No students found', []));
     }
 
-    return res.status(200).json(
-        new apiResponse(200, 'Users fetched successfully', users)
-    );
+    return res.status(200).json(new apiResponse(200, 'Users fetched successfully', users));
 });

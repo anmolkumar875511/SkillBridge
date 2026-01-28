@@ -1,5 +1,12 @@
 import { Router } from 'express';
-import { ingest, toggleBlacklist, getLogs, exportLogs, getDashboardStats, getAllUsers } from '../controllers/admin.controller.js';
+import {
+    ingest,
+    toggleBlacklist,
+    getLogs,
+    exportLogs,
+    getDashboardStats,
+    getAllUsers,
+} from '../controllers/admin.controller.js';
 import { verifyToken, authorizeRoles } from '../middlewares/auth.middleware.js';
 
 const router = Router();

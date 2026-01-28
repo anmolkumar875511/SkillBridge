@@ -11,7 +11,11 @@ const learningRoadmapSchema = new mongoose.Schema(
         opportunity: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Opportunity',
-            required: true,
+            required: false,
+        },
+        targetSkill: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'TargetSkill',
         },
 
         skillGapReport: {
