@@ -3,11 +3,12 @@ import { AuthContext } from '../context/AuthContext';
 import axiosInstance from '../axiosInstance';
 import { toast } from 'sonner';
 import assetLogo from '../assets/avatar.svg';
-import { theme } from '../theme';
 import { Pencil, Key, Save, X, Camera } from 'lucide-react';
+import { getThemeColors } from '../theme';
 
 const Profile = () => {
     const { user, fetchUser } = useContext(AuthContext);
+    const { colors } = getThemeColors(user?.theme || 'light');
 
     // States for Password and UI
     const [currentPassword, setCurrentPassword] = useState('');
@@ -84,17 +85,17 @@ const Profile = () => {
             <div className="flex justify-center items-center min-h-[60vh]">
                 <div
                     className="animate-spin rounded-full h-10 w-10 border-t-2"
-                    style={{ borderColor: theme.colors.primary }}
+                    style={{ borderColor: colors.primary }}
                 ></div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen py-12 px-6" style={{ backgroundColor: theme.colors.bgLight }}>
+        <div className="min-h-screen py-12 px-6" style={{ backgroundColor: colors.bgLight }}>
             <div
                 className="max-w-4xl mx-auto bg-white rounded-3xl shadow-sm border overflow-hidden flex flex-col md:flex-row"
-                style={{ borderColor: theme.colors.border }}
+                style={{ borderColor: colors.border }}
             >
                 {/* Left Side: Info & Actions */}
                 <div className="flex-1 p-8 md:p-12 space-y-8">
@@ -104,7 +105,7 @@ const Profile = () => {
                                 <div className="space-y-1">
                                     <label
                                         className="text-[10px] font-bold uppercase tracking-widest opacity-50"
-                                        style={{ color: theme.colors.textMuted }}
+                                        style={{ color: colors.textMuted }}
                                     >
                                         Full Name
                                     </label>
@@ -114,7 +115,7 @@ const Profile = () => {
                                         onChange={(e) => setName(e.target.value)}
                                         className="w-full text-xl font-bold p-3 bg-slate-50 border rounded-xl outline-none transition-all focus:border-blue-500"
                                         placeholder="Your Name"
-                                        style={{ color: theme.colors.textMain }}
+                                        style={{ color: colors.textMain }}
                                     />
                                 </div>
 
@@ -122,14 +123,14 @@ const Profile = () => {
                                     <button
                                         onClick={handleUpdateProfile}
                                         className="flex items-center gap-2 px-6 py-2.5 text-white rounded-xl text-xs font-bold uppercase tracking-widest shadow-md transition-all active:scale-95"
-                                        style={{ backgroundColor: theme.colors.primary }}
+                                        style={{ backgroundColor: colors.primary }}
                                     >
                                         <Save size={14} /> Save
                                     </button>
                                     <button
                                         onClick={() => setIsEditing(false)}
                                         className="px-6 py-2.5 bg-slate-100 rounded-xl text-xs font-bold uppercase tracking-widest transition-all"
-                                        style={{ color: theme.colors.textMain }}
+                                        style={{ color: colors.textMain }}
                                     >
                                         Cancel
                                     </button>
@@ -139,20 +140,20 @@ const Profile = () => {
                             <div className="space-y-1">
                                 <h1
                                     className="text-3xl md:text-4xl font-bold tracking-tight"
-                                    style={{ color: theme.colors.textMain }}
+                                    style={{ color: colors.textMain }}
                                 >
                                     {user?.name}
                                 </h1>
                                 <p
                                     className="text-base font-medium"
-                                    style={{ color: theme.colors.textMuted }}
+                                    style={{ color: colors.textMuted }}
                                 >
                                     {user?.email}
                                 </p>
                                 <button
                                     onClick={() => setIsEditing(true)}
                                     className="mt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-all hover:opacity-70"
-                                    style={{ color: theme.colors.primary }}
+                                    style={{ color: colors.primary }}
                                 >
                                     <Pencil size={14} /> Edit Profile Info
                                 </button>
@@ -162,15 +163,15 @@ const Profile = () => {
 
                     <div
                         className="space-y-4 pt-8 border-t"
-                        style={{ borderColor: theme.colors.border }}
+                        style={{ borderColor: colors.border }}
                     >
                         <button
                             onClick={() => setShowPassFields(!showPassFields)}
                             className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all border shadow-sm"
                             style={{
-                                color: theme.colors.textMain,
-                                backgroundColor: theme.colors.white,
-                                borderColor: theme.colors.border,
+                                color: colors.textMain,
+                                backgroundColor: colors.white,
+                                borderColor: colors.border,
                             }}
                         >
                             <Key size={14} /> {showPassFields ? 'Cancel Change' : 'Update Password'}
@@ -179,7 +180,7 @@ const Profile = () => {
                         {showPassFields && (
                             <div
                                 className="space-y-3 p-6 bg-slate-50 rounded-2xl border animate-in fade-in slide-in-from-top-4 duration-300"
-                                style={{ borderColor: theme.colors.border }}
+                                style={{ borderColor: colors.border }}
                             >
                                 <input
                                     type="password"
@@ -198,7 +199,7 @@ const Profile = () => {
                                 <button
                                     onClick={changePassword}
                                     className="w-full py-3 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-md transition-all active:scale-95"
-                                    style={{ backgroundColor: theme.colors.primary }}
+                                    style={{ backgroundColor: colors.primary }}
                                 >
                                     Save New Password
                                 </button>
@@ -211,8 +212,8 @@ const Profile = () => {
                 <div
                     className="w-full md:w-2/5 flex flex-col items-center justify-center p-12 border-l"
                     style={{
-                        backgroundColor: theme.colors.bgLight,
-                        borderColor: theme.colors.border,
+                        backgroundColor: colors.bgLight,
+                        borderColor: colors.border,
                     }}
                 >
                     <div className="relative group">
@@ -225,7 +226,7 @@ const Profile = () => {
                         </div>
                         <label
                             className="absolute -bottom-3 -right-3 p-3 rounded-2xl shadow-lg cursor-pointer transition-all active:scale-90 border-2 border-white group"
-                            style={{ backgroundColor: theme.colors.primary }}
+                            style={{ backgroundColor: colors.primary }}
                         >
                             <Camera
                                 size={18}
@@ -241,7 +242,7 @@ const Profile = () => {
                     </div>
                     <p
                         className="mt-6 text-[10px] font-bold uppercase tracking-widest opacity-40"
-                        style={{ color: theme.colors.textMain }}
+                        style={{ color: colors.textMain }}
                     >
                         Update Photo
                     </p>

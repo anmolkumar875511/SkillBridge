@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, Trophy, Calendar, ArrowRight, CheckCircle, ArrowLeft } from 'lucide-react';
 import axiosInstance from '../axiosInstance';
-import { theme } from '../theme';
+import { AuthContext } from '../context/AuthContext';
+import { getThemeColors } from '../theme';
 
 const CompletedRoadmap = () => {
     const [completed, setCompleted] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const {user} = useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
 
     const fetchData = async () => {
         try {
@@ -31,31 +34,31 @@ const CompletedRoadmap = () => {
             <div className="flex justify-center items-center min-h-[60vh]">
                 <div
                     className="animate-spin rounded-full h-10 w-10 border-t-2"
-                    style={{ borderColor: theme.colors.primary }}
+                    style={{ borderColor: colors.primary }}
                 ></div>
             </div>
         );
 
     return (
-        <div className="min-h-screen py-12 px-6" style={{ backgroundColor: theme.colors.bgLight }}>
+        <div className="min-h-screen py-12 px-6" style={{ backgroundColor: colors.bgLight }}>
             <div className="max-w-6xl mx-auto">
                 {/* Header Section - Decent & Clean */}
                 <div
                     className="relative pl-5 border-l-4 mb-12"
-                    style={{ borderColor: theme.colors.primary }}
+                    style={{ borderColor: colors.primary }}
                 >
                     <h1
                         className="text-3xl md:text-4xl font-bold tracking-tight"
-                        style={{ color: theme.colors.textMain }}
+                        style={{ color: colors.textMain }}
                     >
-                        Mission <span style={{ color: theme.colors.primary }}>Accomplished</span>
+                        Mission <span style={{ color: colors.primary }}>Accomplished</span>
                     </h1>
                     <p
                         className="mt-2 text-sm md:text-lg font-medium"
-                        style={{ color: theme.colors.textMuted }}
+                        style={{ color: colors.textMuted }}
                     >
                         Review your{' '}
-                        <span style={{ color: theme.colors.textMain }}>Completed Career Paths</span>{' '}
+                        <span style={{ color: colors.textMain }}>Completed Career Paths</span>{' '}
                         and achievements.
                     </p>
                 </div>
@@ -63,21 +66,21 @@ const CompletedRoadmap = () => {
                 {completed.length === 0 ? (
                     <div
                         className="text-center bg-white p-16 rounded-3xl shadow-sm border"
-                        style={{ borderColor: theme.colors.border }}
+                        style={{ borderColor: colors.border }}
                     >
                         <div className="flex justify-center mb-4 opacity-20">
-                            <Trophy size={48} style={{ color: theme.colors.textMain }} />
+                            <Trophy size={48} style={{ color: colors.textMain }} />
                         </div>
                         <p
                             className="text-lg font-medium"
-                            style={{ color: theme.colors.textMuted }}
+                            style={{ color: colors.textMuted }}
                         >
                             No roadmaps completed yet. Keep pushing!
                         </p>
                         <button
                             onClick={() => navigate('/Dashboard')}
                             className="mt-6 flex items-center justify-center gap-2 mx-auto text-xs font-bold uppercase tracking-widest hover:underline"
-                            style={{ color: theme.colors.primary }}
+                            style={{ color: colors.primary }}
                         >
                             <ArrowLeft size={14} /> Back to Dashboard
                         </button>
@@ -88,7 +91,7 @@ const CompletedRoadmap = () => {
                             <div
                                 key={item._id}
                                 className="group bg-white rounded-3xl p-6 shadow-sm border transition-all duration-300 hover:shadow-md hover:-translate-y-1 relative overflow-hidden"
-                                style={{ borderColor: theme.colors.border }}
+                                style={{ borderColor: colors.border }}
                             >
                                 {/* Completed Badge - Professional Green */}
                                 <div
@@ -102,7 +105,7 @@ const CompletedRoadmap = () => {
                                     {/* Icon Container - Branded Blue */}
                                     <div
                                         className="p-3 w-fit rounded-xl text-white shadow-sm"
-                                        style={{ backgroundColor: theme.colors.primary }}
+                                        style={{ backgroundColor: colors.primary }}
                                     >
                                         <Trophy size={20} />
                                     </div>
@@ -110,13 +113,13 @@ const CompletedRoadmap = () => {
                                     <div>
                                         <h2
                                             className="text-lg font-bold line-clamp-2 min-h-14 leading-snug"
-                                            style={{ color: theme.colors.textMain }}
+                                            style={{ color: colors.textMain }}
                                         >
                                             {item.opportunity?.title || 'Career Roadmap'}
                                         </h2>
                                         <p
                                             className="text-[11px] font-bold uppercase tracking-widest mt-1 opacity-60"
-                                            style={{ color: theme.colors.textMuted }}
+                                            style={{ color: colors.textMuted }}
                                         >
                                             {item.opportunity?.company?.name || 'Target Goal'}
                                         </p>
@@ -124,7 +127,7 @@ const CompletedRoadmap = () => {
 
                                     <div
                                         className="flex items-center gap-4 text-xs font-medium"
-                                        style={{ color: theme.colors.textMuted }}
+                                        style={{ color: colors.textMuted }}
                                     >
                                         <div className="flex items-center gap-1.5">
                                             <Calendar size={14} className="opacity-70" />
@@ -140,7 +143,7 @@ const CompletedRoadmap = () => {
                                     <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
                                         <div
                                             className="h-full w-full"
-                                            style={{ backgroundColor: theme.colors.primary }}
+                                            style={{ backgroundColor: colors.primary }}
                                         />
                                     </div>
 
@@ -151,7 +154,7 @@ const CompletedRoadmap = () => {
                                             })
                                         }
                                         className="w-full mt-2 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all duration-200 text-white shadow-sm hover:opacity-90 active:scale-[0.98]"
-                                        style={{ backgroundColor: theme.colors.textMain }}
+                                        style={{ backgroundColor: colors.textMain }}
                                     >
                                         Review Roadmap <ArrowRight size={14} />
                                     </button>

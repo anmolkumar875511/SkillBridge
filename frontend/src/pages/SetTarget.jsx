@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../axiosInstance';
-import { theme } from '../theme';
 import { Target, Sparkles, Plus, X, ArrowRight } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
+import { getThemeColors } from '../theme';
 
 const SetTarget = () => {
     const navigate = useNavigate();
@@ -13,6 +14,8 @@ const SetTarget = () => {
         specificSkills: [],
     });
     const [skillInput, setSkillInput] = useState('');
+    const {user} = useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
 
     const handleAddSkill = (e) => {
         e.preventDefault();
@@ -49,13 +52,13 @@ const SetTarget = () => {
     };
 
     return (
-        <div className="min-h-screen py-12 px-6" style={{ backgroundColor: theme.colors.bgLight }}>
+        <div className="min-h-screen py-12 px-6" style={{ backgroundColor: colors.bgLight }}>
             <div className="max-w-2xl mx-auto">
                 <header className="mb-10 text-center">
                     <div className="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center mx-auto mb-4 border border-slate-100">
-                        <Target size={32} style={{ color: theme.colors.primary }} />
+                        <Target size={32} style={{ color: colors.primary }} />
                     </div>
-                    <h1 className="text-3xl font-bold" style={{ color: theme.colors.textMain }}>
+                    <h1 className="text-3xl font-bold" style={{ color: colors.textMain }}>
                         Set Your Target
                     </h1>
                     <p className="text-slate-500 mt-2">
@@ -77,7 +80,7 @@ const SetTarget = () => {
                             type="text"
                             placeholder="e.g. Senior Frontend Developer"
                             className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl focus:outline-none focus:ring-2 transition-all"
-                            style={{ '--tw-ring-color': theme.colors.primary }}
+                            style={{ '--tw-ring-color': colors.primary }}
                             value={formData.targetRole}
                             onChange={(e) =>
                                 setFormData({ ...formData, targetRole: e.target.value })
@@ -124,7 +127,7 @@ const SetTarget = () => {
                                 type="button"
                                 onClick={handleAddSkill}
                                 className="p-4 rounded-xl text-white transition-transform active:scale-95"
-                                style={{ backgroundColor: theme.colors.textMain }}
+                                style={{ backgroundColor: colors.textMain }}
                             >
                                 <Plus size={24} />
                             </button>
@@ -152,7 +155,7 @@ const SetTarget = () => {
                         type="submit"
                         disabled={loading}
                         className="w-full py-4 rounded-2xl text-white font-bold text-sm uppercase tracking-[0.2em] shadow-lg shadow-blue-200 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
-                        style={{ backgroundColor: theme.colors.primary }}
+                        style={{ backgroundColor: colors.primary }}
                     >
                         {loading ? 'Generating Roadmap...' : 'Generate Personalized Path'}
                         {!loading && <Sparkles size={18} />}

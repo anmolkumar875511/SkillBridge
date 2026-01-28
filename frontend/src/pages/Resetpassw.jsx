@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axiosInstance from '../axiosInstance';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
-import { theme } from '../theme';
+import { getThemeColors } from '../theme';
 import { Lock, ShieldCheck, ArrowRight } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
 
 const Resetpassw = () => {
     const [newPassword, setPassword] = useState('');
     const [confpassword, setConfPassword] = useState('');
     const { token } = useParams();
+    const {user} = useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
     const navigate = useNavigate();
 
     const submithandler = async (e) => {
@@ -30,7 +33,7 @@ const Resetpassw = () => {
     return (
         <div
             className="min-h-screen flex items-center justify-center px-4"
-            style={{ backgroundColor: theme.colors.bgLight }}
+            style={{ backgroundColor: colors.bgLight }}
         >
             <div className="w-full max-w-100 bg-white rounded-3xl p-8 shadow-sm border border-slate-100 z-10 animate-fade-in">
                 <form className="space-y-6" onSubmit={submithandler}>
@@ -38,23 +41,23 @@ const Resetpassw = () => {
                     <div className="text-center space-y-2">
                         <div
                             className="w-12 h-12 mx-auto rounded-2xl flex items-center justify-center mb-4"
-                            style={{ backgroundColor: `${theme.colors.primary}10` }}
+                            style={{ backgroundColor: `${colors.primary}10` }}
                         >
-                            <ShieldCheck size={24} style={{ color: theme.colors.primary }} />
+                            <ShieldCheck size={24} style={{ color: colors.primary }} />
                         </div>
 
                         <h2
                             className="text-2xl font-bold tracking-tight"
-                            style={{ color: theme.colors.textMain }}
+                            style={{ color: colors.textMain }}
                         >
                             Reset Password
                         </h2>
                         <p
                             className="text-xs font-medium leading-relaxed opacity-60"
-                            style={{ color: theme.colors.textMuted }}
+                            style={{ color: colors.textMuted }}
                         >
                             Secure your account with a{' '}
-                            <span style={{ color: theme.colors.secondary }}>new password</span>.
+                            <span style={{ color: colors.secondary }}>new password</span>.
                         </p>
                     </div>
 
@@ -89,7 +92,7 @@ const Resetpassw = () => {
                     <button
                         type="submit"
                         className="w-full py-3 text-white font-bold rounded-xl transition-all shadow-sm hover:opacity-95 active:scale-[0.98] text-sm uppercase tracking-wider flex items-center justify-center gap-2"
-                        style={{ backgroundColor: theme.colors.primary }}
+                        style={{ backgroundColor: colors.primary }}
                     >
                         Update Password
                         <ArrowRight size={16} />

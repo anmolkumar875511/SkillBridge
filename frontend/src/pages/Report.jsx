@@ -4,14 +4,17 @@ import { useParams, useNavigate } from 'react-router-dom';
 import SkillGapChart from '../components/SkillGapChart';
 import ProgressBar from '../components/ProgressBar';
 import { ResumeContext } from '../context/ResumeContext';
-import { theme } from '../theme';
 import { FileSearch, Sparkles, ArrowRight, RotateCcw, LayoutDashboard } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
+import { getThemeColors } from '../theme';
 
 const Report = () => {
     const [matchedskills, setMatchedSkills] = useState([]);
     const [unmatchedskills, setUnmatchedSkills] = useState([]);
     const [matchedPercentage, setMatchedPercentage] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+    const {user} = useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
 
     const { resume } = useContext(ResumeContext);
 
@@ -58,24 +61,24 @@ const Report = () => {
         return (
             <div
                 className="flex flex-col items-center justify-center min-h-screen px-6"
-                style={{ backgroundColor: theme.colors.bgLight }}
+                style={{ backgroundColor: colors.bgLight }}
             >
                 <div className="bg-white p-10 rounded-3xl shadow-sm border border-slate-100 max-w-md text-center">
                     <div
                         className="w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center"
                         style={{
-                            backgroundColor: `${theme.colors.primary}10`,
-                            color: theme.colors.primary,
+                            backgroundColor: `${colors.primary}10`,
+                            color: colors.primary,
                         }}
                     >
                         <FileSearch size={32} />
                     </div>
-                    <h2 className="text-xl font-bold mb-3" style={{ color: theme.colors.textMain }}>
+                    <h2 className="text-xl font-bold mb-3" style={{ color: colors.textMain }}>
                         Resume Missing
                     </h2>
                     <p
                         className="text-sm font-medium leading-relaxed mb-8"
-                        style={{ color: theme.colors.textMuted }}
+                        style={{ color: colors.textMuted }}
                     >
                         To analyze your skill gap and generate a custom roadmap, we first need to
                         process your professional experience.
@@ -83,7 +86,7 @@ const Report = () => {
                     <button
                         onClick={() => navigate('/Resume')}
                         className="w-full py-3.5 px-6 text-white font-bold rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-xs uppercase tracking-widest"
-                        style={{ backgroundColor: theme.colors.primary }}
+                        style={{ backgroundColor: colors.primary }}
                     >
                         Go to Upload
                     </button>
@@ -96,19 +99,19 @@ const Report = () => {
         return (
             <div
                 className="flex items-center justify-center min-h-screen"
-                style={{ backgroundColor: theme.colors.bgLight }}
+                style={{ backgroundColor: colors.bgLight }}
             >
                 <div className="flex flex-col items-center">
                     <div
                         className="w-10 h-10 border-2 rounded-full animate-spin mb-4"
                         style={{
-                            borderColor: theme.colors.primary,
+                            borderColor: colors.primary,
                             borderTopColor: 'transparent',
                         }}
                     ></div>
                     <p
                         className="text-xs font-bold uppercase tracking-widest"
-                        style={{ color: theme.colors.textMuted }}
+                        style={{ color: colors.textMuted }}
                     >
                         Analyzing Skills...
                     </p>
@@ -121,24 +124,24 @@ const Report = () => {
         return (
             <div
                 className="flex flex-col items-center justify-center min-h-screen p-6 text-center"
-                style={{ backgroundColor: theme.colors.bgLight }}
+                style={{ backgroundColor: colors.bgLight }}
             >
                 <div className="bg-white p-10 rounded-3xl shadow-sm border border-slate-100 max-w-md">
                     <div
                         className="w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center"
                         style={{
-                            backgroundColor: `${theme.colors.secondary}10`,
-                            color: theme.colors.secondary,
+                            backgroundColor: `${colors.secondary}10`,
+                            color: colors.secondary,
                         }}
                     >
                         <Sparkles size={32} />
                     </div>
-                    <h2 className="text-xl font-bold mb-2" style={{ color: theme.colors.textMain }}>
+                    <h2 className="text-xl font-bold mb-2" style={{ color: colors.textMain }}>
                         Perfect Match!
                     </h2>
                     <p
                         className="text-sm font-medium mb-8"
-                        style={{ color: theme.colors.textMuted }}
+                        style={{ color: colors.textMuted }}
                     >
                         Your profile fully aligns with this opportunity. No additional roadmap is
                         required.
@@ -147,8 +150,8 @@ const Report = () => {
                         onClick={() => navigate('/opportunities')}
                         className="w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all border"
                         style={{
-                            color: theme.colors.textMain,
-                            borderColor: theme.colors.border,
+                            color: colors.textMain,
+                            borderColor: colors.border,
                         }}
                     >
                         Back to Opportunities
@@ -159,19 +162,19 @@ const Report = () => {
     }
 
     return (
-        <div className="min-h-screen p-4 md:p-8" style={{ backgroundColor: theme.colors.bgLight }}>
+        <div className="min-h-screen p-4 md:p-8" style={{ backgroundColor: colors.bgLight }}>
             <div className="max-w-4xl mx-auto space-y-6">
                 {/* Header Analysis Section */}
                 <div
                     className="bg-white p-8 rounded-3xl shadow-sm border"
-                    style={{ borderColor: theme.colors.border }}
+                    style={{ borderColor: colors.border }}
                 >
                     <div className="flex items-center gap-2 mb-6">
                         <div
                             className="w-1.5 h-6 rounded-full"
-                            style={{ backgroundColor: theme.colors.secondary }}
+                            style={{ backgroundColor: colors.secondary }}
                         />
-                        <h1 className="text-xl font-bold" style={{ color: theme.colors.textMain }}>
+                        <h1 className="text-xl font-bold" style={{ color: colors.textMain }}>
                             Analysis Report
                         </h1>
                     </div>
@@ -183,12 +186,12 @@ const Report = () => {
                             </span>
                             <span
                                 className="text-3xl font-black"
-                                style={{ color: theme.colors.primary }}
+                                style={{ color: colors.primary }}
                             >
                                 {matchedPercentage}%
                             </span>
                         </div>
-                        <ProgressBar value={matchedPercentage} color={theme.colors.primary} />
+                        <ProgressBar value={matchedPercentage} color={colors.primary} />
                     </div>
                 </div>
 
@@ -196,7 +199,7 @@ const Report = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
                     <div
                         className="bg-white rounded-3xl shadow-sm border p-2"
-                        style={{ borderColor: theme.colors.border }}
+                        style={{ borderColor: colors.border }}
                     >
                         <SkillGapChart
                             matchedCount={matchedskills.length}
@@ -206,20 +209,20 @@ const Report = () => {
 
                     <div
                         className="bg-white p-8 rounded-3xl shadow-sm border flex flex-col justify-center"
-                        style={{ borderColor: theme.colors.border }}
+                        style={{ borderColor: colors.border }}
                     >
                         <h3
                             className="text-lg font-bold mb-3"
-                            style={{ color: theme.colors.textMain }}
+                            style={{ color: colors.textMain }}
                         >
                             Bridge the Gap
                         </h3>
                         <p
                             className="text-sm font-medium leading-relaxed mb-8"
-                            style={{ color: theme.colors.textMuted }}
+                            style={{ color: colors.textMuted }}
                         >
                             We've identified{' '}
-                            <span style={{ color: theme.colors.textMain }}>
+                            <span style={{ color: colors.textMain }}>
                                 {unmatchedskills.length} missing skills
                             </span>
                             . Generate an AI roadmap to achieve 100% eligibility.
@@ -228,7 +231,7 @@ const Report = () => {
                         <button
                             onClick={createRoadmap}
                             className="w-full py-4 rounded-xl font-bold text-white shadow-md transition-all hover:opacity-90 active:scale-[0.98] flex items-center justify-center gap-3 text-xs uppercase tracking-widest"
-                            style={{ backgroundColor: theme.colors.primary }}
+                            style={{ backgroundColor: colors.primary }}
                         >
                             <span>Generate AI Roadmap</span>
                             <ArrowRight size={16} />
@@ -237,7 +240,7 @@ const Report = () => {
                         <button
                             onClick={() => navigate('/opportunities')}
                             className="mt-4 flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity"
-                            style={{ color: theme.colors.textMain }}
+                            style={{ color: colors.textMain }}
                         >
                             <RotateCcw size={12} />
                             Re-evaluate Selection
@@ -250,7 +253,7 @@ const Report = () => {
                     <button
                         onClick={() => navigate('/Dashboard')}
                         className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest transition-all"
-                        style={{ color: theme.colors.textMuted }}
+                        style={{ color: colors.textMuted }}
                     >
                         <LayoutDashboard size={14} />
                         Go to My Dashboard

@@ -46,6 +46,12 @@ const userSchema = new mongoose.Schema(
             required: true,
         },
 
+        theme: {
+            type: String,
+            enum: ['light', 'dark'],
+            default: 'light',
+        },
+
         avatar: {
             url: String,
             publicId: String,

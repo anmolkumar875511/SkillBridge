@@ -3,7 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom'; // Import useLocation
 import axiosInstance from '../axiosInstance';
 import { Plus, BookOpen, Calendar, Trophy, ArrowRight, CheckCircle, X } from 'lucide-react';
-import { theme } from '../theme';
+import { getThemeColors } from '../theme';
 
 const Dashboard = () => {
     const { user } = useContext(AuthContext);
@@ -11,6 +11,7 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const location = useLocation(); // Capture the state passed from Roadmap.jsx
+    const { colors } = getThemeColors(user?.theme || 'light');
 
     // Toast State
     const [toastMessage, setToastMessage] = useState(location.state?.message || null);
@@ -55,7 +56,7 @@ const Dashboard = () => {
     return (
         <div
             className="min-h-screen py-12 px-6 relative"
-            style={{ backgroundColor: theme.colors.bgLight }}
+            style={{ backgroundColor: colors.bgLight }}
         >
             {/* SUCCESS TOAST NOTIFICATION */}
             {toastMessage && (
@@ -83,30 +84,30 @@ const Dashboard = () => {
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-12">
                     <div
                         className="relative pl-5 border-l-4"
-                        style={{ borderColor: theme.colors.secondary }}
+                        style={{ borderColor: colors.secondary }}
                     >
                         <h1
                             className="text-3xl md:text-4xl font-bold tracking-tight"
-                            style={{ color: theme.colors.textMain }}
+                            style={{ color: colors.textMain }}
                         >
                             Hello,{' '}
-                            <span style={{ color: theme.colors.primary }}>
+                            <span style={{ color: colors.primary }}>
                                 {user?.name || 'Explorer'}
                             </span>
                         </h1>
                         <p
                             className="mt-2 text-sm md:text-lg font-medium"
-                            style={{ color: theme.colors.textMuted }}
+                            style={{ color: colors.textMuted }}
                         >
                             Continue your path to{' '}
-                            <span style={{ color: theme.colors.textMain }}>Career Excellence</span>.
+                            <span style={{ color: colors.textMain }}>Career Excellence</span>.
                         </p>
                     </div>
 
                     <button
                         onClick={() => navigate('/set-target')}
                         className="flex items-center gap-2 px-6 py-3 rounded-2xl text-white font-bold text-xs uppercase tracking-widest transition-all hover:scale-105 shadow-md"
-                        style={{ backgroundColor: theme.colors.primary }}
+                        style={{ backgroundColor: colors.primary }}
                     >
                         <Plus size={18} /> New Goal
                     </button>
@@ -116,7 +117,7 @@ const Dashboard = () => {
                     <div className="text-center bg-white p-16 rounded-[40px] shadow-sm border border-slate-100">
                         <p
                             className="font-medium opacity-60"
-                            style={{ color: theme.colors.textMuted }}
+                            style={{ color: colors.textMuted }}
                         >
                             No roadmaps generated yet.
                         </p>
@@ -127,13 +128,13 @@ const Dashboard = () => {
                             <div
                                 key={item._id}
                                 className="group bg-white rounded-3xl p-6 shadow-sm border transition-all duration-300 hover:shadow-md hover:-translate-y-1 relative overflow-hidden"
-                                style={{ borderColor: theme.colors.border }}
+                                style={{ borderColor: colors.border }}
                             >
                                 <div
                                     className="absolute top-6 right-6 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
                                     style={{
-                                        backgroundColor: `${theme.colors.primary}10`,
-                                        color: theme.colors.primary,
+                                        backgroundColor: `${colors.primary}10`,
+                                        color: colors.primary,
                                     }}
                                 >
                                     {item.progress || 0}%
@@ -142,7 +143,7 @@ const Dashboard = () => {
                                 <div className="space-y-5">
                                     <div
                                         className="p-3 w-fit rounded-xl text-white"
-                                        style={{ backgroundColor: theme.colors.primary }}
+                                        style={{ backgroundColor: colors.primary }}
                                     >
                                         <BookOpen size={20} />
                                     </div>
@@ -150,7 +151,7 @@ const Dashboard = () => {
                                     <div>
                                         <h2
                                             className="text-lg font-bold line-clamp-2 min-h-14 leading-tight"
-                                            style={{ color: theme.colors.textMain }}
+                                            style={{ color: colors.textMain }}
                                         >
                                             {item.opportunity?.title ||
                                                 item.targetSkill?.targetRole ||
@@ -158,7 +159,7 @@ const Dashboard = () => {
                                         </h2>
                                         <p
                                             className="text-[10px] font-bold uppercase tracking-widest mt-1 opacity-50"
-                                            style={{ color: theme.colors.textMuted }}
+                                            style={{ color: colors.textMuted }}
                                         >
                                             {item.opportunity?.company?.name || 'Personal Target'}
                                         </p>
@@ -166,7 +167,7 @@ const Dashboard = () => {
 
                                     <div
                                         className="flex items-center gap-4 text-xs font-medium"
-                                        style={{ color: theme.colors.textMuted }}
+                                        style={{ color: colors.textMuted }}
                                     >
                                         <div className="flex items-center gap-1.5">
                                             <Calendar size={14} className="opacity-70" />
@@ -179,7 +180,7 @@ const Dashboard = () => {
                                             className="h-full transition-all duration-700"
                                             style={{
                                                 width: `${item.progress || 0}%`,
-                                                backgroundColor: theme.colors.primary,
+                                                backgroundColor: colors.primary,
                                             }}
                                         />
                                     </div>
@@ -187,7 +188,7 @@ const Dashboard = () => {
                                     <button
                                         onClick={() => navigate(`/roadmap/${item._id}`)}
                                         className="w-full mt-2 flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all text-white hover:opacity-90 active:scale-[0.98]"
-                                        style={{ backgroundColor: theme.colors.textMain }}
+                                        style={{ backgroundColor: colors.textMain }}
                                     >
                                         Continue <ArrowRight size={14} />
                                     </button>

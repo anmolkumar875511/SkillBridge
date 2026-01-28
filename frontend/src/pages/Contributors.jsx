@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Github, Linkedin, Instagram, Code2, GraduationCap } from 'lucide-react';
 import Anmol from '../assets/Anmol.png';
 import tanishq from '../assets/tanishq.jpeg';
-import { theme } from '../theme';
-
+import { AuthContext } from '../context/AuthContext';
+import { getThemeColors } from '../theme';
 const Contributors = () => {
+    const {user} = useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
     const contributors = [
         {
             name: 'Anmol Kumar',
@@ -44,25 +46,25 @@ const Contributors = () => {
     ];
 
     return (
-        <div className="min-h-screen py-16 px-6" style={{ backgroundColor: theme.colors.bgLight }}>
+        <div className="min-h-screen py-16 px-6" style={{ backgroundColor: colors.bgLight }}>
             <div className="max-w-6xl mx-auto">
                 {/* Section Header - Clean & Decent */}
                 <div className="text-center mb-16">
                     <p
                         className="text-[11px] font-bold tracking-[0.2em] uppercase mb-3"
-                        style={{ color: theme.colors.secondary }}
+                        style={{ color: colors.secondary }}
                     >
                         The Team
                     </p>
                     <h1
                         className="text-3xl md:text-5xl font-bold tracking-tight"
-                        style={{ color: theme.colors.textMain }}
+                        style={{ color: colors.textMain }}
                     >
-                        Meet the <span style={{ color: theme.colors.primary }}>Contributors</span>
+                        Meet the <span style={{ color: colors.primary }}>Contributors</span>
                     </h1>
                     <p
                         className="mt-4 text-sm md:text-lg font-medium"
-                        style={{ color: theme.colors.textMuted }}
+                        style={{ color: colors.textMuted }}
                     >
                         The minds behind SkillBridge's personalized career paths.
                     </p>
@@ -74,14 +76,14 @@ const Contributors = () => {
                         <div
                             key={index}
                             className="bg-white rounded-3xl p-8 border transition-all duration-300 shadow-sm hover:shadow-md"
-                            style={{ borderColor: theme.colors.border }}
+                            style={{ borderColor: colors.border }}
                         >
                             <div className="flex flex-col md:flex-row gap-8 items-start">
                                 {/* Image Section - Simplified */}
                                 <div className="relative shrink-0 mx-auto md:mx-0">
                                     <div
                                         className="w-28 h-28 rounded-2xl overflow-hidden border-2"
-                                        style={{ borderColor: theme.colors.border }}
+                                        style={{ borderColor: colors.border }}
                                     >
                                         <img
                                             src={member.image}
@@ -96,7 +98,7 @@ const Contributors = () => {
                                     <div className="flex items-center justify-between mb-2">
                                         <h3
                                             className="text-xl font-bold"
-                                            style={{ color: theme.colors.textMain }}
+                                            style={{ color: colors.textMain }}
                                         >
                                             {member.name}
                                         </h3>
@@ -106,7 +108,7 @@ const Contributors = () => {
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 className="opacity-40 hover:opacity-100 transition-opacity"
-                                                style={{ color: theme.colors.textMain }}
+                                                style={{ color: colors.textMain }}
                                             >
                                                 <Github size={18} />
                                             </a>
@@ -115,7 +117,7 @@ const Contributors = () => {
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 className="opacity-40 hover:opacity-100 transition-opacity"
-                                                style={{ color: theme.colors.primary }}
+                                                style={{ color: colors.primary }}
                                             >
                                                 <Linkedin size={18} />
                                             </a>
@@ -124,7 +126,7 @@ const Contributors = () => {
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 className="opacity-40 hover:opacity-100 transition-opacity"
-                                                style={{ color: theme.colors.secondary }}
+                                                style={{ color: colors.secondary }}
                                             >
                                                 <Instagram size={18} />
                                             </a>
@@ -133,14 +135,14 @@ const Contributors = () => {
 
                                     <p
                                         className="font-bold text-[11px] uppercase tracking-wider mb-4 flex items-center gap-2"
-                                        style={{ color: theme.colors.primary }}
+                                        style={{ color: colors.primary }}
                                     >
                                         <Code2 size={14} /> {member.skills}
                                     </p>
 
                                     <p
                                         className="text-sm leading-relaxed mb-6"
-                                        style={{ color: theme.colors.textMuted }}
+                                        style={{ color: colors.textMuted }}
                                     >
                                         {member.description}
                                     </p>
@@ -149,13 +151,13 @@ const Contributors = () => {
                                     <div
                                         className="space-y-3 p-5 rounded-2xl border"
                                         style={{
-                                            backgroundColor: theme.colors.bgLight,
-                                            borderColor: theme.colors.border,
+                                            backgroundColor: colors.bgLight,
+                                            borderColor: colors.border,
                                         }}
                                     >
                                         <h4
                                             className="text-[9px] font-bold uppercase tracking-widest flex items-center gap-2 opacity-60"
-                                            style={{ color: theme.colors.textMain }}
+                                            style={{ color: colors.textMain }}
                                         >
                                             <GraduationCap size={14} /> Academic Background
                                         </h4>
@@ -163,13 +165,13 @@ const Contributors = () => {
                                             <div key={idx} className="flex flex-col">
                                                 <span
                                                     className="text-xs font-bold"
-                                                    style={{ color: theme.colors.textMain }}
+                                                    style={{ color: colors.textMain }}
                                                 >
                                                     {edu.degree}
                                                 </span>
                                                 <span
                                                     className="text-[10px] font-medium"
-                                                    style={{ color: theme.colors.textMuted }}
+                                                    style={{ color: colors.textMuted }}
                                                 >
                                                     {edu.institute}
                                                 </span>

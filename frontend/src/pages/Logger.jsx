@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Download, AlertCircle, CheckCircle, ScrollText, History } from 'lucide-react';
 import axiosInstance from '../axiosInstance';
-import { theme } from '../theme';
+import { AuthContext } from '../context/AuthContext';
+import { getThemeColors } from '../theme';
 
 const LogLevelBadge = ({ level }) => {
+    const {user} = useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
     const config = {
         info: { color: '#3b82f6', icon: <CheckCircle className="w-3 h-3" /> },
         warn: { color: '#f59e0b', icon: <AlertCircle className="w-3 h-3" /> },
@@ -27,6 +30,8 @@ const LogLevelBadge = ({ level }) => {
 };
 
 const Logger = () => {
+    const {user} = useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
     const [logs, setLogs] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -56,13 +61,13 @@ const Logger = () => {
                 <div
                     className="w-10 h-10 border-2 rounded-full animate-spin"
                     style={{
-                        borderColor: theme.colors.primary,
+                        borderColor: colors.primary,
                         borderTopColor: 'transparent',
                     }}
                 ></div>
                 <p
                     className="text-xs font-bold uppercase tracking-widest opacity-50"
-                    style={{ color: theme.colors.textMuted }}
+                    style={{ color: colors.textMuted }}
                 >
                     Retrieving Logs...
                 </p>
@@ -76,17 +81,17 @@ const Logger = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
                 <div
                     className="relative pl-5 border-l-4"
-                    style={{ borderColor: theme.colors.secondary }}
+                    style={{ borderColor: colors.secondary }}
                 >
                     <h1
                         className="text-3xl font-bold tracking-tight"
-                        style={{ color: theme.colors.textMain }}
+                        style={{ color: colors.textMain }}
                     >
-                        System <span style={{ color: theme.colors.primary }}>Activity</span>
+                        System <span style={{ color: colors.primary }}>Activity</span>
                     </h1>
                     <p
                         className="mt-1 text-sm font-medium"
-                        style={{ color: theme.colors.textMuted }}
+                        style={{ color: colors.textMuted }}
                     >
                         Audit trail of platform events and security logs.
                     </p>
@@ -95,7 +100,7 @@ const Logger = () => {
                 <button
                     onClick={handleExportLogs}
                     className="flex items-center gap-2 px-6 py-3 text-white rounded-xl text-[11px] font-bold uppercase tracking-widest shadow-md transition-all hover:opacity-90 active:scale-95"
-                    style={{ backgroundColor: theme.colors.textMain }}
+                    style={{ backgroundColor: colors.textMain }}
                 >
                     <Download size={14} />
                     Export Audit Log
@@ -105,14 +110,14 @@ const Logger = () => {
             {/* Table Section - Clean & Decent */}
             <div
                 className="bg-white rounded-3xl border shadow-sm overflow-hidden"
-                style={{ borderColor: theme.colors.border }}
+                style={{ borderColor: colors.border }}
             >
                 <div className="overflow-x-auto custom-scrollbar">
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr
                                 className="bg-slate-50 border-b"
-                                style={{ borderColor: theme.colors.border }}
+                                style={{ borderColor: colors.border }}
                             >
                                 <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                                     Timestamp
@@ -131,7 +136,7 @@ const Logger = () => {
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y" style={{ borderColor: theme.colors.border }}>
+                        <tbody className="divide-y" style={{ borderColor: colors.border }}>
                             {logs.length > 0 ? (
                                 logs.map((log) => (
                                     <tr
@@ -141,13 +146,13 @@ const Logger = () => {
                                         <td className="px-8 py-4 whitespace-nowrap">
                                             <p
                                                 className="text-xs font-bold"
-                                                style={{ color: theme.colors.textMain }}
+                                                style={{ color: colors.textMain }}
                                             >
                                                 {new Date(log.createdAt).toLocaleDateString()}
                                             </p>
                                             <p
                                                 className="text-[10px] font-medium opacity-50"
-                                                style={{ color: theme.colors.textMuted }}
+                                                style={{ color: colors.textMuted }}
                                             >
                                                 {new Date(log.createdAt).toLocaleTimeString()}
                                             </p>
@@ -157,7 +162,7 @@ const Logger = () => {
                                         </td>
                                         <td
                                             className="px-6 py-4 text-[11px] font-bold uppercase tracking-wide"
-                                            style={{ color: theme.colors.primary }}
+                                            style={{ color: colors.primary }}
                                         >
                                             {log.meta?.action || 'SYSTEM_EVENT'}
                                         </td>
@@ -166,9 +171,9 @@ const Logger = () => {
                                                 <div
                                                     className="w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-bold border"
                                                     style={{
-                                                        backgroundColor: theme.colors.bgLight,
-                                                        color: theme.colors.textMuted,
-                                                        borderColor: theme.colors.border,
+                                                        backgroundColor: colors.bgLight,
+                                                        color: colors.textMuted,
+                                                        borderColor: colors.border,
                                                     }}
                                                 >
                                                     {log.user?.email
@@ -177,7 +182,7 @@ const Logger = () => {
                                                 </div>
                                                 <span
                                                     className="text-xs font-semibold"
-                                                    style={{ color: theme.colors.textMain }}
+                                                    style={{ color: colors.textMain }}
                                                 >
                                                     {log.user?.email || 'System'}
                                                 </span>
@@ -185,7 +190,7 @@ const Logger = () => {
                                         </td>
                                         <td
                                             className="px-8 py-4 text-xs font-medium max-w-xs xl:max-w-md truncate group-hover:whitespace-normal"
-                                            style={{ color: theme.colors.textMuted }}
+                                            style={{ color: colors.textMuted }}
                                         >
                                             {log.message}
                                         </td>
@@ -196,7 +201,7 @@ const Logger = () => {
                                     <td colSpan="5" className="px-8 py-20 text-center">
                                         <div
                                             className="flex flex-col items-center opacity-20"
-                                            style={{ color: theme.colors.textMuted }}
+                                            style={{ color: colors.textMuted }}
                                         >
                                             <History size={48} className="mb-3" />
                                             <p className="text-xs font-bold uppercase tracking-[0.2em]">
@@ -215,7 +220,7 @@ const Logger = () => {
                 dangerouslySetInnerHTML={{
                     __html: `
                 .custom-scrollbar::-webkit-scrollbar { height: 6px; }
-                .custom-scrollbar::-webkit-scrollbar-thumb { background: ${theme.colors.border}; border-radius: 10px; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background: ${colors.border}; border-radius: 10px; }
                 .animate-fade-in { animation: fadeIn 0.5s ease-out; }
                 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
             `,

@@ -519,3 +519,25 @@ export const handleGoogleCallback = asyncHandler(async (req, res) => {
         })
         .redirect(`${process.env.FRONTEND_URL}/Dashboard`);
 });
+
+export const updateTheme = async (req, res) => {
+    try {
+        const { theme } = req.body;
+        if (!['light', 'dark'].includes(theme)) {
+            return res.status(400).json({ message: "Invalid theme type" });
+        }
+
+        const user = await User.findByIdAndUpdate(
+            req.user.id, 
+            { theme }, 
+            { new: true }
+        );
+
+        res.status(200).json({ 
+            success: true, 
+            theme: user.theme 
+        });
+    } catch (error) {
+        res.status(500).json({ message: "Server error updating theme" });
+    }
+};

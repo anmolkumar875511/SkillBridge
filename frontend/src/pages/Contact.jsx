@@ -1,8 +1,11 @@
-import React from 'react';
-import { theme } from '../theme';
+import React, { useContext } from 'react';
 import { Mail, Phone, MapPin, Instagram, Facebook, Linkedin } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
+import { getThemeColors } from '../theme';
 
 const Contact = () => {
+    const {user}= useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
     const contactInfo = [
         {
             label: 'Email Us',
@@ -58,28 +61,28 @@ const Contact = () => {
     ];
 
     return (
-        <div className="min-h-screen py-16 px-6" style={{ backgroundColor: theme.colors.bgLight }}>
+        <div className="min-h-screen py-16 px-6" style={{ backgroundColor: colors.bgLight }}>
             <div className="max-w-6xl mx-auto space-y-12">
                 {/* Section Header - Clean & Balanced */}
                 <div className="text-center space-y-3">
                     <p
                         className="text-[11px] font-bold uppercase tracking-[0.2em]"
-                        style={{ color: theme.colors.secondary }}
+                        style={{ color: colors.secondary }}
                     >
                         Contact Us
                     </p>
                     <h1
                         className="text-3xl md:text-5xl font-bold tracking-tight"
-                        style={{ color: theme.colors.textMain }}
+                        style={{ color: colors.textMain }}
                     >
-                        Get in <span style={{ color: theme.colors.primary }}>Touch</span>
+                        Get in <span style={{ color: colors.primary }}>Touch</span>
                     </h1>
                     <p
                         className="text-sm md:text-lg max-w-2xl mx-auto font-medium leading-relaxed"
-                        style={{ color: theme.colors.textMuted }}
+                        style={{ color: colors.textMuted }}
                     >
                         We are{' '}
-                        <span className="font-bold" style={{ color: theme.colors.textMain }}>
+                        <span className="font-bold" style={{ color: colors.textMain }}>
                             SkillBridge
                         </span>
                         . We’d love to hear from you. Connect with us through any of these
@@ -99,8 +102,8 @@ const Contact = () => {
                                 <div
                                     className="w-12 h-12 rounded-xl flex items-center justify-center transition-colors"
                                     style={{
-                                        backgroundColor: `${theme.colors.primary}10`,
-                                        color: theme.colors.primary,
+                                        backgroundColor: `${colors.primary}10`,
+                                        color: colors.primary,
                                     }}
                                 >
                                     {info.icon}
@@ -108,13 +111,13 @@ const Contact = () => {
                                 <div className="ml-5">
                                     <p
                                         className="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1"
-                                        style={{ color: theme.colors.textMuted }}
+                                        style={{ color: colors.textMuted }}
                                     >
                                         {info.label}
                                     </p>
                                     <p
                                         className="text-base font-bold transition-colors group-hover:text-blue-600"
-                                        style={{ color: theme.colors.textMain }}
+                                        style={{ color: colors.textMain }}
                                     >
                                         {info.value}
                                     </p>
@@ -128,13 +131,13 @@ const Contact = () => {
                         <div>
                             <h3
                                 className="text-xl font-bold mb-2"
-                                style={{ color: theme.colors.textMain }}
+                                style={{ color: colors.textMain }}
                             >
                                 Follow Our Journey
                             </h3>
                             <p
                                 className="text-sm font-medium"
-                                style={{ color: theme.colors.textMuted }}
+                                style={{ color: colors.textMuted }}
                             >
                                 Stay updated with our latest milestones and student stories.
                             </p>
@@ -176,18 +179,18 @@ const Contact = () => {
                         <div className="pt-6 border-t border-slate-100 flex items-center justify-between">
                             <span
                                 className="text-[10px] font-bold uppercase tracking-[0.3em] opacity-30"
-                                style={{ color: theme.colors.textMain }}
+                                style={{ color: colors.textMain }}
                             >
                                 SkillBridge Global
                             </span>
                             <div className="flex gap-1.5">
                                 <div
                                     className="h-1.5 w-6 rounded-full"
-                                    style={{ backgroundColor: theme.colors.primary }}
+                                    style={{ backgroundColor: colors.primary }}
                                 />
                                 <div
                                     className="h-1.5 w-1.5 rounded-full"
-                                    style={{ backgroundColor: theme.colors.secondary }}
+                                    style={{ backgroundColor: colors.secondary }}
                                 />
                             </div>
                         </div>

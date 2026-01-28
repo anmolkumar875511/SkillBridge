@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axiosInstance from '../axiosInstance';
 import { useNavigate } from 'react-router-dom';
-import { theme } from '../theme'; // Pulling from your central theme.js
 import { Briefcase, MapPin, Search, ChevronRight, X } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
+import { getThemeColors } from '../theme';
 
 const Opportunities = () => {
     const [opportunities, setOpportunities] = useState([]);
     const [selectedOp, setSelectedOp] = useState(null);
     const [isLoading, setIsLoading] = useState(true); // 1. Add loading state
     const navigate = useNavigate();
+    const {user} = useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
 
     const getOpportunity = async () => {
         try {
@@ -49,24 +52,24 @@ const Opportunities = () => {
     );
 
     return (
-        <div className="min-h-screen py-12 px-6" style={{ backgroundColor: theme.colors.bgLight }}>
+        <div className="min-h-screen py-12 px-6" style={{ backgroundColor: colors.bgLight }}>
             <div className="max-w-7xl mx-auto space-y-10">
                 {/* Header Section - Uniform Style */}
                 <div
                     className="relative pl-5 border-l-4"
-                    style={{ borderColor: theme.colors.secondary }}
+                    style={{ borderColor: colors.secondary }}
                 >
                     <h1
                         className="text-3xl md:text-4xl font-bold tracking-tight"
-                        style={{ color: theme.colors.textMain }}
+                        style={{ color: colors.textMain }}
                     >
-                        Career <span style={{ color: theme.colors.primary }}>Opportunities</span>
+                        Career <span style={{ color: colors.primary }}>Opportunities</span>
                     </h1>
                     <p
                         className="mt-2 text-sm md:text-lg font-medium"
-                        style={{ color: theme.colors.textMuted }}
+                        style={{ color: colors.textMuted }}
                     >
-                        Find the <span style={{ color: theme.colors.textMain }}>Best Match</span>{' '}
+                        Find the <span style={{ color: colors.textMain }}>Best Match</span>{' '}
                         opportunities curated for your skill set.
                     </p>
                 </div>
@@ -88,19 +91,19 @@ const Opportunities = () => {
                                       <div className="space-y-1">
                                           <p
                                               className="text-[10px] font-bold uppercase tracking-widest"
-                                              style={{ color: theme.colors.textMuted }}
+                                              style={{ color: colors.textMuted }}
                                           >
                                               {item.company.name}
                                           </p>
                                           <h3
                                               className="text-xl font-bold leading-tight transition-colors"
-                                              style={{ color: theme.colors.textMain }}
+                                              style={{ color: colors.textMain }}
                                           >
                                               {item.title}
                                           </h3>
                                           <p
                                               className="text-xs font-semibold italic"
-                                              style={{ color: theme.colors.primary }}
+                                              style={{ color: colors.primary }}
                                           >
                                               {item.category}
                                           </p>
@@ -110,7 +113,7 @@ const Opportunities = () => {
                                       <div className="space-y-3">
                                           <p
                                               className="text-[9px] font-bold uppercase tracking-widest opacity-60"
-                                              style={{ color: theme.colors.textMuted }}
+                                              style={{ color: colors.textMuted }}
                                           >
                                               Required Skills
                                           </p>
@@ -122,9 +125,9 @@ const Opportunities = () => {
                                                           key={sIndex}
                                                           className="px-3 py-1 text-[10px] font-bold rounded-lg border transition-colors"
                                                           style={{
-                                                              backgroundColor: `${theme.colors.primary}08`,
-                                                              color: theme.colors.primary,
-                                                              borderColor: `${theme.colors.primary}15`,
+                                                              backgroundColor: `${colors.primary}08`,
+                                                              color: colors.primary,
+                                                              borderColor: `${colors.primary}15`,
                                                           }}
                                                       >
                                                           {skill}
@@ -140,7 +143,7 @@ const Opportunities = () => {
                                               <div>
                                                   <p
                                                       className="text-xs font-bold"
-                                                      style={{ color: theme.colors.textMain }}
+                                                      style={{ color: colors.textMain }}
                                                   >
                                                       {item.experienceLevel}
                                                   </p>
@@ -151,7 +154,7 @@ const Opportunities = () => {
                                               <div>
                                                   <p
                                                       className="text-xs font-bold"
-                                                      style={{ color: theme.colors.textMain }}
+                                                      style={{ color: colors.textMain }}
                                                   >
                                                       {item.location}
                                                   </p>
@@ -165,8 +168,8 @@ const Opportunities = () => {
                                           onClick={() => setSelectedOp(item)}
                                           className="w-full py-3 rounded-xl font-bold text-[11px] tracking-widest border-2 transition-all hover:bg-slate-50"
                                           style={{
-                                              color: theme.colors.primary,
-                                              borderColor: `${theme.colors.primary}20`,
+                                              color: colors.primary,
+                                              borderColor: `${colors.primary}20`,
                                           }}
                                       >
                                           VIEW DETAILS
@@ -174,7 +177,7 @@ const Opportunities = () => {
                                       <button
                                           onClick={() => navigate(`/analyze/${item._id}`)}
                                           className="w-full py-3 rounded-xl font-bold text-[11px] text-white tracking-widest shadow-sm hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
-                                          style={{ backgroundColor: theme.colors.primary }}
+                                          style={{ backgroundColor: colors.primary }}
                                       >
                                           GENERATE SKILL GAP <ChevronRight size={14} />
                                       </button>
@@ -196,13 +199,13 @@ const Opportunities = () => {
                             <div>
                                 <h2
                                     className="text-2xl font-bold tracking-tight"
-                                    style={{ color: theme.colors.textMain }}
+                                    style={{ color: colors.textMain }}
                                 >
                                     {selectedOp.title}
                                 </h2>
                                 <p
                                     className="font-bold uppercase text-[10px] tracking-[0.2em] mt-1"
-                                    style={{ color: theme.colors.secondary }}
+                                    style={{ color: colors.secondary }}
                                 >
                                     {selectedOp.company.name}
                                 </p>
@@ -224,7 +227,7 @@ const Opportunities = () => {
                             <button
                                 onClick={() => navigate(`/analyze/${selectedOp._id}`)}
                                 className="w-full py-4 rounded-xl font-bold text-white tracking-widest text-xs shadow-md hover:opacity-90 transition-all"
-                                style={{ backgroundColor: theme.colors.primary }}
+                                style={{ backgroundColor: colors.primary }}
                             >
                                 ANALYZE SKILL GAP NOW
                             </button>
@@ -237,7 +240,7 @@ const Opportunities = () => {
                 dangerouslySetInnerHTML={{
                     __html: `
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: ${theme.colors.border}; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: ${colors.border}; border-radius: 10px; }
         @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fade-in 0.5s ease-out; }
       `,

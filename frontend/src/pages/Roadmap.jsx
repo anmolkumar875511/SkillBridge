@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axiosInstance from '../axiosInstance';
-import { theme } from '../theme';
 import {
     CheckCircle,
     Circle,
@@ -17,6 +16,8 @@ import {
     AlertTriangle,
     X,
 } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
+import { getThemeColors } from '../theme';
 
 const Roadmap = () => {
     const { id } = useParams();
@@ -29,6 +30,8 @@ const Roadmap = () => {
     const [showHurray, setShowHurray] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+    const {user} = useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
 
     const isReadonly = roadmapData?.progress === 100;
 
@@ -119,14 +122,14 @@ const Roadmap = () => {
         return (
             <div
                 className="flex items-center justify-center min-h-screen"
-                style={{ backgroundColor: theme.colors.bgLight }}
+                style={{ backgroundColor: colors.bgLight }}
             >
                 <div className="text-center">
                     <div
                         className="w-10 h-10 rounded-full animate-spin mx-auto mb-4 border-t-2"
-                        style={{ borderColor: theme.colors.primary }}
+                        style={{ borderColor: colors.primary }}
                     ></div>
-                    <p className="text-sm font-medium" style={{ color: theme.colors.textMuted }}>
+                    <p className="text-sm font-medium" style={{ color: colors.textMuted }}>
                         Curating your path...
                     </p>
                 </div>
@@ -137,7 +140,7 @@ const Roadmap = () => {
         return (
             <div
                 className="min-h-screen flex flex-col items-center justify-center px-6 text-center"
-                style={{ backgroundColor: theme.colors.bgLight }}
+                style={{ backgroundColor: colors.bgLight }}
             >
                 <div className="p-6 rounded-full bg-white shadow-sm mb-6">
                     <SearchX size={48} className="opacity-20" />
@@ -158,7 +161,7 @@ const Roadmap = () => {
     const displaySubtitle = roadmapData.opportunity?.company?.name || 'Target Learning Goal';
 
     return (
-        <div className="min-h-screen py-12 px-4" style={{ backgroundColor: theme.colors.bgLight }}>
+        <div className="min-h-screen py-12 px-4" style={{ backgroundColor: colors.bgLight }}>
             {/* CUSTOM DELETE MODAL */}
             {showDeleteModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -209,7 +212,7 @@ const Roadmap = () => {
                 {showHurray && (
                     <div
                         className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md animate-in fade-in duration-500"
-                        style={{ backgroundColor: `${theme.colors.primary}F2` }}
+                        style={{ backgroundColor: `${colors.primary}F2` }}
                     >
                         <div className="text-center text-white p-8">
                             <PartyPopper size={64} className="mx-auto mb-6 animate-bounce" />
@@ -223,7 +226,7 @@ const Roadmap = () => {
                     <button
                         onClick={() => navigate(backPath)}
                         className="group flex items-center gap-2 font-bold transition-all text-xs uppercase tracking-widest"
-                        style={{ color: theme.colors.textMuted }}
+                        style={{ color: colors.textMuted }}
                     >
                         <ArrowLeft
                             size={16}
@@ -245,7 +248,7 @@ const Roadmap = () => {
                         <div className="flex items-center gap-3">
                             <h1
                                 className="text-2xl md:text-3xl font-bold tracking-tight"
-                                style={{ color: theme.colors.textMain }}
+                                style={{ color: colors.textMain }}
                             >
                                 {displayTitle}
                             </h1>
@@ -253,7 +256,7 @@ const Roadmap = () => {
                         </div>
                         <p
                             className="text-[11px] font-bold uppercase tracking-[0.2em]"
-                            style={{ color: theme.colors.secondary }}
+                            style={{ color: colors.secondary }}
                         >
                             {displaySubtitle}
                         </p>
@@ -261,7 +264,7 @@ const Roadmap = () => {
                     <div className="md:text-right">
                         <div
                             className="text-4xl font-bold"
-                            style={{ color: isReadonly ? '#10b981' : theme.colors.primary }}
+                            style={{ color: isReadonly ? '#10b981' : colors.primary }}
                         >
                             {roadmapData.progress || 0}%
                         </div>
@@ -273,14 +276,14 @@ const Roadmap = () => {
 
                 <div
                     className="relative border-l-2 ml-4 md:ml-6 space-y-10"
-                    style={{ borderColor: theme.colors.border }}
+                    style={{ borderColor: colors.border }}
                 >
                     {roadmapData.roadmap.map((item, weekIndex) => (
                         <div key={weekIndex} className="relative pl-8 md:pl-10">
                             <div
                                 className="absolute -left-2.25 top-0 w-4 h-4 rounded-full border-4 border-white shadow-sm"
                                 style={{
-                                    backgroundColor: isReadonly ? '#10b981' : theme.colors.primary,
+                                    backgroundColor: isReadonly ? '#10b981' : colors.primary,
                                 }}
                             ></div>
 
@@ -290,7 +293,7 @@ const Roadmap = () => {
                                     style={{
                                         backgroundColor: isReadonly
                                             ? '#059669'
-                                            : theme.colors.textMain,
+                                            : colors.textMain,
                                     }}
                                 >
                                     <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
@@ -302,7 +305,7 @@ const Roadmap = () => {
                                 <div className="p-6 md:p-8">
                                     <h2
                                         className="text-xl font-bold mb-8"
-                                        style={{ color: theme.colors.textMain }}
+                                        style={{ color: colors.textMain }}
                                     >
                                         {item.topic}
                                     </h2>
@@ -311,7 +314,7 @@ const Roadmap = () => {
                                         <div className="space-y-4">
                                             <div
                                                 className="flex items-center gap-2 font-bold text-[11px] uppercase tracking-widest"
-                                                style={{ color: theme.colors.primary }}
+                                                style={{ color: colors.primary }}
                                             >
                                                 <Youtube size={14} /> Learning Material
                                             </div>

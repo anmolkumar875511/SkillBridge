@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Users, ShieldCheck, ShieldAlert, Mail, Search, User as UserIcon } from 'lucide-react';
 import axiosInstance from '../axiosInstance';
-import { theme } from '../theme';
+import { AuthContext } from '../context/AuthContext';
+import { getThemeColors } from '../theme';
+
 
 const AllUsers = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const {user} =  useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
 
     const fetchData = async () => {
         try {
@@ -48,13 +52,13 @@ const AllUsers = () => {
                 <div
                     className="w-10 h-10 border-2 rounded-full animate-spin"
                     style={{
-                        borderColor: theme.colors.primary,
+                        borderColor: colors.primary,
                         borderTopColor: 'transparent',
                     }}
                 ></div>
                 <p
                     className="text-xs font-bold tracking-widest uppercase opacity-50"
-                    style={{ color: theme.colors.textMuted }}
+                    style={{ color: colors.textMuted }}
                 >
                     Loading Directory...
                 </p>
@@ -68,17 +72,17 @@ const AllUsers = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div
                     className="relative pl-5 border-l-4"
-                    style={{ borderColor: theme.colors.secondary }}
+                    style={{ borderColor: colors.secondary }}
                 >
                     <h1
                         className="text-3xl font-bold tracking-tight"
-                        style={{ color: theme.colors.textMain }}
+                        style={{ color: colors.textMain }}
                     >
-                        User <span style={{ color: theme.colors.primary }}>Management</span>
+                        User <span style={{ color: colors.primary }}>Management</span>
                     </h1>
                     <p
                         className="mt-1 text-sm font-medium"
-                        style={{ color: theme.colors.textMuted }}
+                        style={{ color: colors.textMuted }}
                     >
                         Review and manage platform accessibility.
                     </p>
@@ -94,8 +98,8 @@ const AllUsers = () => {
                         placeholder="Search name or email..."
                         className="w-full pl-11 pr-4 py-3 rounded-xl border outline-none transition-all text-sm font-medium"
                         style={{
-                            backgroundColor: theme.colors.white,
-                            borderColor: theme.colors.border,
+                            backgroundColor: colors.white,
+                            borderColor: colors.border,
                         }}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
@@ -106,14 +110,14 @@ const AllUsers = () => {
             {/* Users Table */}
             <div
                 className="bg-white rounded-3xl border shadow-sm overflow-hidden"
-                style={{ borderColor: theme.colors.border }}
+                style={{ borderColor: colors.border }}
             >
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr
                                 className="bg-slate-50 border-b"
-                                style={{ borderColor: theme.colors.border }}
+                                style={{ borderColor: colors.border }}
                             >
                                 <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                                     User Details
@@ -126,7 +130,7 @@ const AllUsers = () => {
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y" style={{ borderColor: theme.colors.border }}>
+                        <tbody className="divide-y" style={{ borderColor: colors.border }}>
                             {filteredUsers.map((u) => (
                                 <tr
                                     key={u._id}
@@ -137,8 +141,8 @@ const AllUsers = () => {
                                             <div
                                                 className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden border"
                                                 style={{
-                                                    backgroundColor: theme.colors.bgLight,
-                                                    borderColor: theme.colors.border,
+                                                    backgroundColor: colors.bgLight,
+                                                    borderColor: colors.border,
                                                 }}
                                             >
                                                 {u.avatar?.url ? (
@@ -154,7 +158,7 @@ const AllUsers = () => {
                                             <div>
                                                 <p
                                                     className="font-bold text-sm"
-                                                    style={{ color: theme.colors.textMain }}
+                                                    style={{ color: colors.textMain }}
                                                 >
                                                     {u.name || 'Anonymous User'}
                                                 </p>

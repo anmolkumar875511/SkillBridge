@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axiosInstance from '../axiosInstance';
 import { ResumeContext } from '../context/ResumeContext';
-import { theme } from '../theme';
 import { Code2, Briefcase, GraduationCap, Laptop, Check, Pencil } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
+import { getThemeColors } from '../theme';
 
 const ConfirmResume = ({}) => {
     const [isEdit, setIsEdit] = useState(false);
@@ -11,6 +12,8 @@ const ConfirmResume = ({}) => {
     const [experience, setExperience] = useState([]);
     const [projects, setProjects] = useState([]);
     const [id, setId] = useState('');
+    const {user} = useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
 
     const { resume, fetchResume } = useContext(ResumeContext);
 
@@ -59,11 +62,11 @@ const ConfirmResume = ({}) => {
             {/* SKILLS SECTION - Clean Grid */}
             <section
                 className="bg-white border rounded-3xl p-8 shadow-sm"
-                style={{ borderColor: theme.colors.border }}
+                style={{ borderColor: colors.border }}
             >
                 <div className="flex items-center gap-3 mb-6">
-                    <Code2 size={20} style={{ color: theme.colors.primary }} />
-                    <h3 className="text-xl font-bold" style={{ color: theme.colors.textMain }}>
+                    <Code2 size={20} style={{ color: colors.primary }} />
+                    <h3 className="text-xl font-bold" style={{ color: colors.textMain }}>
                         Technical Skills
                     </h3>
                 </div>
@@ -104,13 +107,13 @@ const ConfirmResume = ({}) => {
                                 <>
                                     <p
                                         className="text-[9px] font-bold uppercase tracking-wider mb-1"
-                                        style={{ color: theme.colors.secondary }}
+                                        style={{ color: colors.secondary }}
                                     >
                                         {item.level}
                                     </p>
                                     <p
                                         className="text-sm font-bold"
-                                        style={{ color: theme.colors.textMain }}
+                                        style={{ color: colors.textMain }}
                                     >
                                         {item.name}
                                     </p>
@@ -125,7 +128,7 @@ const ConfirmResume = ({}) => {
                 {/* PROJECTS SECTION - Professional Blue Card */}
                 <div
                     className="rounded-3xl p-8 text-white shadow-sm"
-                    style={{ backgroundColor: theme.colors.primary }}
+                    style={{ backgroundColor: colors.primary }}
                 >
                     <div className="flex items-center gap-3 mb-6">
                         <Laptop size={20} className="opacity-80" />
@@ -170,13 +173,13 @@ const ConfirmResume = ({}) => {
                                     <>
                                         <h4
                                             className="text-sm font-bold mb-2"
-                                            style={{ color: theme.colors.secondary }}
+                                            style={{ color: colors.secondary }}
                                         >
                                             {item.title}
                                         </h4>
                                         <p
                                             className="text-xs leading-relaxed opacity-80"
-                                            style={{ color: theme.colors.bgLight }}
+                                            style={{ color: colors.bgLight }}
                                         >
                                             {item.description}
                                         </p>
@@ -191,13 +194,13 @@ const ConfirmResume = ({}) => {
                     {/* EXPERIENCE SECTION - Decent & Muted */}
                     <div
                         className="bg-white rounded-3xl p-8 border shadow-sm"
-                        style={{ borderColor: theme.colors.border }}
+                        style={{ borderColor: colors.border }}
                     >
                         <div className="flex items-center gap-3 mb-6">
-                            <Briefcase size={20} style={{ color: theme.colors.primary }} />
+                            <Briefcase size={20} style={{ color: colors.primary }} />
                             <h3
                                 className="text-lg font-bold"
-                                style={{ color: theme.colors.textMain }}
+                                style={{ color: colors.textMain }}
                             >
                                 Professional Experience
                             </h3>
@@ -207,7 +210,7 @@ const ConfirmResume = ({}) => {
                                 <div
                                     key={index}
                                     className="pl-4 border-l-2"
-                                    style={{ borderColor: theme.colors.secondary }}
+                                    style={{ borderColor: colors.secondary }}
                                 >
                                     {isEdit ? (
                                         <div className="space-y-2">
@@ -227,7 +230,7 @@ const ConfirmResume = ({}) => {
                                             <input
                                                 className="w-full border rounded-lg p-2 text-xs font-bold"
                                                 value={item.company}
-                                                style={{ color: theme.colors.primary }}
+                                                style={{ color: colors.primary }}
                                                 onChange={(e) =>
                                                     setExperience((prev) =>
                                                         prev.map((ex, i) =>
@@ -243,13 +246,13 @@ const ConfirmResume = ({}) => {
                                         <div>
                                             <p
                                                 className="text-sm font-bold"
-                                                style={{ color: theme.colors.textMain }}
+                                                style={{ color: colors.textMain }}
                                             >
                                                 {item.role}
                                             </p>
                                             <p
                                                 className="text-xs font-semibold"
-                                                style={{ color: theme.colors.primary }}
+                                                style={{ color: colors.primary }}
                                             >
                                                 {item.company}
                                             </p>
@@ -263,7 +266,7 @@ const ConfirmResume = ({}) => {
                     {/* EDUCATION SECTION - Balanced Orange Accent */}
                     <div
                         className="rounded-3xl p-8 text-white shadow-sm"
-                        style={{ backgroundColor: theme.colors.secondary }}
+                        style={{ backgroundColor: colors.secondary }}
                     >
                         <div className="flex items-center gap-3 mb-6">
                             <GraduationCap size={20} className="opacity-80" />
@@ -319,7 +322,7 @@ const ConfirmResume = ({}) => {
                                             <p className="text-sm font-bold">{item.degree}</p>
                                             <p
                                                 className="text-xs opacity-80"
-                                                style={{ color: theme.colors.bgLight }}
+                                                style={{ color: colors.bgLight }}
                                             >
                                                 {item.institute}
                                             </p>
@@ -341,7 +344,7 @@ const ConfirmResume = ({}) => {
                     onClick={() => (isEdit ? updateData() : setIsEdit(true))}
                     className="flex items-center gap-3 px-6 py-3.5 rounded-2xl font-bold text-white shadow-lg hover:opacity-90 active:scale-95 transition-all text-xs uppercase tracking-widest"
                     style={{
-                        backgroundColor: isEdit ? '#10b981' : theme.colors.textMain,
+                        backgroundColor: isEdit ? '#10b981' : colors.textMain,
                     }}
                 >
                     <span>{isEdit ? 'Save Changes' : 'Edit Profile'}</span>
@@ -353,7 +356,7 @@ const ConfirmResume = ({}) => {
                 dangerouslySetInnerHTML={{
                     __html: `
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: ${theme.colors.border}; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: ${colors.border}; border-radius: 10px; }
         @keyframes fade-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fade-in 0.5s ease-out; }
       `,

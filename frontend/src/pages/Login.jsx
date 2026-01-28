@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { toast } from 'sonner';
-import { theme } from '../theme';
 import { Mail, Lock, User, ShieldCheck, ArrowRight, Chrome } from 'lucide-react'; // Clean, modern icons
+import { getThemeColors } from '../theme';
 
 const Login = () => {
     const [state, setState] = useState('Sign Up');
@@ -23,6 +23,8 @@ const Login = () => {
     const navigate = useNavigate();
 
     const { fetchUser, user } = useContext(AuthContext);
+
+    const { colors } = getThemeColors(user?.theme || 'light');
 
     // Google OAuth Handler
     const handleGoogleLogin = () => {
@@ -118,7 +120,7 @@ const Login = () => {
     return (
         <div
             className="min-h-screen flex flex-col items-center justify-start pt-16 md:pt-24 px-4 mt-[-12]"
-            style={{ backgroundColor: theme.colors.bgLight }}
+            style={{ backgroundColor: colors.bgLight }}
         >
             <div className="w-full max-w-100 bg-white rounded-3xl p-8 shadow-sm border border-slate-100 z-10 -mt-8 md:-mt-16 lg:-mt-20">
                 {state !== 'Middle' ? (
@@ -126,13 +128,13 @@ const Login = () => {
                         <div className="text-center space-y-1">
                             <h2
                                 className="text-2xl font-bold tracking-tight"
-                                style={{ color: theme.colors.textMain }}
+                                style={{ color: colors.textMain }}
                             >
                                 {state === 'Sign Up' ? 'Create Account' : 'Welcome Back'}
                             </h2>
                             <p
                                 className="text-[10px] font-bold uppercase tracking-widest opacity-50"
-                                style={{ color: theme.colors.textMuted }}
+                                style={{ color: colors.textMuted }}
                             >
                                 {state === 'Sign Up'
                                     ? 'Bridge to your success'
@@ -184,7 +186,7 @@ const Login = () => {
                                         <span
                                             onClick={() => navigate('/forgetpassword')}
                                             className="text-[11px] font-bold cursor-pointer hover:underline opacity-70 transition-opacity"
-                                            style={{ color: theme.colors.primary }}
+                                            style={{ color: colors.primary }}
                                         >
                                             Forgot Password?
                                         </span>
@@ -196,7 +198,7 @@ const Login = () => {
                         <button
                             type="submit"
                             className="w-full py-3 text-white font-bold rounded-xl transition-all shadow-sm hover:opacity-95 active:scale-[0.98] text-sm uppercase tracking-wider"
-                            style={{ backgroundColor: theme.colors.primary }}
+                            style={{ backgroundColor: colors.primary }}
                         >
                             {state === 'Sign Up' ? 'Get Started' : 'Login Now'}
                         </button>
@@ -228,7 +230,7 @@ const Login = () => {
                         <div className="text-center pt-1">
                             <p
                                 className="text-xs font-medium"
-                                style={{ color: theme.colors.textMuted }}
+                                style={{ color: colors.textMuted }}
                             >
                                 {state === 'Sign Up' ? 'Already a member?' : 'New to the platform?'}
                                 <span
@@ -236,7 +238,7 @@ const Login = () => {
                                         setState(state === 'Sign Up' ? 'Login' : 'Sign Up')
                                     }
                                     className="ml-2 font-bold cursor-pointer hover:underline"
-                                    style={{ color: theme.colors.secondary }}
+                                    style={{ color: colors.secondary }}
                                 >
                                     {state === 'Sign Up' ? 'Login' : 'Sign Up'}
                                 </span>
@@ -251,16 +253,16 @@ const Login = () => {
                             <div className="w-12 h-12 mx-auto rounded-full flex items-center justify-center bg-blue-50">
                                 <ShieldCheck
                                     className="w-6 h-6"
-                                    style={{ color: theme.colors.primary }}
+                                    style={{ color: colors.primary }}
                                 />
                             </div>
                             <h2
                                 className="text-2xl font-bold"
-                                style={{ color: theme.colors.textMain }}
+                                style={{ color: colors.textMain }}
                             >
                                 Verify Email
                             </h2>
-                            <p className="text-xs" style={{ color: theme.colors.textMuted }}>
+                            <p className="text-xs" style={{ color: colors.textMuted }}>
                                 Enter the 6-digit code sent to your inbox
                             </p>
                         </div>
@@ -272,14 +274,14 @@ const Login = () => {
                             onChange={(e) => setOtp(e.target.value)}
                             placeholder="000 000"
                             className="w-full py-4 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 text-center text-3xl font-bold tracking-[0.4rem]"
-                            style={{ color: theme.colors.primary }}
+                            style={{ color: colors.primary }}
                             required
                         />
 
                         <button
                             type="submit"
                             className="w-full py-3 text-white font-bold rounded-xl shadow-sm uppercase tracking-wider text-sm"
-                            style={{ backgroundColor: theme.colors.secondary }}
+                            style={{ backgroundColor: colors.secondary }}
                         >
                             Complete Registration
                         </button>
@@ -290,7 +292,7 @@ const Login = () => {
                                 onClick={resendotp}
                                 disabled={!canResend}
                                 className="text-[10px] font-bold uppercase tracking-widest transition-all opacity-60 hover:opacity-100"
-                                style={{ color: theme.colors.primary }}
+                                style={{ color: colors.primary }}
                             >
                                 {timer > 0 ? `Resend available in ${timer}s` : 'Resend OTP'}
                             </button>

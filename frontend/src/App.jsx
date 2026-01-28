@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Navbar from './components/Navbar';
 import Banner from './components/Banner';
 import Footer from './components/Footer';
@@ -24,13 +24,18 @@ import Logger from './pages/Logger.jsx';
 import AllUsers from './pages/AllUsers.jsx';
 import AccountSuspended from './pages/AccountSuspended.jsx';
 import SetTarget from './pages/SetTarget.jsx';
-import { theme } from './theme';
+import { getThemeColors } from './theme';
+import { AuthContext } from './context/AuthContext.jsx';
+
+
 
 function App() {
+    const {user} = useContext(AuthContext)
+    const {colors} = getThemeColors(user?.theme || 'light');
     return (
         <div
             className="min-h-screen flex flex-col"
-            style={{ backgroundColor: theme.colors.bgLight }}
+            style={{ backgroundColor: colors.bgLight }}
         >
             <Navbar />
             <Toaster duration={2000} richColors position="top-center" />

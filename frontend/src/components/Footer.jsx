@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import logo from '../assets/logo.png';
+import { AuthContext } from '../context/AuthContext';
+import { getThemeColors } from '../theme';
 
 const Footer = () => {
+    const {user} = useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
     return (
-        <footer className="w-full bg-white border-t border-gray-100 mt-10">
+        <footer className="w-full  border-t border-gray-100 mt-10"
+        style={{backgroundColor: colors.bglight}}>
             {/* 1. max-w-7xl: Limits the width exactly like the Navbar.
         2. mx-auto: Centers the container.
         3. px-6: Matches the horizontal padding of your Navbar.

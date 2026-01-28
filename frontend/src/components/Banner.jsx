@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { theme } from '../theme';
+import { getThemeColors } from '../theme';
+import { AuthContext } from '../context/AuthContext';
+
 
 const Banner = () => {
     const navigate = useNavigate();
-
+    const {user} = useContext(AuthContext)
+    const { colors } = getThemeColors(user?.colors || 'light');
     return (
         <section className="w-full ">
             {/* Reduced padding for a more compact, decent look */}
@@ -13,7 +16,7 @@ const Banner = () => {
                     {/* Subtle Tagline - No big background, just clean text */}
                     <p
                         className="text-[11px] font-bold uppercase tracking-[0.2em] mb-4"
-                        style={{ color: theme.colors.secondary }}
+                        style={{ color: colors.secondary }}
                     >
                         Bridge The Gap
                     </p>
@@ -21,19 +24,19 @@ const Banner = () => {
                     {/* Headline - Semi-bold/Bold instead of Black, smaller sizing */}
                     <h1
                         className="text-3xl md:text-5xl font-bold tracking-tight mb-6 leading-tight max-w-4xl"
-                        style={{ color: theme.colors.textMain }}
+                        style={{ color: colors.textMain }}
                     >
                         Upskill Yourself <br className="hidden md:block" />
-                        <span style={{ color: theme.colors.primary }}>And Grow Together.</span>
+                        <span style={{ color: colors.primary }}>And Grow Together.</span>
                     </h1>
 
                     {/* Subtext - Balanced font size */}
                     <p
                         className="text-sm md:text-lg max-w-2xl font-normal leading-relaxed mb-10"
-                        style={{ color: theme.colors.textMuted }}
+                        style={{ color: colors.textMuted }}
                     >
                         A community-driven platform designed to empower students with the
-                        <span className="font-semibold" style={{ color: theme.colors.textMain }}>
+                        <span className="font-semibold" style={{ color: colors.textMain }}>
                             {' '}
                             practical skills
                         </span>{' '}
@@ -45,7 +48,7 @@ const Banner = () => {
                         <button
                             onClick={() => navigate('/Login')}
                             className="px-8 py-3 rounded-xl font-semibold text-white transition-all duration-200 hover:opacity-90 active:scale-[0.98] text-sm shadow-sm"
-                            style={{ backgroundColor: theme.colors.primary }}
+                            style={{ backgroundColor: colors.primary }}
                         >
                             Get Started
                         </button>
@@ -53,7 +56,7 @@ const Banner = () => {
                         <button
                             onClick={() => navigate('/contributors')}
                             className="px-8 py-3 rounded-xl font-semibold text-sm transition-all hover:bg-slate-50 border border-slate-200"
-                            style={{ color: theme.colors.textMain }}
+                            style={{ color: colors.textMain }}
                         >
                             View Contributors
                         </button>

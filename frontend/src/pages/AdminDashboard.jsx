@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import {
     LayoutDashboard,
@@ -16,12 +16,16 @@ import {
 import { toast } from 'sonner';
 import axiosInstance from '../axiosInstance';
 import { useNavigate } from 'react-router-dom';
-import { theme } from '../theme';
+import { AuthContext } from '../context/AuthContext';
+import { getThemeColors } from '../theme';
+
 
 const AdminDashboard = () => {
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
     const [ingesting, setIngesting] = useState(false);
+    const {user} = useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
 
     const navigate = useNavigate();
 
@@ -64,24 +68,24 @@ const AdminDashboard = () => {
     return (
         <div
             className="min-h-screen py-12 px-4 md:px-8"
-            style={{ backgroundColor: theme.colors.bgLight }}
+            style={{ backgroundColor: colors.bgLight }}
         >
             <main className="max-w-7xl mx-auto space-y-10">
                 {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div
                         className="relative pl-5 border-l-4"
-                        style={{ borderColor: theme.colors.secondary }}
+                        style={{ borderColor: colors.secondary }}
                     >
                         <h1
                             className="text-3xl md:text-4xl font-bold tracking-tight"
-                            style={{ color: theme.colors.textMain }}
+                            style={{ color: colors.textMain }}
                         >
-                            System <span style={{ color: theme.colors.primary }}>Overview</span>
+                            System <span style={{ color: colors.primary }}>Overview</span>
                         </h1>
                         <p
                             className="mt-2 text-sm md:text-lg font-medium"
-                            style={{ color: theme.colors.textMuted }}
+                            style={{ color: colors.textMuted }}
                         >
                             Manage platform resources and monitor system health.
                         </p>
@@ -91,7 +95,7 @@ const AdminDashboard = () => {
                         onClick={handleIngest}
                         disabled={ingesting}
                         className={`flex items-center gap-2 px-6 py-3 text-white rounded-xl shadow-md transition-all active:scale-95 text-xs font-bold uppercase tracking-widest ${ingesting ? 'opacity-70 cursor-not-allowed' : 'hover:opacity-90'}`}
-                        style={{ backgroundColor: theme.colors.primary }}
+                        style={{ backgroundColor: colors.primary }}
                     >
                         <RefreshCw className={`w-4 h-4 ${ingesting ? 'animate-spin' : ''}`} />
                         {ingesting ? 'Syncing...' : 'Sync Opportunities'}
@@ -104,43 +108,43 @@ const AdminDashboard = () => {
                         icon={<Users className="w-5 h-5" />}
                         title="Total Students"
                         value={stats?.users?.total || 0}
-                        brandColor={theme.colors.primary}
+                        brandColor={colors.primary}
                     />
                     <StatCard
                         icon={<Briefcase className="w-5 h-5" />}
                         title="Active Jobs"
                         value={stats?.opportunities?.active || 0}
                         subtext={`of ${stats?.opportunities?.total} total`}
-                        brandColor={theme.colors.secondary}
+                        brandColor={colors.secondary}
                     />
                     <StatCard
                         icon={<FileText className="w-5 h-5" />}
                         title="Resumes Parsed"
                         value={stats?.resumes || 0}
-                        brandColor={theme.colors.textMain}
+                        brandColor={colors.textMain}
                     />
                     <StatCard
                         icon={<Activity className="w-5 h-5" />}
                         title="Roadmaps Created"
                         value={stats?.roadmaps || 0}
-                        brandColor={theme.colors.primary}
+                        brandColor={colors.primary}
                     />
                 </div>
 
                 {/* Recent Logs Preview */}
                 <div
                     className="bg-white rounded-3xl shadow-sm border overflow-hidden"
-                    style={{ borderColor: theme.colors.border }}
+                    style={{ borderColor: colors.border }}
                 >
                     <div
                         className="px-8 py-6 border-b flex justify-between items-center"
-                        style={{ borderColor: theme.colors.border }}
+                        style={{ borderColor: colors.border }}
                     >
                         <div className="flex items-center gap-2">
-                            <History size={18} style={{ color: theme.colors.primary }} />
+                            <History size={18} style={{ color: colors.primary }} />
                             <h3
                                 className="font-bold text-lg"
-                                style={{ color: theme.colors.textMain }}
+                                style={{ color: colors.textMain }}
                             >
                                 System Activity
                             </h3>
@@ -148,12 +152,12 @@ const AdminDashboard = () => {
                         <button
                             onClick={() => navigate('/logger')}
                             className="text-xs font-bold uppercase tracking-widest hover:underline flex items-center gap-1"
-                            style={{ color: theme.colors.primary }}
+                            style={{ color: colors.primary }}
                         >
                             View All Logs <ChevronRight size={14} />
                         </button>
                     </div>
-                    <div className="divide-y" style={{ borderColor: theme.colors.border }}>
+                    <div className="divide-y" style={{ borderColor: colors.border }}>
                         {stats?.recentLogs?.map((log) => (
                             <div
                                 key={log._id}
@@ -164,13 +168,13 @@ const AdminDashboard = () => {
                                     <div className="flex flex-col">
                                         <span
                                             className="text-sm font-bold"
-                                            style={{ color: theme.colors.textMain }}
+                                            style={{ color: colors.textMain }}
                                         >
                                             {log.meta?.action || 'System Event'}
                                         </span>
                                         <span
                                             className="text-xs font-medium truncate max-w-lg"
-                                            style={{ color: theme.colors.textMuted }}
+                                            style={{ color: colors.textMuted }}
                                         >
                                             {log.message}
                                         </span>
@@ -178,7 +182,7 @@ const AdminDashboard = () => {
                                 </div>
                                 <span
                                     className="text-[10px] font-bold uppercase tracking-wider opacity-40 whitespace-nowrap"
-                                    style={{ color: theme.colors.textMain }}
+                                    style={{ color: colors.textMain }}
                                 >
                                     {new Date(log.createdAt).toLocaleString()}
                                 </span>
@@ -192,25 +196,27 @@ const AdminDashboard = () => {
 };
 
 // Sub-components
-const StatCard = ({ icon, title, value, subtext, brandColor }) => (
+const StatCard = ({ icon, title, value, subtext, brandColor }) => {
+    const {user} = useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
     <div
         className="p-6 rounded-3xl border bg-white flex items-start justify-between transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-1"
-        style={{ borderColor: theme.colors.border }}
+        style={{ borderColor: colors.border }}
     >
         <div className="space-y-1">
             <p
                 className="text-[10px] font-bold uppercase tracking-widest"
-                style={{ color: theme.colors.textMuted }}
+                style={{ color: colors.textMuted }}
             >
                 {title}
             </p>
-            <h3 className="text-3xl font-bold" style={{ color: theme.colors.textMain }}>
+            <h3 className="text-3xl font-bold" style={{ color: colors.textMain }}>
                 {value}
             </h3>
             {subtext && (
                 <p
                     className="text-[10px] font-medium opacity-60"
-                    style={{ color: theme.colors.textMuted }}
+                    style={{ color: colors.textMuted }}
                 >
                     {subtext}
                 </p>
@@ -223,9 +229,11 @@ const StatCard = ({ icon, title, value, subtext, brandColor }) => (
             {icon}
         </div>
     </div>
-);
+};
 
 const LogLevelBadge = ({ level }) => {
+    const {user} = useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
     const config = {
         info: { color: '#3b82f6', icon: <CheckCircle className="w-3 h-3" /> },
         warn: { color: '#f59e0b', icon: <AlertCircle className="w-3 h-3" /> },

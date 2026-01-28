@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axiosInstance from '../axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { theme } from '../theme';
 import { KeyRound, Mail, ArrowLeft } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
+import { getThemeColors } from '../theme';
 
 const Forgetpassw = () => {
     const [email, setEmail] = useState('');
     const navigate = useNavigate();
+    const {user} = useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
     const submithandler = async (e) => {
         e.preventDefault();
         toast.promise(axiosInstance.post('/user/forgot-password', { email }), {
@@ -24,7 +27,7 @@ const Forgetpassw = () => {
     return (
         <div
             className="min-h-screen flex items-center justify-center px-4"
-            style={{ backgroundColor: theme.colors.bgLight }}
+            style={{ backgroundColor: colors.bgLight }}
         >
             <div className="w-full max-w-100 bg-white rounded-3xl p-8 shadow-sm border border-slate-100 z-10 animate-fade-in">
                 <form onSubmit={submithandler} className="space-y-6">
@@ -32,20 +35,20 @@ const Forgetpassw = () => {
                     <div className="text-center space-y-2">
                         <div
                             className="w-12 h-12 mx-auto rounded-2xl flex items-center justify-center mb-4"
-                            style={{ backgroundColor: `${theme.colors.primary}10` }}
+                            style={{ backgroundColor: `${colors.primary}10` }}
                         >
-                            <KeyRound size={24} style={{ color: theme.colors.primary }} />
+                            <KeyRound size={24} style={{ color: colors.primary }} />
                         </div>
 
                         <h2
                             className="text-2xl font-bold tracking-tight"
-                            style={{ color: theme.colors.textMain }}
+                            style={{ color: colors.textMain }}
                         >
                             Forgot Password?
                         </h2>
                         <p
                             className="text-xs font-medium leading-relaxed opacity-60"
-                            style={{ color: theme.colors.textMuted }}
+                            style={{ color: colors.textMuted }}
                         >
                             Enter your registered email and we’ll send you a recovery link.
                         </p>
@@ -71,7 +74,7 @@ const Forgetpassw = () => {
                         <button
                             type="submit"
                             className="w-full py-3 text-white font-bold rounded-xl transition-all shadow-sm hover:opacity-95 active:scale-[0.98] text-sm uppercase tracking-wider"
-                            style={{ backgroundColor: theme.colors.primary }}
+                            style={{ backgroundColor: colors.primary }}
                         >
                             Send Reset Link
                         </button>
@@ -82,7 +85,7 @@ const Forgetpassw = () => {
                                 type="button"
                                 onClick={() => navigate('/Login')}
                                 className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:opacity-70 transition-opacity"
-                                style={{ color: theme.colors.secondary }}
+                                style={{ color: colors.secondary }}
                             >
                                 <ArrowLeft size={14} /> Back to Login
                             </button>
