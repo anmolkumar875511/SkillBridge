@@ -94,7 +94,7 @@ const Profile = () => {
     return (
         <div className="min-h-screen py-12 px-6" style={{ backgroundColor: colors.bgLight }}>
             <div
-                className="max-w-4xl mx-auto bg-white rounded-3xl shadow-sm border overflow-hidden flex flex-col md:flex-row"
+                className="max-w-4xl mx-auto  rounded-3xl shadow-sm border overflow-hidden flex flex-col md:flex-row"
                 style={{ borderColor: colors.border }}
             >
                 {/* Left Side: Info & Actions */}
@@ -186,14 +186,14 @@ const Profile = () => {
                                     type="password"
                                     value={currentPassword}
                                     onChange={(e) => setCurrentPassword(e.target.value)}
-                                    className="w-full px-4 py-3 rounded-xl border bg-white outline-none focus:border-blue-500 transition-all text-sm"
+                                    className="w-full px-4 py-3 rounded-xl border  outline-none focus:border-blue-500 transition-all text-sm"
                                     placeholder="Current Password"
                                 />
                                 <input
                                     type="password"
                                     value={newPassword}
                                     onChange={(e) => setNewPassword(e.target.value)}
-                                    className="w-full px-4 py-3 rounded-xl border bg-white outline-none focus:border-blue-500 transition-all text-sm"
+                                    className="w-full px-4 py-3 rounded-xl border  outline-none focus:border-blue-500 transition-all text-sm"
                                     placeholder="New Password"
                                 />
                                 <button

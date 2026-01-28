@@ -81,7 +81,7 @@ const Resume = () => {
 
                 {/* Upload Portal Card - Decent & Clean */}
                 <div
-                    className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border transition-all duration-300 hover:shadow-md"
+                    className=" rounded-3xl p-8 md:p-12 shadow-sm border transition-all duration-300 hover:shadow-md"
                     style={{ borderColor: colors.border }}
                 >
                     <div className="flex flex-col items-center justify-center space-y-6">
@@ -170,7 +170,7 @@ const Resume = () => {
                     </div>
 
                     <div
-                        className="min-h-75 bg-white rounded-3xl shadow-sm p-8 border"
+                        className="min-h-75  rounded-3xl shadow-sm p-8 border"
                         style={{ borderColor: colors.border }}
                     >
                         {isContent ? (

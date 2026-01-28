@@ -65,7 +65,7 @@ const CompletedRoadmap = () => {
 
                 {completed.length === 0 ? (
                     <div
-                        className="text-center bg-white p-16 rounded-3xl shadow-sm border"
+                        className="text-center  p-16 rounded-3xl shadow-sm border"
                         style={{ borderColor: colors.border }}
                     >
                         <div className="flex justify-center mb-4 opacity-20">
@@ -90,7 +90,7 @@ const CompletedRoadmap = () => {
                         {completed.map((item) => (
                             <div
                                 key={item._id}
-                                className="group bg-white rounded-3xl p-6 shadow-sm border transition-all duration-300 hover:shadow-md hover:-translate-y-1 relative overflow-hidden"
+                                className="group  rounded-3xl p-6 shadow-sm border transition-all duration-300 hover:shadow-md hover:-translate-y-1 relative overflow-hidden"
                                 style={{ borderColor: colors.border }}
                             >
                                 {/* Completed Badge - Professional Green */}

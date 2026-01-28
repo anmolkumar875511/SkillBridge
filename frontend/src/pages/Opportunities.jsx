@@ -31,7 +31,7 @@ const Opportunities = () => {
 
     // 3. Skeleton Loader Component
     const SkeletonCard = () => (
-        <div className="bg-white rounded-3xl border border-slate-100 p-8 flex flex-col justify-between animate-pulse">
+        <div className=" rounded-3xl border border-slate-100 p-8 flex flex-col justify-between animate-pulse">
             <div className="space-y-4">
                 <div className="flex justify-between">
                     <div className="h-3 w-20 bg-slate-100 rounded"></div>
@@ -83,7 +83,7 @@ const Opportunities = () => {
                         : opportunities.map((item, index) => (
                               <div
                                   key={index}
-                                  className="group bg-white rounded-3xl border border-slate-100 shadow-sm p-8 flex flex-col justify-between transition-all duration-300 hover:shadow-md hover:-translate-y-1 relative overflow-hidden"
+                                  className="group  rounded-3xl border border-slate-100 shadow-sm p-8 flex flex-col justify-between transition-all duration-300 hover:shadow-md hover:-translate-y-1 relative overflow-hidden"
                               >
                                   {/* Type Badge - Decent Styling */}
 
@@ -194,7 +194,7 @@ const Opportunities = () => {
                         className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px]"
                         onClick={() => setSelectedOp(null)}
                     />
-                    <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                    <div className="relative w-full max-w-2xl  rounded-3xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                         <div className="p-8 pb-4 flex justify-between items-start">
                             <div>
                                 <h2

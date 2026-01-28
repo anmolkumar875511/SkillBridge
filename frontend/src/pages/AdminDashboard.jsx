@@ -133,7 +133,7 @@ const AdminDashboard = () => {
 
                 {/* Recent Logs Preview */}
                 <div
-                    className="bg-white rounded-3xl shadow-sm border overflow-hidden"
+                    className="rounded-3xl shadow-sm border overflow-hidden"
                     style={{ borderColor: colors.border }}
                 >
                     <div
@@ -200,7 +200,7 @@ const StatCard = ({ icon, title, value, subtext, brandColor }) => {
     const {user} = useContext(AuthContext)
     const { colors } = getThemeColors(user?.theme || 'light');
     <div
-        className="p-6 rounded-3xl border bg-white flex items-start justify-between transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-1"
+        className="p-6 rounded-3xl border  flex items-start justify-between transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-1"
         style={{ borderColor: colors.border }}
     >
         <div className="space-y-1">

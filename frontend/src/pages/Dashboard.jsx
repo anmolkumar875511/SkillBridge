@@ -114,7 +114,7 @@ const Dashboard = () => {
                 </div>
 
                 {activeRoadmaps.length === 0 ? (
-                    <div className="text-center bg-white p-16 rounded-[40px] shadow-sm border border-slate-100">
+                    <div className="text-center  p-16 rounded-[40px] shadow-sm border border-slate-100">
                         <p
                             className="font-medium opacity-60"
                             style={{ color: colors.textMuted }}
@@ -127,7 +127,7 @@ const Dashboard = () => {
                         {activeRoadmaps.map((item) => (
                             <div
                                 key={item._id}
-                                className="group bg-white rounded-3xl p-6 shadow-sm border transition-all duration-300 hover:shadow-md hover:-translate-y-1 relative overflow-hidden"
+                                className="group  rounded-3xl p-6 shadow-sm border transition-all duration-300 hover:shadow-md hover:-translate-y-1 relative overflow-hidden"
                                 style={{ borderColor: colors.border }}
                             >
                                 <div

@@ -75,7 +75,7 @@ const Contributors = () => {
                     {contributors.map((member, index) => (
                         <div
                             key={index}
-                            className="bg-white rounded-3xl p-8 border transition-all duration-300 shadow-sm hover:shadow-md"
+                            className=" rounded-3xl p-8 border transition-all duration-300 shadow-sm hover:shadow-md"
                             style={{ borderColor: colors.border }}
                         >
                             <div className="flex flex-col md:flex-row gap-8 items-start">

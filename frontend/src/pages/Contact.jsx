@@ -97,7 +97,7 @@ const Contact = () => {
                             <a
                                 href={info.link}
                                 key={index}
-                                className="group flex items-center p-5 bg-white border border-slate-200 rounded-2xl shadow-sm transition-all hover:border-blue-400 hover:shadow-md"
+                                className="group flex items-center p-5  border border-slate-200 rounded-2xl shadow-sm transition-all hover:border-blue-400 hover:shadow-md"
                             >
                                 <div
                                     className="w-12 h-12 rounded-xl flex items-center justify-center transition-colors"
@@ -127,7 +127,7 @@ const Contact = () => {
                     </div>
 
                     {/* Right: Social Connect Section */}
-                    <div className="bg-white border border-slate-200 rounded-3xl p-8 md:p-10 shadow-sm flex flex-col justify-between min-h-85">
+                    <div className=" border border-slate-200 rounded-3xl p-8 md:p-10 shadow-sm flex flex-col justify-between min-h-85">
                         <div>
                             <h3
                                 className="text-xl font-bold mb-2"

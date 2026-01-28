@@ -29,7 +29,7 @@ const Forgetpassw = () => {
             className="min-h-screen flex items-center justify-center px-4"
             style={{ backgroundColor: colors.bgLight }}
         >
-            <div className="w-full max-w-100 bg-white rounded-3xl p-8 shadow-sm border border-slate-100 z-10 animate-fade-in">
+            <div className="w-full max-w-100  rounded-3xl p-8 shadow-sm border border-slate-100 z-10 animate-fade-in">
                 <form onSubmit={submithandler} className="space-y-6">
                     {/* Icon & Header - Professional & Centered */}
                     <div className="text-center space-y-2">

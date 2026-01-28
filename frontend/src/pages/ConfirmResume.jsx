@@ -61,7 +61,7 @@ const ConfirmResume = ({}) => {
         <div className="w-full max-w-6xl mx-auto space-y-8 animate-fade-in pb-20">
             {/* SKILLS SECTION - Clean Grid */}
             <section
-                className="bg-white border rounded-3xl p-8 shadow-sm"
+                className=" border rounded-3xl p-8 shadow-sm"
                 style={{ borderColor: colors.border }}
             >
                 <div className="flex items-center gap-3 mb-6">
@@ -74,12 +74,12 @@ const ConfirmResume = ({}) => {
                     {skills.map((item, index) => (
                         <div
                             key={index}
-                            className={`p-4 rounded-xl border transition-all ${isEdit ? 'bg-slate-50 border-orange-200' : 'bg-white border-slate-100'}`}
+                            className={`p-4 rounded-xl border transition-all ${isEdit ? 'bg-slate-50 border-orange-200' : ' border-slate-100'}`}
                         >
                             {isEdit ? (
                                 <div className="space-y-2">
                                     <input
-                                        className="w-full bg-white border rounded-lg px-2 py-1.5 text-xs font-bold outline-none focus:ring-1 focus:ring-orange-400"
+                                        className="w-full  border rounded-lg px-2 py-1.5 text-xs font-bold outline-none focus:ring-1 focus:ring-orange-400"
                                         value={item.name}
                                         onChange={(e) =>
                                             setSkills((prev) =>
@@ -90,7 +90,7 @@ const ConfirmResume = ({}) => {
                                         }
                                     />
                                     <input
-                                        className="w-full bg-white border rounded-lg px-2 py-1 text-[10px] outline-none"
+                                        className="w-full  border rounded-lg px-2 py-1 text-[10px] outline-none"
                                         value={item.level}
                                         onChange={(e) =>
                                             setSkills((prev) =>
@@ -193,7 +193,7 @@ const ConfirmResume = ({}) => {
                 <div className="space-y-8">
                     {/* EXPERIENCE SECTION - Decent & Muted */}
                     <div
-                        className="bg-white rounded-3xl p-8 border shadow-sm"
+                        className=" rounded-3xl p-8 border shadow-sm"
                         style={{ borderColor: colors.border }}
                     >
                         <div className="flex items-center gap-3 mb-6">

@@ -109,7 +109,7 @@ const AllUsers = () => {
 
             {/* Users Table */}
             <div
-                className="bg-white rounded-3xl border shadow-sm overflow-hidden"
+                className=" rounded-3xl border shadow-sm overflow-hidden"
                 style={{ borderColor: colors.border }}
             >
                 <div className="overflow-x-auto">
