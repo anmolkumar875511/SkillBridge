@@ -11,9 +11,11 @@ connectDB()
     .then(async () => {
         await createDefaultAdmin();
 
-        app.listen(PORT, () => {
-            console.log(`Server is running at: http://localhost:${PORT}`);
-        });
+        if (process.env.NODE_ENV !== 'production') {
+            app.listen(process.env.PORT || 8000, () => {
+                console.log(`Server is running at: http://localhost:${PORT}`);
+            });
+        }
     })
     .catch((error) => {
         console.error('Failed to connect to the database:', error);
