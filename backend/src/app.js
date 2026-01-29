@@ -40,6 +40,10 @@ app.use('/api/v1/roadmap', roadmapRoutes);
 import adminRoutes from './routes/admin.routes.js';
 app.use('/api/v1/admin', adminRoutes);
 
+app.get("/", (req, res) => {
+    res.json({ message: "SkillBridge API is running!" });
+});
+
 app.use(errorHandler);
 
 export default app;

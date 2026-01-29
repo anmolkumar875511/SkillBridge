@@ -8,6 +8,30 @@
   ],
   "routes": [
     {
+      "src": "/api/v1/user/(.*)",
+      "dest": "src/server.js"
+    },
+    {
+      "src": "/api/v1/resume/(.*)",
+      "dest": "src/server.js"
+    },
+    {
+      "src": "/api/v1/opportunity/(.*)",
+      "dest": "src/server.js"
+    },
+    {
+      "src": "/api/v1/skillgap/(.*)",
+      "dest": "src/server.js"
+    },
+    {
+      "src": "/api/v1/roadmap/(.*)",
+      "dest": "src/server.js"
+    },
+    {
+      "src": "/api/v1/admin/(.*)",
+      "dest": "src/server.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "src/server.js"
     }
