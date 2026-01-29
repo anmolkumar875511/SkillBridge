@@ -7,21 +7,25 @@ cloudinary.config({
 });
 
 export const uploadImage = async (fileBuffer) => {
-    try {
-        if (!fileBuffer) return null;
+    if (!fileBuffer) return null;
 
-        return new Promise((resolve, reject) => {
+    try {
+        return await new Promise((resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
-                { resource_type: 'image', folder: 'skillbridge_avatars' },
+                { 
+                    resource_type: 'auto',
+                    folder: 'skillbridge_avatars' 
+                },
                 (error, result) => {
                     if (error) {
                         console.error('Cloudinary Upload Error:', error);
-                        return reject(null);
+                        reject(error);
+                    } else {
+                        resolve({
+                            url: result.secure_url,
+                            id: result.public_id,
+                        });
                     }
-                    resolve({
-                        url: result.secure_url,
-                        id: result.public_id,
-                    });
                 }
             );
             uploadStream.end(fileBuffer);
