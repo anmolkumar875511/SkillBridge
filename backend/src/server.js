@@ -3,7 +3,7 @@ import connectDB from './db/index.js';
 import app from './app.js';
 import { createDefaultAdmin } from './utils/defaultAdmin.js';
 
-dotenv.config({ path: './.env' });
+dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 
@@ -15,6 +15,9 @@ connectDB()
             app.listen(process.env.PORT || 8000, () => {
                 console.log(`Server is running at: http://localhost:${PORT}`);
             });
+        }
+        else {
+            console.log('Running in production mode');
         }
     })
     .catch((error) => {
