@@ -10,6 +10,13 @@ import apiResponse from '../utils/apiResponse.js';
 import { logger } from '../utils/logger.js';
 
 export const ingest = asyncHandler(async (req, res) => {
+
+    const authHeader = req.headers['authorization'];
+    const isCron = authHeader === `Bearer ${process.env.CRON_SECRET}`;
+    if (process.env.NODE_ENV === 'production' && !isCron && !req.user?.isAdmin) {
+        return res.status(401).json(new apiResponse(401, 'Unauthorized access'));
+    }
+    
     try {
         console.log('Admin is fetching opportunities...');
         await runIngestion();
