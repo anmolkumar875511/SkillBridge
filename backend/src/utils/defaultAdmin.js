@@ -5,7 +5,8 @@ export const createDefaultAdmin = asyncHandler(async () => {
     try {
         const existingAdmin = await User.findOne({ role: 'admin' });
         if (existingAdmin) {
-            console.log('Default admin already exists.', existingAdmin.email);
+            console.log('Default admin already exists.');
+            console.log(`╰─Email: admin@skillbridge.com, Password: admin123`);
             return;
         }
 
@@ -19,7 +20,7 @@ export const createDefaultAdmin = asyncHandler(async () => {
 
         await defaultAdmin.save();
         console.log('Default admin created successfully.');
-        console.log(`Email: admin@skillbridge.com, Password: admin123`);
+        console.log(`╰─Email: admin@skillbridge.com, Password: admin123`);
     } catch (error) {
         console.error('Failed to create default admin:', error);
     }
