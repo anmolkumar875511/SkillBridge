@@ -164,7 +164,7 @@ const Roadmap = () => {
         <div className="min-h-screen py-12 px-4" style={{ backgroundColor: colors.bgLight }}>
             {/* CUSTOM DELETE MODAL */}
             {showDeleteModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                <div style={{backgroundColor:colors.bgLight}} className="fixed inset-0 z-50 flex items-center justify-center p-4">
                     <div
                         className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300"
                         onClick={() => !isDeleting && setShowDeleteModal(false)}
@@ -180,7 +180,7 @@ const Roadmap = () => {
                             <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
                                 <AlertTriangle size={32} className="text-red-500" />
                             </div>
-                            <h3 className="text-xl font-bold text-slate-900 mb-2">
+                            <h3 style={{color:colors.textMain}} className="text-xl font-bold mb-2">
                                 Delete Roadmap?
                             </h3>
                             <p className="text-sm text-slate-500 mb-8 px-4">
@@ -243,7 +243,7 @@ const Roadmap = () => {
                     </button>
                 </div>
 
-                <header className="mb-10 bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <header className="mb-10  p-8 rounded-3xl shadow-sm   flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div className="space-y-1">
                         <div className="flex items-center gap-3">
                             <h1
@@ -325,7 +325,7 @@ const Roadmap = () => {
                                                         href={resource.url}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-transparent hover:border-blue-100 hover:bg-white transition-all group"
+                                                        className="flex items-center justify-between p-4  rounded-xl border border-transparent hover:border-blue-100  transition-all group"
                                                     >
                                                         <span className="text-sm font-semibold text-slate-700 group-hover:text-blue-700 line-clamp-1">
                                                             {resource.title}
@@ -359,8 +359,8 @@ const Roadmap = () => {
                                                                 : 'cursor-pointer'
                                                         } ${
                                                             task.isCompleted
-                                                                ? 'bg-emerald-50/50 border-emerald-100'
-                                                                : 'bg-white border-slate-100 hover:border-emerald-200'
+                                                                ? ' border-emerald-100'
+                                                                : ' border-slate-100 hover:border-emerald-200'
                                                         }`}
                                                     >
                                                         <div className="mt-0.5">

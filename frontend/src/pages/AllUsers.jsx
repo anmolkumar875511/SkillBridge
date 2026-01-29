@@ -212,8 +212,8 @@ const AllUsers = () => {
 
                 {filteredUsers.length === 0 && (
                     <div className="p-20 text-center flex flex-col items-center opacity-30">
-                        <Users size={48} className="mb-4" />
-                        <p className="text-xs font-bold uppercase tracking-[0.2em]">
+                        <Users size={48} style={{color: colors.textMain}} className="mb-4" />
+                        <p style={{color: colors.textMain}} className="text-xs font-bold uppercase tracking-[0.2em]">
                             No Users Found
                         </p>
                     </div>
