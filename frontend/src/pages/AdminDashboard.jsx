@@ -160,8 +160,7 @@ const AdminDashboard = () => {
                     <div className="divide-y" style={{ borderColor: colors.border }}>
                         {stats?.recentLogs?.map((log) => (
                             <div
-                                key={log._id}
-                                className="px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-50 transition-colors"
+                               className="px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-colors"
                             >
                                 <div className="flex items-center gap-4">
                                     <LogLevelBadge level={log.level} />

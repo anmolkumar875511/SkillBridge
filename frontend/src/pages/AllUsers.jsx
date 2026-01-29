@@ -92,13 +92,14 @@ const AllUsers = () => {
                     <Search
                         className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30"
                         size={16}
+                        style={{color: colors.textMain}}
                     />
                     <input
                         type="text"
                         placeholder="Search name or email..."
                         className="w-full pl-11 pr-4 py-3 rounded-xl border outline-none transition-all text-sm font-medium"
                         style={{
-                            backgroundColor: colors.white,
+                            color: colors.textMain,
                             borderColor: colors.border,
                         }}
                         value={searchTerm}
@@ -130,19 +131,18 @@ const AllUsers = () => {
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y" style={{ borderColor: colors.border }}>
+                        <tbody className="" >
                             {filteredUsers.map((u) => (
                                 <tr
                                     key={u._id}
-                                    className="group hover:bg-slate-50 transition-colors"
+                                    className="group  transition-colors"
                                 >
                                     <td className="px-8 py-4">
                                         <div className="flex items-center gap-4">
                                             <div
-                                                className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden border"
+                                                className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden "
                                                 style={{
-                                                    backgroundColor: colors.bgLight,
-                                                    borderColor: colors.border,
+                                                    backgroundColor: colors.textMuted,
                                                 }}
                                             >
                                                 {u.avatar?.url ? (
@@ -152,7 +152,7 @@ const AllUsers = () => {
                                                         className={`w-full h-full object-cover ${u.isBlacklisted ? 'grayscale opacity-50' : ''}`}
                                                     />
                                                 ) : (
-                                                    <UserIcon size={18} className="opacity-30" />
+                                                    <UserIcon size={18}  className="opacity-30" />
                                                 )}
                                             </div>
                                             <div>
@@ -162,7 +162,7 @@ const AllUsers = () => {
                                                 >
                                                     {u.name || 'Anonymous User'}
                                                 </p>
-                                                <div className="flex items-center gap-1.5 opacity-60">
+                                                <div style={{color: colors.textMain}} className="flex items-center gap-1.5 opacity-60">
                                                     <Mail size={12} />
                                                     <span className="text-xs font-medium tracking-tight">
                                                         {u.email}

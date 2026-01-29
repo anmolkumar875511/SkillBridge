@@ -105,7 +105,7 @@ const Profile = () => {
                                 <div className="space-y-1">
                                     <label
                                         className="text-[10px] font-bold uppercase tracking-widest opacity-50"
-                                        style={{ color: colors.textMuted }}
+                                        style={{ color: colors.textMain }}
                                     >
                                         Full Name
                                     </label>
@@ -170,7 +170,7 @@ const Profile = () => {
                             className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all border shadow-sm"
                             style={{
                                 color: colors.textMain,
-                                backgroundColor: colors.white,
+                                
                                 borderColor: colors.border,
                             }}
                         >
@@ -185,6 +185,7 @@ const Profile = () => {
                                 <input
                                     type="password"
                                     value={currentPassword}
+                                    style={{color: colors.textMain}}
                                     onChange={(e) => setCurrentPassword(e.target.value)}
                                     className="w-full px-4 py-3 rounded-xl border  outline-none focus:border-blue-500 transition-all text-sm"
                                     placeholder="Current Password"
@@ -192,6 +193,7 @@ const Profile = () => {
                                 <input
                                     type="password"
                                     value={newPassword}
+                                    style={{color: colors.textMain}}
                                     onChange={(e) => setNewPassword(e.target.value)}
                                     className="w-full px-4 py-3 rounded-xl border  outline-none focus:border-blue-500 transition-all text-sm"
                                     placeholder="New Password"
