@@ -5,23 +5,24 @@ import { createDefaultAdmin } from './utils/defaultAdmin.js';
 
 dotenv.config();
 
-const PORT = process.env.PORT || 5000;
-
-connectDB()
-    .then(async () => {
+const startServer = async () => {
+    try {
+        await connectDB();
         await createDefaultAdmin();
+        console.log("✅ Database connected and Admin check complete.");
 
-        if (process.env.NODE_ENV !== 'production') {
-            app.listen(process.env.PORT || 8000, () => {
-                console.log(`Server is running at: http://localhost:${PORT}`);
+        if (!process.env.VERCEL) {
+            const PORT = process.env.PORT || 5000;
+            app.listen(PORT, () => {
+                console.log(`Local Server: http://localhost:${PORT}`);
             });
         }
-        else {
-            console.log('Running in production mode');
-        }
-    })
-    .catch((error) => {
-        console.error('Failed to connect to the database:', error);
-    });
+    } catch (error) {
+        console.error("Server initialization failed:", error.message);
+        if (!process.env.VERCEL) process.exit(1);
+    }
+};
+
+startServer();
 
 export default app;

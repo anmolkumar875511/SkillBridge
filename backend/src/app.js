@@ -2,14 +2,22 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import errorHandler from './middlewares/errorHandler.middleware.js';
-import { startFindWorkCron } from './cron/findwork.cron.js';
 import './cron/databaseMaintenance.cron.js';
 import './utils/passport.js';
 import passport from 'passport';
-
-startFindWorkCron();
+import connectDB from './db/index.js';
 
 const app = express();
+
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (error) {
+        console.error("Database connection failed during request:", error);
+        res.status(500).json({ error: "Database connection unavailable" });
+    }
+});
 
 app.use(express.json({ limit: '32kb' }));
 app.use(passport.initialize());
@@ -43,7 +51,11 @@ import adminRoutes from './routes/admin.routes.js';
 app.use('/api/v1/admin', adminRoutes);
 
 app.get("/", (req, res) => {
-    res.json({ message: "SkillBridge API is running!" });
+    res.json({ 
+        status: "Active",
+        message: "SkillBridge API is running!",
+        environment: process.env.NODE_ENV 
+    });
 });
 
 app.use(errorHandler);
