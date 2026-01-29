@@ -440,7 +440,7 @@ export const uploadAvatar = asyncHandler(async (req, res, next) => {
     if (!req.file) return next(new apiError(400, 'No file uploaded'));
 
     try {
-        const img = await uploadImage(req.file.path);
+        const img = await uploadImage(req.file.buffer);
 
         fs.unlinkSync(req.file.path);
 

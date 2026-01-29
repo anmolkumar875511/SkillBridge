@@ -1,5 +1,4 @@
 import { v2 as cloudinary } from 'cloudinary';
-import fs from 'fs';
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -7,25 +6,28 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const uploadImage = async (filePath) => {
+export const uploadImage = async (fileBuffer) => {
     try {
-        if (!filePath) return null;
+        if (!fileBuffer) return null;
 
-        const result = await cloudinary.uploader.upload(filePath, {
-            resource_type: 'image',
+        return new Promise((resolve, reject) => {
+            const uploadStream = cloudinary.uploader.upload_stream(
+                { resource_type: 'image', folder: 'skillbridge_avatars' },
+                (error, result) => {
+                    if (error) {
+                        console.error('Cloudinary Upload Error:', error);
+                        return reject(null);
+                    }
+                    resolve({
+                        url: result.secure_url,
+                        id: result.public_id,
+                    });
+                }
+            );
+            uploadStream.end(fileBuffer);
         });
-
-        return {
-            url: result.secure_url,
-            id: result.public_id,
-        };
     } catch (error) {
-        console.error('Error uploading avatar to Cloudinary:', error.message);
-
-        if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath);
-        }
-
+        console.error('Unexpected error during Cloudinary upload:', error.message);
         return null;
     }
 };
