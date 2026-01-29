@@ -109,14 +109,14 @@ const Logger = () => {
 
             {/* Table Section - Clean & Decent */}
             <div
-                className="bg-white rounded-3xl border shadow-sm overflow-hidden"
+                className=" rounded-3xl border shadow-sm overflow-hidden"
                 style={{ borderColor: colors.border }}
             >
                 <div className="overflow-x-auto custom-scrollbar">
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr
-                                className="bg-slate-50 border-b"
+                                className=" border-b"
                                 style={{ borderColor: colors.border }}
                             >
                                 <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
@@ -141,7 +141,7 @@ const Logger = () => {
                                 logs.map((log) => (
                                     <tr
                                         key={log._id}
-                                        className="hover:bg-slate-50 transition-colors group"
+                                        className="transition-colors group"
                                     >
                                         <td className="px-8 py-4 whitespace-nowrap">
                                             <p

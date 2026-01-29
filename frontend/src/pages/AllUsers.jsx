@@ -116,7 +116,7 @@ const AllUsers = () => {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr
-                                className="bg-slate-50 border-b"
+                                className="border-b"
                                 style={{ borderColor: colors.border }}
                             >
                                 <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
@@ -176,8 +176,8 @@ const AllUsers = () => {
                                         <span
                                             className={`inline-flex items-center px-3 py-1 rounded-lg text-[9px] font-bold uppercase tracking-widest border ${
                                                 u.isBlacklisted
-                                                    ? 'bg-rose-50 text-rose-600 border-rose-100'
-                                                    : 'bg-emerald-50 text-emerald-600 border-emerald-100'
+                                                    ? ' text-rose-600 border-rose-100'
+                                                    : ' text-emerald-600 border-emerald-100'
                                             }`}
                                         >
                                             {u.isBlacklisted ? 'Suspended' : 'Active'}

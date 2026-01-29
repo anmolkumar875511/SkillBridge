@@ -63,7 +63,7 @@ const Report = () => {
                 className="flex flex-col items-center justify-center min-h-screen px-6"
                 style={{ backgroundColor: colors.bgLight }}
             >
-                <div className="bg-white p-10 rounded-3xl shadow-sm border border-slate-100 max-w-md text-center">
+                <div className=" p-10 rounded-3xl shadow-sm border border-slate-100 max-w-md text-center">
                     <div
                         className="w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center"
                         style={{
@@ -126,7 +126,7 @@ const Report = () => {
                 className="flex flex-col items-center justify-center min-h-screen p-6 text-center"
                 style={{ backgroundColor: colors.bgLight }}
             >
-                <div className="bg-white p-10 rounded-3xl shadow-sm border border-slate-100 max-w-md">
+                <div className=" p-10 rounded-3xl shadow-sm border border-slate-100 max-w-md">
                     <div
                         className="w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center"
                         style={{
@@ -166,7 +166,7 @@ const Report = () => {
             <div className="max-w-4xl mx-auto space-y-6">
                 {/* Header Analysis Section */}
                 <div
-                    className="bg-white p-8 rounded-3xl shadow-sm border"
+                    className=" p-8 rounded-3xl shadow-sm border"
                     style={{ borderColor: colors.border }}
                 >
                     <div className="flex items-center gap-2 mb-6">
@@ -198,7 +198,7 @@ const Report = () => {
                 {/* Chart & AI Roadmap Section */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
                     <div
-                        className="bg-white rounded-3xl shadow-sm border p-2"
+                        className=" rounded-3xl shadow-sm border p-2"
                         style={{ borderColor: colors.border }}
                     >
                         <SkillGapChart
@@ -208,7 +208,7 @@ const Report = () => {
                     </div>
 
                     <div
-                        className="bg-white p-8 rounded-3xl shadow-sm border flex flex-col justify-center"
+                        className=" p-8 rounded-3xl shadow-sm border flex flex-col justify-center"
                         style={{ borderColor: colors.border }}
                     >
                         <h3

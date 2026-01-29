@@ -55,7 +55,7 @@ const SetTarget = () => {
         <div className="min-h-screen py-12 px-6" style={{ backgroundColor: colors.bgLight }}>
             <div className="max-w-2xl mx-auto">
                 <header className="mb-10 text-center">
-                    <div className="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center mx-auto mb-4 border border-slate-100">
+                    <div className="w-16 h-16  rounded-2xl shadow-sm flex items-center justify-center mx-auto mb-4  ">
                         <Target size={32} style={{ color: colors.primary }} />
                     </div>
                     <h1 className="text-3xl font-bold" style={{ color: colors.textMain }}>
@@ -68,7 +68,7 @@ const SetTarget = () => {
 
                 <form
                     onSubmit={handleSubmit}
-                    className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 space-y-6"
+                    className=" p-8 rounded-3xl shadow-sm border border-slate-100 space-y-6"
                 >
                     {/* Role Input */}
                     <div>
@@ -79,8 +79,8 @@ const SetTarget = () => {
                             required
                             type="text"
                             placeholder="e.g. Senior Frontend Developer"
-                            className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl focus:outline-none focus:ring-2 transition-all"
-                            style={{ '--tw-ring-color': colors.primary }}
+                            className="w-full p-4  border border-slate-100 rounded-xl focus:outline-none focus:ring-2 transition-all"
+                            style={{ '--tw-ring-color': colors.primary, color: colors.textMain }}
                             value={formData.targetRole}
                             onChange={(e) =>
                                 setFormData({ ...formData, targetRole: e.target.value })
@@ -94,9 +94,10 @@ const SetTarget = () => {
                             Category
                         </label>
                         <select
-                            className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl focus:outline-none focus:ring-2"
+                            className="w-full p-4  border border-slate-100 rounded-xl focus:outline-none focus:ring-2"
                             value={formData.category}
                             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                            style={{color: colors.textMain}}
                         >
                             <option value="tech">Technology</option>
                             <option value="medical">Medical</option>
@@ -118,10 +119,11 @@ const SetTarget = () => {
                             <input
                                 type="text"
                                 placeholder="e.g. React, Docker, System Design"
-                                className="flex-1 p-4 bg-slate-50 border border-slate-100 rounded-xl focus:outline-none"
+                                className="flex-1 p-4 border border-slate-100 rounded-xl focus:outline-none"
                                 value={skillInput}
                                 onChange={(e) => setSkillInput(e.target.value)}
                                 onKeyPress={(e) => e.key === 'Enter' && handleAddSkill(e)}
+                                style={{color: colors.textMain}}
                             />
                             <button
                                 type="button"
@@ -138,7 +140,7 @@ const SetTarget = () => {
                             {formData.specificSkills.map((skill) => (
                                 <span
                                     key={skill}
-                                    className="flex items-center gap-2 px-3 py-2 bg-slate-100 rounded-lg text-xs font-bold text-slate-600"
+                                    className="flex items-center gap-2 px-3 py-2  rounded-lg text-xs font-bold text-slate-600"
                                 >
                                     {skill}
                                     <X

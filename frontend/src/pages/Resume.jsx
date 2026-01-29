@@ -122,7 +122,7 @@ const Resume = () => {
                             />
                             <label
                                 htmlFor="file-upload"
-                                className="flex items-center justify-between w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:border-blue-400 hover:bg-white transition-all group"
+                                className="flex items-center justify-between w-full px-5 py-3.5 border border-slate-200 rounded-xl cursor-pointer hover:border-blue-400  transition-all group"
                             >
                                 <div className="flex items-center gap-3 overflow-hidden">
                                     <FileText size={18} className="text-slate-400 shrink-0" />
@@ -163,10 +163,7 @@ const Resume = () => {
                         >
                             Parsed Results
                         </h1>
-                        <div
-                            className="h-px flex-1"
-                            style={{ backgroundColor: colors.border }}
-                        />
+                        
                     </div>
 
                     <div

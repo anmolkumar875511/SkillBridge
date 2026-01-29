@@ -142,7 +142,7 @@ const Roadmap = () => {
                 className="min-h-screen flex flex-col items-center justify-center px-6 text-center"
                 style={{ backgroundColor: colors.bgLight }}
             >
-                <div className="p-6 rounded-full bg-white shadow-sm mb-6">
+                <div className="p-6 rounded-full  shadow-sm mb-6">
                     <SearchX size={48} className="opacity-20" />
                 </div>
                 <h2 className="text-2xl font-bold mb-2">Roadmap Not Found</h2>
@@ -169,7 +169,7 @@ const Roadmap = () => {
                         className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300"
                         onClick={() => !isDeleting && setShowDeleteModal(false)}
                     />
-                    <div className="relative bg-white w-full max-w-md rounded-3xl p-8 shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-200">
+                    <div className="relative  w-full max-w-md rounded-3xl p-8 shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-200">
                         <button
                             onClick={() => setShowDeleteModal(false)}
                             className="absolute top-6 right-6 p-2 hover:bg-slate-50 rounded-full transition-colors"
@@ -287,7 +287,7 @@ const Roadmap = () => {
                                 }}
                             ></div>
 
-                            <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+                            <div className=" rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
                                 <div
                                     className="px-6 py-3 flex justify-between items-center text-white"
                                     style={{

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     BarChart,
     Bar,
@@ -9,9 +9,13 @@ import {
     ResponsiveContainer,
     Cell,
 } from 'recharts';
+import { AuthContext } from '../context/AuthContext';
+import { getThemeColors } from '../theme';
 
 const SkillGapChart = ({ matchedCount, unmatchedCount }) => {
     // We restructure data to have individual bars for a cleaner look
+    const {user} = useContext(AuthContext)
+    const { colors } = getThemeColors(user?.theme || 'light');
     const data = [
         { name: 'Matched Skills', value: matchedCount, color: '#10b981' },
         { name: 'Missing Skills', value: unmatchedCount, color: '#f43f5e' },
@@ -21,7 +25,7 @@ const SkillGapChart = ({ matchedCount, unmatchedCount }) => {
     const CustomTooltip = ({ active, payload }) => {
         if (active && payload && payload.length) {
             return (
-                <div className="bg-white p-3 shadow-xl border border-slate-100 rounded-lg">
+                <div className=" p-3 shadow-xl border border-slate-100 rounded-lg">
                     <p className="text-sm font-bold text-slate-700">{`${payload[0].payload.name}`}</p>
                     <p
                         className="text-lg font-extrabold"
@@ -37,10 +41,11 @@ const SkillGapChart = ({ matchedCount, unmatchedCount }) => {
     };
 
     return (
-        <div className="w-full h-80 bg-slate-50/50 rounded-2xl border border-slate-100 p-6 transition-all hover:shadow-lg">
+        <div className="w-full h-80 rounded-2xl border border-slate-100 p-6 transition-all hover:shadow-lg">
             <div className="flex justify-between items-center mb-6">
                 <div>
-                    <h2 className="text-xl font-bold text-slate-800 tracking-tight">
+                    <h2 className="text-xl font-bold text-slate-800 tracking-tight"
+                    style={{color: colors.textMain}}>
                         Skill Distribution
                     </h2>
                     <p className="text-sm text-slate-500 italic">Visualizing your compatibility</p>
@@ -69,7 +74,7 @@ const SkillGapChart = ({ matchedCount, unmatchedCount }) => {
                             dy={10}
                         />
                         <YAxis hide />
-                        <Tooltip content={<CustomTooltip />} cursor={{ fill: '#f1f5f9' }} />
+                        <Tooltip content={<CustomTooltip />} cursor={ false } />
 
                         <Bar
                             dataKey="value"

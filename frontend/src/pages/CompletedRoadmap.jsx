@@ -140,7 +140,7 @@ const CompletedRoadmap = () => {
                                     </div>
 
                                     {/* Static Progress Bar - Uniform with Dashboard */}
-                                    <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                    <div className="w-full  h-1.5 rounded-full overflow-hidden">
                                         <div
                                             className="h-full w-full"
                                             style={{ backgroundColor: colors.primary }}

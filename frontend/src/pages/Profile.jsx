@@ -113,7 +113,7 @@ const Profile = () => {
                                         type="text"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
-                                        className="w-full text-xl font-bold p-3 bg-slate-50 border rounded-xl outline-none transition-all focus:border-blue-500"
+                                        className="w-full text-xl font-bold p-3  border rounded-xl outline-none transition-all focus:border-blue-500"
                                         placeholder="Your Name"
                                         style={{ color: colors.textMain }}
                                     />
@@ -129,7 +129,7 @@ const Profile = () => {
                                     </button>
                                     <button
                                         onClick={() => setIsEditing(false)}
-                                        className="px-6 py-2.5 bg-slate-100 rounded-xl text-xs font-bold uppercase tracking-widest transition-all"
+                                        className="px-6 py-2.5  rounded-xl text-xs font-bold uppercase tracking-widest transition-all"
                                         style={{ color: colors.textMain }}
                                     >
                                         Cancel
@@ -179,7 +179,7 @@ const Profile = () => {
 
                         {showPassFields && (
                             <div
-                                className="space-y-3 p-6 bg-slate-50 rounded-2xl border animate-in fade-in slide-in-from-top-4 duration-300"
+                                className="space-y-3 p-6  rounded-2xl border animate-in fade-in slide-in-from-top-4 duration-300"
                                 style={{ borderColor: colors.border }}
                             >
                                 <input
@@ -217,7 +217,7 @@ const Profile = () => {
                     }}
                 >
                     <div className="relative group">
-                        <div className="w-44 h-44 rounded-3xl overflow-hidden border-4 border-white shadow-lg">
+                        <div className="w-44 h-44 rounded-3xl overflow-hidden border-4 e shadow-lg">
                             <img
                                 src={user?.avatar?.url || assetLogo}
                                 alt="Profile"
@@ -225,7 +225,7 @@ const Profile = () => {
                             />
                         </div>
                         <label
-                            className="absolute -bottom-3 -right-3 p-3 rounded-2xl shadow-lg cursor-pointer transition-all active:scale-90 border-2 border-white group"
+                            className="absolute -bottom-3 -right-3 p-3 rounded-2xl shadow-lg cursor-pointer transition-all active:scale-90 border-2  group"
                             style={{ backgroundColor: colors.primary }}
                         >
                             <Camera
