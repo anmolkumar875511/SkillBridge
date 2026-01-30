@@ -34,7 +34,7 @@ const AxiosInterceptor = ({ children }) => {
                     try {
                         console.log('Attempting token refresh for student...');
                         await axios.post(
-                            'http://localhost:5000/api/v1/user/refresh-token',
+                            'https://skill-bridge-seven-gamma.vercel.app/api/v1/user/refresh-token',
                             {},
                             { withCredentials: true }
                         );
