@@ -15,19 +15,28 @@ import adminRoutes from "./routes/admin.routes.js";
 
 const app = express();
 
-app.use(
-  cors({
-    origin: [
-      "https://skillbridge-chi.vercel.app",
-      "http://localhost:5173",
-    ],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+const allowedOrigins = [
+  "https://skillbridge-chi.vercel.app",
+  "http://localhost:5173",
+];
 
-app.options("*", cors());
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, origin);
+    }
+
+    return callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(express.json({ limit: "32kb" }));
 app.use(express.urlencoded({ extended: true, limit: "32kb" }));
@@ -41,7 +50,6 @@ app.use("/api/v1/opportunity", opportunityRoutes);
 app.use("/api/v1/skillgap", skillGapRoutes);
 app.use("/api/v1/roadmap", roadmapRoutes);
 app.use("/api/v1/admin", adminRoutes);
-
 
 app.get("/", (req, res) => {
   res.status(200).json({
