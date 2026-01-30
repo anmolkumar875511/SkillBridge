@@ -286,9 +286,9 @@ export const refreshAccessToken = asyncHandler(async (req, res, next) => {
     await user.save({ validateBeforeSave: false });
 
     const options = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'Lax',
+         httpOnly: true,
+        secure: true,
+        sameSite: 'None',
         path: '/',
     };
 

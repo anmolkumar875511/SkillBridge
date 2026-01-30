@@ -26,12 +26,18 @@ import AccountSuspended from './pages/AccountSuspended.jsx';
 import SetTarget from './pages/SetTarget.jsx';
 import { getThemeColors } from './theme';
 import { AuthContext } from './context/AuthContext.jsx';
+import AuthLoader from './components/AuthLoader.jsx';
 
 
 
 function App() {
-    const {user} = useContext(AuthContext)
+    const {user,loading} = useContext(AuthContext)
     const {colors} = getThemeColors(user?.theme || 'light');
+
+    if(loading){
+        return <AuthLoader/>
+    }
+    
     return (
         <div
             className="min-h-screen flex flex-col"
