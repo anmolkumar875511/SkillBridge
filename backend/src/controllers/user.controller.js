@@ -159,59 +159,63 @@ export const resendEmailOTP = asyncHandler(async (req, res, next) => {
 export const loginUser = asyncHandler(async (req, res, next) => {
     const { email, password } = req.body;
 
-    if (!email || !password) {
-        return next(new apiError(400, 'Missing email or password'));
-    }
+    try {
+        if (!email || !password) {
+            return next(new apiError(400, 'Missing email or password'));
+        }
 
-    const user = await User.findOne({ email }).select('+password');
+        const user = await User.findOne({ email }).select('+password');
 
-    if (!user || !(await user.isPasswordMatch(password))) {
-        return next(new apiError(401, 'Invalid email or password'));
-    }
+        if (!user || !(await user.isPasswordMatch(password))) {
+            return next(new apiError(401, 'Invalid email or password'));
+        }
 
-    if (user.isBlacklisted) {
-        return next(new apiError(402, 'Your account is currently blacklisted by admin'));
-    }
+        if (user.isBlacklisted) {
+            return next(new apiError(402, 'Your account is currently blacklisted by admin'));
+        }
 
-    if (!user.isEmailVerified) {
-        return next(new apiError(403, 'Please verify your email before login'));
-    }
+        if (!user.isEmailVerified) {
+            return next(new apiError(403, 'Please verify your email before login'));
+        }
 
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken();
+        const accessToken = user.generateAccessToken();
+        const refreshToken = user.generateRefreshToken();
 
-    user.refreshToken = refreshToken;
-    await user.save({ validateBeforeSave: false });
+        user.refreshToken = refreshToken;
+        await user.save({ validateBeforeSave: false });
 
-    const options = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'Lax',
-    };
+        const options = {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Lax',
+        };
 
-    await logger({
-        level: 'info',
-        action: 'USER_LOGIN',
-        message: `User ${user.email} logged in`,
-        req,
-    });
+        await logger({
+            level: 'info',
+            action: 'USER_LOGIN',
+            message: `User ${user.email} logged in`,
+            req,
+        });
 
-    res.status(200)
-        .cookie('accessToken', accessToken, {
-            ...options,
-            maxAge: 1000 * 60 * 15,
-        })
-        .cookie('refreshToken', refreshToken, {
-            ...options,
-            maxAge: 1000 * 60 * 60 * 24 * 7,
-        })
-        .json(
-            new apiResponse(200, 'Login successful', {
-                user: user.toJSON(),
-                accessToken,
-                refreshToken,
+        res.status(200)
+            .cookie('accessToken', accessToken, {
+                ...options,
+                maxAge: 1000 * 60 * 15,
             })
-        );
+            .cookie('refreshToken', refreshToken, {
+                ...options,
+                maxAge: 1000 * 60 * 60 * 24 * 7,
+            })
+            .json(
+                new apiResponse(200, 'Login successful', {
+                    user: user.toJSON(),
+                    accessToken,
+                    refreshToken,
+                })
+            );
+    }catch (error) {
+        return next(new apiError(500, 'Server error during login', error.message)); 
+    }
 });
 
 export const getUserProfile = asyncHandler(async (req, res) => {

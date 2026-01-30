@@ -9,7 +9,7 @@ const startServer = async () => {
     try {
         await connectDB();
         await createDefaultAdmin();
-        console.log("✅ Database connected and Admin check complete.");
+        console.log("Database connected and Admin check complete.");
 
         if (!process.env.VERCEL) {
             const PORT = process.env.PORT || 5000;
