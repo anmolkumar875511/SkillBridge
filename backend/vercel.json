@@ -3,11 +3,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/src/server.js"
-    },
-    {
-      "source": "/((?!api/).*)",
-      "destination": "/index.html"
+      "destination": "src/server.js"
     }
   ],
   "crons": [
