@@ -50,6 +50,6 @@ router.get('/profile', verifyToken, getUserProfile);
 router.put('/profile', verifyToken, updateUserProfile);
 router.put('/change-password', verifyToken, changeUserPassword);
 router.patch('/avatar', verifyToken, uploadImage.single('avatar'), uploadAvatar);
-router.patch('/theme', verifyToken, updateTheme)
+router.patch('/theme', verifyToken, updateTheme);
 
 export default router;

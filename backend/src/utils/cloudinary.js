@@ -12,9 +12,9 @@ export const uploadImage = async (fileBuffer) => {
     try {
         return await new Promise((resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
-                { 
+                {
                     resource_type: 'auto',
-                    folder: 'skillbridge_avatars' 
+                    folder: 'skillbridge_avatars',
                 },
                 (error, result) => {
                     if (error) {

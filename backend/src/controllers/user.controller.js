@@ -10,6 +10,13 @@ import { logger } from '../utils/logger.js';
 import fs from 'fs';
 import crypto from 'crypto';
 
+const cookieOptions = {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'None',
+    path: '/',
+};
+
 export const registerUser = asyncHandler(async (req, res, next) => {
     const { name, email, password } = req.body;
 
@@ -99,12 +106,6 @@ export const verifyEmailOTP = asyncHandler(async (req, res, next) => {
 
     await user.save({ validateBeforeSave: false });
 
-    const options = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'Lax',
-    };
-
     await logger({
         level: 'info',
         action: 'EMAIL_VERIFIED',
@@ -114,18 +115,16 @@ export const verifyEmailOTP = asyncHandler(async (req, res, next) => {
 
     res.status(200)
         .cookie('accessToken', accessToken, {
-            ...options,
+            ...cookieOptions,
             maxAge: 1000 * 60 * 15,
         })
         .cookie('refreshToken', refreshToken, {
-            ...options,
+            ...cookieOptions,
             maxAge: 1000 * 60 * 60 * 24 * 7,
         })
         .json(
             new apiResponse(200, 'Email verified and login successful', {
                 user: user.toJSON(),
-                accessToken,
-                refreshToken,
             })
         );
 });
@@ -184,12 +183,6 @@ export const loginUser = asyncHandler(async (req, res, next) => {
         user.refreshToken = refreshToken;
         await user.save({ validateBeforeSave: false });
 
-        const options = {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Lax',
-        };
-
         await logger({
             level: 'info',
             action: 'USER_LOGIN',
@@ -199,22 +192,20 @@ export const loginUser = asyncHandler(async (req, res, next) => {
 
         res.status(200)
             .cookie('accessToken', accessToken, {
-                ...options,
+                ...cookieOptions,
                 maxAge: 1000 * 60 * 15,
             })
             .cookie('refreshToken', refreshToken, {
-                ...options,
+                ...cookieOptions,
                 maxAge: 1000 * 60 * 60 * 24 * 7,
             })
             .json(
                 new apiResponse(200, 'Login successful', {
                     user: user.toJSON(),
-                    accessToken,
-                    refreshToken,
                 })
             );
-    }catch (error) {
-        return next(new apiError(500, 'Server error during login', error.message)); 
+    } catch (error) {
+        return next(new apiError(500, 'Server error during login', error.message));
     }
 });
 
@@ -231,14 +222,8 @@ export const logoutUser = asyncHandler(async (req, res) => {
         $unset: { refreshToken: '' },
     });
 
-    const options = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'Lax',
-    };
-
-    res.clearCookie('accessToken', options);
-    res.clearCookie('refreshToken', options);
+    res.clearCookie('accessToken', cookieOptions);
+    res.clearCookie('refreshToken', cookieOptions);
     await logger({
         level: 'info',
         action: 'USER_LOGOUT',
@@ -285,18 +270,11 @@ export const refreshAccessToken = asyncHandler(async (req, res, next) => {
     user.refreshToken = newRefreshToken;
     await user.save({ validateBeforeSave: false });
 
-    const options = {
-         httpOnly: true,
-        secure: true,
-        sameSite: 'None',
-        path: '/',
-    };
-
     return res
         .status(200)
-        .cookie('accessToken', newAccessToken, options)
-        .cookie('refreshToken', newRefreshToken, options)
-        .json(new apiResponse(200, 'Token refreshed', { accessToken: newAccessToken }));
+        .cookie('accessToken', newAccessToken, cookieOptions)
+        .cookie('refreshToken', newRefreshToken, cookieOptions)
+        .json(new apiResponse(200, 'Token refreshed'));
 });
 
 export const updateUserProfile = asyncHandler(async (req, res, next) => {
@@ -499,26 +477,19 @@ export const handleGoogleCallback = asyncHandler(async (req, res) => {
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
 
-    const options = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'Lax',
-    };
-
     await logger({
         level: 'info',
         action: 'USER_LOGIN_GOOGLE',
         message: `User ${user.email} logged in via Google`,
         req,
     });
-
     res.status(200)
         .cookie('accessToken', accessToken, {
-            ...options,
+            ...cookieOptions,
             maxAge: 1000 * 60 * 15,
         })
         .cookie('refreshToken', refreshToken, {
-            ...options,
+            ...cookieOptions,
             maxAge: 1000 * 60 * 60 * 24 * 7,
         })
         .redirect(`${process.env.FRONTEND_URL}/Dashboard`);
@@ -528,20 +499,16 @@ export const updateTheme = async (req, res) => {
     try {
         const { theme } = req.body;
         if (!['light', 'dark'].includes(theme)) {
-            return res.status(400).json({ message: "Invalid theme type" });
+            return res.status(400).json({ message: 'Invalid theme type' });
         }
 
-        const user = await User.findByIdAndUpdate(
-            req.user.id, 
-            { theme }, 
-            { new: true }
-        );
+        const user = await User.findByIdAndUpdate(req.user.id, { theme }, { new: true });
 
-        res.status(200).json({ 
-            success: true, 
-            theme: user.theme 
+        res.status(200).json({
+            success: true,
+            theme: user.theme,
         });
     } catch (error) {
-        res.status(500).json({ message: "Server error updating theme" });
+        res.status(500).json({ message: 'Server error updating theme' });
     }
 };
