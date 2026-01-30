@@ -1,61 +1,54 @@
-import express from 'express';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import errorHandler from './middlewares/errorHandler.middleware.js';
-import './cron/databaseMaintenance.cron.js';
-import './utils/passport.js';
-import passport from 'passport';
-import connectDB from './db/index.js';
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import passport from "passport";
+
+import errorHandler from "./middlewares/errorHandler.middleware.js";
+import "./utils/passport.js";
+
+import userRoutes from "./routes/user.routes.js";
+import resumeRoutes from "./routes/resume.routes.js";
+import opportunityRoutes from "./routes/opportunity.routes.js";
+import skillGapRoutes from "./routes/skillGap.routes.js";
+import roadmapRoutes from "./routes/roadmap.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
 
 const app = express();
 
-app.use(async (req, res, next) => {
-    try {
-        await connectDB();
-        next();
-    } catch (error) {
-        console.error("Database connection failed during request:", error);
-        res.status(500).json({ error: "Database connection unavailable" });
-    }
-});
-
-app.use(express.json({ limit: '32kb' }));
-app.use(passport.initialize());
-app.use(express.urlencoded({ extended: true, limit: '32kb' }));
-app.use(cookieParser());
 app.use(
-    cors({
-        origin: process.env.FRONTEND_URL, 
-        credentials: true,
-        methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"]
-    })
+  cors({
+    origin: [
+      "https://skillbridge-chi.vercel.app",
+      "http://localhost:5173",
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
 );
 
-import userRoutes from './routes/user.routes.js';
-app.use('/api/v1/user', userRoutes);
+app.options("*", cors());
 
-import resumeRoutes from './routes/resume.routes.js';
-app.use('/api/v1/resume', resumeRoutes);
+app.use(express.json({ limit: "32kb" }));
+app.use(express.urlencoded({ extended: true, limit: "32kb" }));
+app.use(cookieParser());
 
-import opportunityRoutes from './routes/opportunity.routes.js';
-app.use('/api/v1/opportunity', opportunityRoutes);
+app.use(passport.initialize());
 
-import skillGapRoutes from './routes/skillGap.routes.js';
-app.use('/api/v1/skillgap', skillGapRoutes);
+app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/resume", resumeRoutes);
+app.use("/api/v1/opportunity", opportunityRoutes);
+app.use("/api/v1/skillgap", skillGapRoutes);
+app.use("/api/v1/roadmap", roadmapRoutes);
+app.use("/api/v1/admin", adminRoutes);
 
-import roadmapRoutes from './routes/roadmap.routes.js';
-app.use('/api/v1/roadmap', roadmapRoutes);
-
-import adminRoutes from './routes/admin.routes.js';
-app.use('/api/v1/admin', adminRoutes);
 
 app.get("/", (req, res) => {
-    res.json({ 
-        status: "Active",
-        message: "SkillBridge API is running!",
-        environment: process.env.NODE_ENV 
-    });
+  res.status(200).json({
+    status: "OK",
+    message: "SkillBridge API is running smoothly!",
+    environment: process.env.NODE_ENV || "development",
+  });
 });
 
 app.use(errorHandler);
