@@ -1,3 +1,8 @@
+import { createContext, useEffect, useState } from 'react';
+import axiosInstance from '../axiosInstance';
+
+export const AuthContext = createContext(null);
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -6,7 +11,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await axiosInstance.get('/user/profile', {
         withCredentials: true,
-        _authInit: true, // 🔥 KEY FIX
+        _authInit: true,
       });
       setUser(res.data.data.user);
     } catch {
@@ -26,4 +31,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
