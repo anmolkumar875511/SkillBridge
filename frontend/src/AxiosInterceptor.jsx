@@ -39,13 +39,13 @@ const AxiosInterceptor = ({ children }) => {
 
           try {
             await axios.post(
-              'https://skill-bridge-seven-gamma.vercel.app/api/v1/user/refresh-token',
+              'https://skillbridge-server-zeta.vercel.app/api/v1/user/refresh-token',
               {},
               { withCredentials: true }
             );
 
             // Retry original request
-            return axiosInstance(originalRequest);
+            return axiosInstance(originalRequest);  
           } catch (refreshError) {
             console.error('Refresh token failed', refreshError);
 
