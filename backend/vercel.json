@@ -4,6 +4,10 @@
     {
       "source": "/api/(.*)",
       "destination": "/src/server.js"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
     }
   ],
   "crons": [
