@@ -1,167 +1,179 @@
-# 🚀 SkillBridge – Smart Internship & Skill Gap Analyzer
+# SkillBridge
 
-> **SkillBridge** is a full-stack MERN platform that analyzes student resumes, matches skills against internship requirements, identifies skill gaps, and generates a personalized learning roadmap.
-> Designed with **scalable, industry-grade architecture** and **AI-ready modularity**.
-
----
-
-## 📌 Problem Statement
-
-Students often apply to internships without understanding:
-
-* Which skills they already have
-* Which skills are missing
-* How prepared they are for a specific role
-
-**SkillBridge solves this by providing data-driven insights and actionable learning paths.**
+SkillBridge is a **full‑stack MERN platform** that helps users analyze their resumes, identify skill gaps against real job opportunities, and generate **AI‑powered learning roadmaps** to bridge those gaps. It combines **rule‑based parsing**, **LLM intelligence**, and **real‑world job data** into one cohesive career‑growth system.
 
 ---
 
-## 🎯 Key Features
+## Live Demo
 
-### 👤 Authentication & Roles
+* **Frontend:** [https://skillbridge-chi.vercel.app/](https://skillbridge-chi.vercel.app/)
+* **Backend API:** [https://skillbridge-server-zeta.vercel.app/](https://skillbridge-server-zeta.vercel.app/)
 
-* Secure JWT authentication
-* Role-based access (Student / Admin)
+---
 
-### 📄 Resume Analysis
+## Core Features
 
-* PDF resume upload
-* Text extraction
-* Skill identification using keyword & regex matching
-* Editable extracted skills
+### Authentication & User Management
 
-### 💼 Internship Management
+* User registration & login (JWT + refresh tokens)
+* Email OTP verification & resend OTP
+* Forgot / Reset password flow
+* Google OAuth 2.0 authentication (Passport.js)
+* Profile management (update profile, avatar upload)
+* Theme preference update (light / dark)
 
-* Internship listing with required skills
-* Experience level & role categorization
-* Admin-only CRUD operations
+### Resume Intelligence
 
-### 📊 Skill Gap Analysis
+* Resume upload (PDF)
+* Resume text cleaning & normalization
+* **Rule‑based resume parsing** (skills, education, experience, projects)
+* **LLM‑based resume parsing** for higher accuracy
+* Smart merge of rule‑based + LLM parsed data
+* Resume editing & confirmation by user
 
+### Opportunity Matching
+
+* Job ingestion from **FindWork API** (cron‑based)
+* Normalized job roles & skills
+* Skill matching using:
+
+  * String matching
+  * LLM‑based semantic matching
+* Skill gap analysis per opportunity
+
+### Skill Gap Analysis
+
+* Visual skill gap reports
 * Match percentage calculation
-* Matched vs missing skills
-* Readiness score visualization
+* Identified missing & weak skills
+* Stored skill gap reports for reuse
 
-### 🧭 Personalized Learning Roadmap
+### AI Learning Roadmaps
 
-* Skill priority classification
-* Weekly learning plan
-* Curated learning resources
-* Progress tracking
+* Auto‑generated learning roadmap per opportunity
+* Custom target‑based roadmap generation
+* Task‑based roadmap with completion tracking
+* Completed roadmap history
 
-### 📈 Analytics & Visualization
+### Admin Panel
 
-* Skill gap charts
-* Internship readiness indicators
-* User progress dashboard
+* Admin‑only access (role‑based authorization)
+* Dashboard analytics
+* User management & blacklist toggle
+* Opportunity ingestion trigger
+* Application logs view & export
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Frontend
 
-* React (Vite)
-* Tailwind CSS
-* React Query
-* Chart.js / Recharts
-* Axios
+* **React 19** (Vite)
+* **React Router v7**
+* **Tailwind CSS v4**
+* Axios (with interceptors)
+* Recharts (analytics & graphs)
 
 ### Backend
 
-* Node.js
-* Express.js
-* MongoDB (Mongoose)
+* **Node.js + Express 5**
+* **MongoDB + Mongoose**
+* Passport.js (Google OAuth)
 * JWT Authentication
-* Multer (file upload)
-* pdf-parse (resume parsing)
-
-### DevOps & Tools
-
-* Git & GitHub
-* Docker (optional)
-* GitHub Actions (CI)
-* MongoDB Atlas
-* Render / Vercel deployment
+* Multer (file uploads)
+* Cloudinary (avatar & assets)
+* Nodemailer (email & OTP)
+* OpenAI / Groq LLM integration
+* Node‑cron (background jobs)
 
 ---
 
-## 🏗 System Architecture
+## Project Structure
 
 ```
-Client (React)
-   |
-   | REST APIs
-   |
-Server (Node + Express)
-   |
-   ├── Authentication Service
-   ├── Resume Parsing Module
-   ├── Skill Matching Engine
-   ├── Internship Service
-   └── Roadmap Generator
-        |
-     MongoDB
-```
-
----
-
-## 🗂 Database Design
-
-### User
-
-```json
-{
-  "name": "Student Name",
-  "email": "email@example.com",
-  "role": "student",
-  "skills": ["JavaScript", "React"],
-  "resumeId": "ObjectId"
-}
-```
-
-### Internship
-
-```json
-{
-  "title": "Frontend Intern",
-  "company": "TechCorp",
-  "requiredSkills": ["HTML", "CSS", "React"],
-  "experienceLevel": "Beginner"
-}
-```
-
-### Skill Gap Report
-
-```json
-{
-  "matchedSkills": ["React"],
-  "missingSkills": ["HTML", "CSS"],
-  "matchPercentage": 33
-}
+SkillBridge
+├── backend
+│   ├── src
+│   │   ├── controllers
+│   │   ├── routes
+│   │   ├── models
+│   │   ├── services
+│   │   │   ├── parserRule
+│   │   │   ├── parserLLM
+│   │   │   ├── roadmapGenerator
+│   │   │   └── skillMatcher
+│   │   ├── middlewares
+│   │   ├── utils
+│   │   ├── cron
+│   │   └── app.js
+│   └── package.json
+├── frontend
+│   ├── src
+│   │   ├── pages
+│   │   ├── components
+│   │   ├── context
+│   │   └── axiosInstance.js
+│   └── package.json
+├── documentations
+└── README.md
 ```
 
 ---
 
-## 🧭 Skill Gap Calculation Logic
+## Authentication Flow
 
-```text
-Match Percentage = 
-(Matched Skills / Required Skills) × 100
-```
-
-This ensures transparent and explainable results.
+* Access Token (short‑lived)
+* Refresh Token (HTTP‑only cookie)
+* Token rotation on refresh
+* Protected routes via `verifyToken` middleware
+* Role‑based access via `authorizeRoles`
 
 ---
 
-## 🚀 Installation & Setup
+## Resume Parsing Strategy
 
-### 1️⃣ Clone Repository
+1. **PDF Upload → Text Extraction**
+2. **Rule‑Based Parsing** (fast, structured)
+3. **LLM Parsing** (context‑aware, semantic)
+4. **Merge Engine** resolves conflicts & fills gaps
+5. **Normalization** for skills & domains
+
+This hybrid approach ensures **accuracy + reliability**.
+
+---
+
+## Background Jobs (Cron)
+
+* Database cleanup & maintenance
+
+---
+
+## 🧪 API Base Path
+
+```
+/api/v1
+```
+
+Main modules:
+
+* `/user`
+* `/resume`
+* `/opportunity`
+* `/skillgap`
+* `/roadmap`
+* `/admin`
+
+---
+
+
+## Local Setup
+
+### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/skillbridge.git
-cd skillbridge
+git clone https://github.com/anmolkumar875511/SkillBridge.git
+cd SkillBridge
 ```
 
 ### 2️⃣ Backend Setup
@@ -180,42 +192,33 @@ npm install
 npm run dev
 ```
 
-### 4️⃣ Environment Variables
+---
 
-Create `.env` file in backend:
 
-```env
-MONGO_URI=your_mongodb_uri
-JWT_SECRET=your_secret_key
-```
+## Project Makers
+
+SkillBridge is built by a focused two‑member team with clear technical ownership across backend systems and frontend experience.
+
+### **Anmol Kumar** — Backend Engineer
+
+* Backend architecture & REST API design
+* Authentication, authorization, and security flows
+* Resume parsing pipeline (rule‑based + LLM)
+* Skill gap analysis & roadmap generation logic
+* Database schema design and background jobs
+
+**Stack:** Node.js, Express, MongoDB, LLM APIs
 
 ---
 
-## 🌐 Deployment
+### **Tanishq Lalani** — Frontend Engineer
 
-* **Frontend**: Vercel / Netlify
-* **Backend**: Render / Railway / AWS
-* **Database**: MongoDB Atlas
+* Frontend architecture using React + Vite
+* UI components and responsive layouts
+* API integration and protected routing
+* Data visualization and theming
 
----
+**Stack:** React, Tailwind CSS
 
-## 🧠 Future Enhancements (AI-Ready)
 
-* NLP-based skill extraction
-* Resume quality scoring
-* AI-generated learning roadmaps
-* Skill demand trend analysis
-* Internship recommendation engine
-
----
-
-## 🤝 Contributing
-
-Pull requests are welcome.
-For major changes, please open an issue first.
-
----
-
-## 📜 License
-
-MIT License
+⭐ If you like this project, consider giving it a star!

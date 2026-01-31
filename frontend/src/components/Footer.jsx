@@ -49,7 +49,7 @@ const Footer = () => {
                             <ul className="space-y-3 text-sm text-gray-600">
                                 <li>+91 8920103876</li>
                                 <li>+91 8755671186</li>
-                                <li className="text-blue-500">SkillBridge@gmail.com</li>
+                                <li className="text-blue-500">joinskillbridge@gmail.com</li>
                             </ul>
                         </div>
                     </div>
