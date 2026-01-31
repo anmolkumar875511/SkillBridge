@@ -39,8 +39,7 @@ const emailWrapper = (content) => `
         display:inline-block;
         padding:10px 18px;
         border-radius:999px;
-        background:linear-gradient(90deg,#1e3a8a,#f97316);
-        color:white;
+        color:black;
         font-weight:800;
         letter-spacing:1px;
         font-size:14px;
@@ -153,7 +152,7 @@ export const sendWelcomeEmail = async (to, name) => {
             <div style="text-align:center;margin:32px 0">
               <a href="${process.env.FRONTEND_URL}"
                 style="
-                  background:linear-gradient(90deg,#1e3a8a,#f97316);
+                  background:#2A6FA8;
                   color:#ffffff;
                   padding:14px 34px;
                   border-radius:999px;
@@ -206,7 +205,7 @@ export const sendPasswordResetEmail = async (to, resetLink) => {
             <div style="text-align:center;margin:32px 0">
               <a href="${resetLink}"
                 style="
-                  background:linear-gradient(90deg,#1e3a8a,#f97316);
+                  background:#2A6FA8;
                   color:#ffffff;
                   padding:14px 34px;
                   border-radius:999px;
