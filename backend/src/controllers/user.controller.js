@@ -24,7 +24,9 @@ export const registerUser = asyncHandler(async (req, res, next) => {
         return next(new apiError(400, 'Missing required fields'));
     }
 
-    console.log(name, email, password);
+    if (password.length < 6) {
+        return next(new apiError(400, 'Password must be at least 6 characters long'));
+    }
 
     let user = await User.findOne({ email });
 
@@ -47,7 +49,8 @@ export const registerUser = asyncHandler(async (req, res, next) => {
         await sendOTPEmail(email, otp);
         await user.save();
     } catch (error) {
-        return next(new apiError(400, 'Email address is invalid or cannot receive emails'));
+        console.log(error);
+        return next(new apiError(500, 'Email address is invalid or cannot receive emails', error.message));
     }
 
     await logger({
