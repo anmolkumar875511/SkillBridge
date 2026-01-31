@@ -52,7 +52,7 @@ const Logger = () => {
     }, []);
 
     const handleExportLogs = () => {
-        window.open('https://skill-bridge-seven-gamma.vercel.app/api/v1/admin/logs/export', '_blank');
+        window.open('https://skillbridge-server-zeta.vercel.app/api/v1/admin/logs/export', '_blank');
     };
 
     if (loading)
