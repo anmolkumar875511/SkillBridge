@@ -42,18 +42,19 @@ const AdminDashboard = () => {
     }, [user]);
 
     const handleIngest = async () => {
-        setIngesting(true);
         try {
+            setLoading(true);
             await axiosInstance.get('/admin/fetch');
             toast.success('Opportunities synced successfully');
-            fetchDashboardData();
         } catch (error) {
-            console.error('Ingest error:', error.response?.data);
-            toast.error(error.response?.data?.message || 'Sync failed');
+            toast.error(
+            error.response?.data?.message || 'Sync failed'
+            );
         } finally {
-            setIngesting(false);
+            setLoading(false);
         }
     };
+
 
     if (!user || user.role !== 'admin') {
         return (

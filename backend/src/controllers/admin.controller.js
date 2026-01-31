@@ -10,32 +10,35 @@ import apiResponse from '../utils/apiResponse.js';
 import { logger } from '../utils/logger.js';
 
 export const ingest = asyncHandler(async (req, res) => {
-    const authHeader = req.headers['authorization'];
-    const isCron = authHeader === `Bearer ${process.env.CRON_SECRET}`;
-    if (process.env.NODE_ENV === 'production' && !isCron && !req.user?.isAdmin) {
-        return res.status(401).json(new apiResponse(401, 'Unauthorized access'));
-    }
 
     try {
         console.log('Admin is fetching opportunities...');
         await runIngestion();
         console.log('Admin successfully fetched opportunities!!');
+
         await logger({
             level: 'info',
             action: 'ADMIN_FETCHED_OPPORTUNITIES',
-            message: 'Admin fetched opportunities',
+            message: `Admin ${req.user.email} fetched opportunities`,
             req,
         });
-        return res.status(200).json(new apiResponse(200, 'Fetched all opportunities'));
+
+        return res
+            .status(200)
+            .json(new apiResponse(200, 'Fetched all opportunities successfully'));
     } catch (error) {
         await logger({
             level: 'error',
+            action: 'ADMIN_FETCH_OPPORTUNITIES_FAILED',
             message: 'Unable to fetch opportunities',
             error,
+            req,
         });
-        throw new apiError(500, 'Unable to fetch opportunities', error);
+
+        throw new apiError(500, 'Unable to fetch opportunities');
     }
 });
+
 
 export const toggleBlacklist = asyncHandler(async (req, res) => {
     const { userId } = req.params;
