@@ -15,7 +15,6 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { getThemeColors } from '../theme';
 
-
 const AdminDashboard = () => {
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -42,19 +41,17 @@ const AdminDashboard = () => {
     }, [user]);
 
     const handleIngest = async () => {
+        setIngesting(true);
         try {
-            setLoading(true);
             await axiosInstance.get('/admin/fetch');
             toast.success('Opportunities synced successfully');
+            fetchDashboardData();
         } catch (error) {
-            toast.error(
-            error.response?.data?.message || 'Sync failed'
-            );
+            toast.error(error.response?.data?.message || 'Sync failed');
         } finally {
-            setLoading(false);
+            setIngesting(false);
         }
     };
-
 
     if (!user || user.role !== 'admin') {
         return (
@@ -66,23 +63,35 @@ const AdminDashboard = () => {
 
     if (loading) {
         return (
-            <div className="flex h-screen items-center justify-center text-gray-500">
+            <div className="h-screen flex items-center justify-center text-gray-500">
                 Loading Dashboard...
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen py-12 px-4 md:px-8" style={{ backgroundColor: colors.bgLight }}>
+        <div
+            className="min-h-screen py-12 px-4 md:px-8"
+            style={{ backgroundColor: colors.bgLight }}
+        >
             <main className="max-w-7xl mx-auto space-y-10">
 
                 {/* HEADER */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div className="relative pl-5 border-l-4" style={{ borderColor: colors.secondary }}>
-                        <h1 className="text-3xl font-bold" style={{ color: colors.textMain }}>
+                    <div
+                        className="relative pl-5 border-l-4"
+                        style={{ borderColor: colors.secondary }}
+                    >
+                        <h1
+                            className="text-3xl md:text-4xl font-bold tracking-tight"
+                            style={{ color: colors.textMain }}
+                        >
                             System <span style={{ color: colors.primary }}>Overview</span>
                         </h1>
-                        <p className="text-sm mt-1" style={{ color: colors.textMuted }}>
+                        <p
+                            className="mt-1 text-sm font-medium"
+                            style={{ color: colors.textMuted }}
+                        >
                             Admin platform metrics & controls
                         </p>
                     </div>
@@ -90,8 +99,11 @@ const AdminDashboard = () => {
                     <button
                         onClick={handleIngest}
                         disabled={ingesting}
-                        className="flex items-center gap-2 px-6 py-3 rounded-xl text-white text-xs font-bold uppercase tracking-widest active:scale-95"
-                        style={{ backgroundColor: colors.primary }}
+                        className="flex items-center gap-2 px-6 py-3 rounded-xl text-white text-xs font-bold uppercase tracking-widest transition-all active:scale-95"
+                        style={{
+                            backgroundColor: colors.primary,
+                            opacity: ingesting ? 0.7 : 1,
+                        }}
                     >
                         <RefreshCw className={`w-4 h-4 ${ingesting ? 'animate-spin' : ''}`} />
                         {ingesting ? 'Syncing...' : 'Sync Opportunities'}
@@ -100,24 +112,57 @@ const AdminDashboard = () => {
 
                 {/* STATS */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <StatCard title="Total Users" value={stats?.users?.total || 0} icon={<Users />} color={colors.primary} />
-                    <StatCard title="Active Jobs" value={stats?.opportunities?.active || 0} subtext={`of ${stats?.opportunities?.total || 0}`} icon={<Briefcase />} color={colors.secondary} />
-                    <StatCard title="Roadmaps Created" value={stats?.roadmaps || 0} icon={<Activity />} color={colors.textMain} />
-                    <StatCard title="Resumes Parsed" value={stats?.resumes || 0} icon={<Activity />} color={colors.primary} />
+                    <StatCard
+                        title="Total Users"
+                        value={stats?.users?.total || 0}
+                        icon={<Users className="w-5 h-5" />}
+                        color={colors.primary}
+                    />
+                    <StatCard
+                        title="Active Jobs"
+                        value={stats?.opportunities?.active || 0}
+                        subtext={`of ${stats?.opportunities?.total || 0}`}
+                        icon={<Briefcase className="w-5 h-5" />}
+                        color={colors.secondary}
+                    />
+                    <StatCard
+                        title="Roadmaps Created"
+                        value={stats?.roadmaps || 0}
+                        icon={<Activity className="w-5 h-5" />}
+                        color={colors.textMain}
+                    />
+                    <StatCard
+                        title="Resumes Parsed"
+                        value={stats?.resumes || 0}
+                        icon={<Activity className="w-5 h-5" />}
+                        color={colors.primary}
+                    />
                 </div>
 
                 {/* LOGS */}
-                <div className="rounded-3xl border overflow-hidden" style={{ borderColor: colors.border }}>
-                    <div className="px-8 py-6 border-b flex justify-between items-center">
+                <div
+                    className="rounded-3xl overflow-hidden shadow-sm"
+                    style={{
+                        backgroundColor: colors.bgCard,
+                        border: `1px solid ${colors.border}`,
+                    }}
+                >
+                    <div
+                        className="px-8 py-6 border-b flex justify-between items-center"
+                        style={{ borderColor: colors.border }}
+                    >
                         <div className="flex items-center gap-2">
                             <History size={18} style={{ color: colors.primary }} />
-                            <h3 className="font-bold text-lg" style={{ color: colors.textMain }}>
+                            <h3
+                                className="font-bold text-lg"
+                                style={{ color: colors.textMain }}
+                            >
                                 System Activity
                             </h3>
                         </div>
                         <button
                             onClick={() => navigate('/logger')}
-                            className="text-xs font-bold uppercase tracking-widest"
+                            className="text-xs font-bold uppercase tracking-widest flex items-center gap-1 hover:underline"
                             style={{ color: colors.primary }}
                         >
                             View Logs <ChevronRight size={14} />
@@ -126,21 +171,43 @@ const AdminDashboard = () => {
 
                     {stats?.recentLogs?.length ? (
                         stats.recentLogs.map((log) => (
-                            <div key={log._id} className="px-8 py-4 border-t flex justify-between">
-                                <div className="flex gap-3">
+                            <div
+                                key={log._id}
+                                className="px-8 py-4 border-t flex flex-col md:flex-row md:items-center justify-between gap-4"
+                                style={{ borderColor: colors.border }}
+                            >
+                                <div className="flex items-center gap-4">
                                     <LogLevelBadge level={log.level} />
                                     <div>
-                                        <p className="font-bold text-sm">{log.meta?.action || 'System Event'}</p>
-                                        <p className="text-xs opacity-60">{log.message}</p>
+                                        <p
+                                            className="text-sm font-bold"
+                                            style={{ color: colors.textMain }}
+                                        >
+                                            {log.meta?.action || 'System Event'}
+                                        </p>
+                                        <p
+                                            className="text-xs"
+                                            style={{ color: colors.textMuted }}
+                                        >
+                                            {log.message}
+                                        </p>
                                     </div>
                                 </div>
-                                <span className="text-xs opacity-40">
+                                <span
+                                    className="text-[10px] font-bold uppercase tracking-wider whitespace-nowrap"
+                                    style={{ color: colors.textMuted, opacity: 0.6 }}
+                                >
                                     {new Date(log.createdAt).toLocaleString()}
                                 </span>
                             </div>
                         ))
                     ) : (
-                        <div className="p-6 text-sm opacity-60">No recent logs</div>
+                        <div
+                            className="p-6 text-sm"
+                            style={{ color: colors.textMuted }}
+                        >
+                            No recent logs
+                        </div>
                     )}
                 </div>
             </main>
@@ -148,15 +215,45 @@ const AdminDashboard = () => {
     );
 };
 
+
 const StatCard = ({ title, value, subtext, icon, color }) => {
+    const { user } = useContext(AuthContext);
+    const { colors } = getThemeColors(user?.theme || 'light');
+
     return (
-        <div className="p-6 rounded-3xl border flex justify-between items-start shadow-sm hover:shadow-md">
-            <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest opacity-60">{title}</p>
-                <h3 className="text-3xl font-bold">{value}</h3>
-                {subtext && <p className="text-xs opacity-60">{subtext}</p>}
+        <div
+            className="p-6 rounded-3xl flex justify-between items-start transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+            style={{
+                backgroundColor: colors.bgCard,
+                border: `1px solid ${colors.border}`,
+            }}
+        >
+            <div className="space-y-1">
+                <p
+                    className="text-[10px] font-bold uppercase tracking-widest"
+                    style={{ color: colors.textMuted }}
+                >
+                    {title}
+                </p>
+                <h3
+                    className="text-3xl font-bold"
+                    style={{ color: colors.textMain }}
+                >
+                    {value}
+                </h3>
+                {subtext && (
+                    <p
+                        className="text-xs font-medium"
+                        style={{ color: colors.textMuted }}
+                    >
+                        {subtext}
+                    </p>
+                )}
             </div>
-            <div className="p-3 rounded-xl text-white" style={{ backgroundColor: color }}>
+            <div
+                className="p-3 rounded-xl text-white shadow-sm"
+                style={{ backgroundColor: color }}
+            >
                 {icon}
             </div>
         </div>
@@ -169,12 +266,16 @@ const LogLevelBadge = ({ level }) => {
         warn: { color: '#f59e0b', icon: <AlertCircle size={12} /> },
         error: { color: '#ef4444', icon: <AlertCircle size={12} /> },
     };
+
     const current = map[level] || map.info;
 
     return (
         <span
-            className="flex items-center gap-1 px-2 py-1 rounded text-[9px] font-bold uppercase"
-            style={{ backgroundColor: `${current.color}20`, color: current.color }}
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[9px] font-bold uppercase tracking-wider"
+            style={{
+                backgroundColor: `${current.color}20`,
+                color: current.color,
+            }}
         >
             {current.icon} {level}
         </span>
