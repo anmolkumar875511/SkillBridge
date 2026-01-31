@@ -11,32 +11,34 @@ import { logger } from '../utils/logger.js';
 
 export const ingest = asyncHandler(async (req, res) => {
 
-    try {
-        console.log('Admin is fetching opportunities...');
-        await runIngestion();
-        console.log('Admin successfully fetched opportunities!!');
+    res.status(202).json(
+        new apiResponse(202, 'Opportunity ingestion started')
+    );
 
-        await logger({
-            level: 'info',
-            action: 'ADMIN_FETCHED_OPPORTUNITIES',
-            message: `Admin ${req.user.email} fetched opportunities`,
-            req,
-        });
+    (async () => {
+        try {
+            console.log('Admin is fetching opportunities...');
 
-        return res
-            .status(200)
-            .json(new apiResponse(200, 'Fetched all opportunities successfully'));
-    } catch (error) {
-        await logger({
-            level: 'error',
-            action: 'ADMIN_FETCH_OPPORTUNITIES_FAILED',
-            message: 'Unable to fetch opportunities',
-            error,
-            req,
-        });
+            await runIngestion();
 
-        throw new apiError(500, 'Unable to fetch opportunities');
-    }
+            console.log('Admin successfully fetched opportunities!!');
+
+            await logger({
+                level: 'info',
+                action: 'ADMIN_FETCHED_OPPORTUNITIES',
+                message: `Admin ${req.user.email} fetched opportunities`,
+                req,
+            });
+        } catch (error) {
+            await logger({
+                level: 'error',
+                action: 'ADMIN_FETCH_OPPORTUNITIES_FAILED',
+                message: 'Unable to fetch opportunities',
+                error,
+                req,
+            });
+        }
+    })();
 });
 
 
