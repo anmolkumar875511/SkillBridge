@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import passport from 'passport';
 import { verifyToken } from '../middlewares/auth.middleware.js';
-import { uploadImage } from '../middlewares/upload.middleware.js';
+import { uploadAvatarMiddleware } from '../middlewares/upload.middleware.js';
 import {
     getUserProfile,
     updateUserProfile,
@@ -49,7 +49,7 @@ router.post('/logout', verifyToken, logoutUser);
 router.get('/profile', verifyToken, getUserProfile);
 router.put('/profile', verifyToken, updateUserProfile);
 router.put('/change-password', verifyToken, changeUserPassword);
-router.patch('/avatar', verifyToken, uploadImage.single('avatar'), uploadAvatar);
+router.patch('/avatar', verifyToken, uploadAvatarMiddleware.single('avatar'), uploadAvatar);
 router.patch('/theme', verifyToken, updateTheme);
 
 export default router;
