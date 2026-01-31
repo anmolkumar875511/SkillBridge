@@ -5,7 +5,7 @@ import apiError from '../utils/apiError.js';
 import apiResponse from '../utils/apiResponse.js';
 import { generateOTP } from '../utils/generateOTP.js';
 import { sendOTPEmail, sendWelcomeEmail, sendPasswordResetEmail } from '../utils/sendEmail.js';
-import { uploadImage } from '../utils/cloudinary.js';
+import { uploadImageToCloudinary } from '../utils/cloudinary.js';
 import { logger } from '../utils/logger.js';
 import fs from 'fs';
 import crypto from 'crypto';
@@ -50,7 +50,9 @@ export const registerUser = asyncHandler(async (req, res, next) => {
         await user.save();
     } catch (error) {
         console.log(error);
-        return next(new apiError(500, 'Email address is invalid or cannot receive emails', error.message));
+        return next(
+            new apiError(500, 'Email address is invalid or cannot receive emails', error.message)
+        );
     }
 
     await logger({
@@ -417,19 +419,32 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
     res.status(200).json(new apiResponse(200, 'Password reset successful'));
 });
 
-export const uploadAvatar = asyncHandler(async (req, res, next) => {
-    if (!req.file) return next(new apiError(400, 'No file uploaded'));
-
+export const uploadAvatar = async (req, res) => {
     try {
-        const img = await uploadImage(req.file.buffer);
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: 'No file uploaded',
+            });
+        }
 
-        fs.unlinkSync(req.file.path);
+        const user = req.user;
 
-        const user = await User.findByIdAndUpdate(
-            req.user._id,
-            { avatar: { public_id: img.id, url: img.url } },
-            { new: true, validateBeforeSave: false }
-        );
+        const uploadedImage = await uploadImageToCloudinary(req.file.buffer);
+
+        if (!uploadedImage) {
+            return res.status(500).json({
+                success: false,
+                message: 'Failed to upload avatar',
+            });
+        }
+
+        user.avatar = {
+            url: uploadedImage.url,
+            publicId: uploadedImage.id,
+        };
+
+        await user.save();
 
         await logger({
             level: 'info',
@@ -438,24 +453,28 @@ export const uploadAvatar = asyncHandler(async (req, res, next) => {
             req,
         });
 
-        res.status(200).json(
+        return res.status(200).json(
             new apiResponse(200, 'Avatar uploaded successfully', {
                 user: user.toJSON(),
             })
         );
     } catch (error) {
-        if (req.file?.path && fs.existsSync(req.file.path)) {
-            fs.unlinkSync(req.file.path);
-        }
         await logger({
             level: 'error',
             action: 'USER_AVATAR_UPLOAD',
-            message: `User ${req.user.email} failed to upload avatar`,
+            message: `Avatar upload failed`,
             req,
         });
-        throw new apiError(500, 'Failed to upload avatar', error.message);
+
+        console.error(error);
+
+        return res.status(500).json({
+            success: false,
+            message: 'Failed to upload avatar',
+            errors: error.message,
+        });
     }
-});
+};
 
 export const handleGoogleCallback = asyncHandler(async (req, res) => {
     const user = req.user;

@@ -136,7 +136,6 @@ export const sendWelcomeEmail = async (to, name) => {
     });
 };
 
-
 export const sendPasswordResetEmail = async (to, resetLink) => {
     await transporter.sendMail({
         from: `"SkillBridge" <${process.env.EMAIL_USER}>`,

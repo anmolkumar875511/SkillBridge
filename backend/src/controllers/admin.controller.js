@@ -10,10 +10,7 @@ import apiResponse from '../utils/apiResponse.js';
 import { logger } from '../utils/logger.js';
 
 export const ingest = asyncHandler(async (req, res) => {
-
-    res.status(202).json(
-        new apiResponse(202, 'Opportunity ingestion started')
-    );
+    res.status(202).json(new apiResponse(202, 'Opportunity ingestion started'));
 
     (async () => {
         try {
@@ -40,7 +37,6 @@ export const ingest = asyncHandler(async (req, res) => {
         }
     })();
 });
-
 
 export const toggleBlacklist = asyncHandler(async (req, res) => {
     const { userId } = req.params;
