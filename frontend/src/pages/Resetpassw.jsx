@@ -19,12 +19,17 @@ const Resetpassw = () => {
         if (newPassword === confpassword) {
             toast.promise(axiosInstance.post(`/user/reset-password/${token}`, { newPassword }), {
                 loading: 'Processing....',
-                success: (res) => {
-                    return 'Your Password Has been changed Successfully';
+                loading: 'Processing...',
+                success: () => {
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 1500);
+
+                    return 'Password changed successfully. Please login again.';
                 },
                 error: (err) => {
-                    console.log(err);
-                    return err.message;
+                    console.error(err);
+                    return err?.response?.data?.message || 'Something went wrong';
                 },
             });
         }
