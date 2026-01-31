@@ -14,50 +14,67 @@ const transporter = nodemailer.createTransport({
 });
 
 const emailWrapper = (content) => `
-<div style="background:#f8fafc;padding:32px;font-family:Inter,Arial,sans-serif">
+<div style="
+  background:#f8fafc;
+  padding:40px 16px;
+  font-family:Inter,Arial,sans-serif;
+">
   <div style="
     max-width:520px;
     margin:auto;
     background:#ffffff;
-    border-radius:16px;
+    border-radius:24px;
     overflow:hidden;
-    box-shadow:0 10px 30px rgba(0,0,0,0.08)
+    border:1px solid #e5e7eb;
+    box-shadow:0 8px 24px rgba(15,23,42,0.06);
   ">
 
     <!-- HEADER -->
     <div style="
-      padding:24px;
+      padding:28px;
       text-align:center;
-      background:linear-gradient(90deg,#1e3a8a,#f97316);
-      color:white;
-      font-size:22px;
-      font-weight:800;
-      letter-spacing:1px;
+      border-bottom:1px solid #e5e7eb;
     ">
-      SkillBridge
+      <div style="
+        display:inline-block;
+        padding:10px 18px;
+        border-radius:999px;
+        background:linear-gradient(90deg,#1e3a8a,#f97316);
+        color:white;
+        font-weight:800;
+        letter-spacing:1px;
+        font-size:14px;
+        text-transform:uppercase;
+      ">
+        SkillBridge
+      </div>
     </div>
 
     <!-- BODY -->
-    <div style="padding:32px;color:#0f172a">
+    <div style="
+      padding:32px;
+      color:#0f172a;
+    ">
       ${content}
     </div>
 
     <!-- FOOTER -->
     <div style="
-      padding:16px;
+      padding:20px;
       text-align:center;
       font-size:12px;
       color:#64748b;
-      background:#f8fafc
+      background:#f8fafc;
+      border-top:1px solid #e5e7eb;
     ">
-      © ${new Date().getFullYear()} SkillBridge — Bridging Skills to Success
+      © ${new Date().getFullYear()} SkillBridge  
+      <br />
+      Bridging Skills to Success
     </div>
 
   </div>
 </div>
 `;
-
-/* ================= OTP EMAIL ================= */
 
 export const sendOTPEmail = async (to, otp) => {
     await transporter.sendMail({
@@ -65,12 +82,21 @@ export const sendOTPEmail = async (to, otp) => {
         to,
         subject: 'Verify your SkillBridge email',
         html: emailWrapper(`
-            <h2 style="color:#1e3a8a;margin-bottom:12px">
+            <h2 style="
+              font-size:22px;
+              font-weight:800;
+              margin-bottom:12px;
+              color:#0f172a;
+            ">
               Email Verification
             </h2>
 
-            <p style="font-size:15px;line-height:1.6">
-              Welcome to <strong>SkillBridge</strong>
+            <p style="
+              font-size:15px;
+              line-height:1.6;
+              color:#334155;
+            ">
+              Welcome to <strong>SkillBridge</strong>.  
               Use the OTP below to verify your email address.
             </p>
 
@@ -79,7 +105,7 @@ export const sendOTPEmail = async (to, otp) => {
               text-align:center;
               padding:18px;
               background:linear-gradient(90deg,#1e3a8a,#f97316);
-              border-radius:12px;
+              border-radius:16px;
               color:#ffffff;
               font-size:30px;
               letter-spacing:6px;
@@ -88,7 +114,11 @@ export const sendOTPEmail = async (to, otp) => {
               ${otp}
             </div>
 
-            <p style="font-size:14px;color:#475569">
+            <p style="
+              font-size:13px;
+              color:#64748b;
+              line-height:1.6;
+            ">
               ⏱ OTP is valid for <strong>10 minutes</strong>.<br/>
               If you didn’t request this, you can safely ignore this email.
             </p>
@@ -96,20 +126,27 @@ export const sendOTPEmail = async (to, otp) => {
     });
 };
 
-/* ================= WELCOME EMAIL ================= */
-
 export const sendWelcomeEmail = async (to, name) => {
     await transporter.sendMail({
         from: `"SkillBridge" <${process.env.EMAIL_USER}>`,
         to,
         subject: 'Welcome to SkillBridge',
         html: emailWrapper(`
-            <h2 style="color:#1e3a8a;margin-bottom:12px">
+            <h2 style="
+              font-size:22px;
+              font-weight:800;
+              margin-bottom:12px;
+              color:#0f172a;
+            ">
               Welcome, ${name}!
             </h2>
 
-            <p style="font-size:15px;line-height:1.6">
-              Your email has been successfully verified 
+            <p style="
+              font-size:15px;
+              line-height:1.6;
+              color:#334155;
+            ">
+              Your email has been successfully verified.  
               You’re now officially part of <strong>SkillBridge</strong>.
             </p>
 
@@ -118,19 +155,26 @@ export const sendWelcomeEmail = async (to, name) => {
                 style="
                   background:linear-gradient(90deg,#1e3a8a,#f97316);
                   color:#ffffff;
-                  padding:14px 32px;
+                  padding:14px 34px;
                   border-radius:999px;
                   text-decoration:none;
-                  font-weight:700;
+                  font-weight:800;
+                  font-size:12px;
+                  text-transform:uppercase;
+                  letter-spacing:1.2px;
                   display:inline-block;
                 ">
                 Go to Dashboard
               </a>
             </div>
 
-            <p style="font-size:14px;color:#475569">
+            <p style="
+              font-size:14px;
+              color:#475569;
+              line-height:1.6;
+            ">
               Start exploring opportunities, building skills,  
-              and bridging the gap between learning and success
+              and bridging the gap between learning and success.
             </p>
         `),
     });
@@ -142,11 +186,20 @@ export const sendPasswordResetEmail = async (to, resetLink) => {
         to,
         subject: 'Reset your SkillBridge password',
         html: emailWrapper(`
-            <h2 style="color:#1e3a8a;margin-bottom:12px">
+            <h2 style="
+              font-size:22px;
+              font-weight:800;
+              margin-bottom:12px;
+              color:#0f172a;
+            ">
               Password Reset
             </h2>
 
-            <p style="font-size:15px;line-height:1.6">
+            <p style="
+              font-size:15px;
+              line-height:1.6;
+              color:#334155;
+            ">
               We received a request to reset your SkillBridge password.
             </p>
 
@@ -155,17 +208,24 @@ export const sendPasswordResetEmail = async (to, resetLink) => {
                 style="
                   background:linear-gradient(90deg,#1e3a8a,#f97316);
                   color:#ffffff;
-                  padding:14px 32px;
+                  padding:14px 34px;
                   border-radius:999px;
                   text-decoration:none;
-                  font-weight:700;
+                  font-weight:800;
+                  font-size:12px;
+                  text-transform:uppercase;
+                  letter-spacing:1.2px;
                   display:inline-block;
                 ">
                 Reset Password
               </a>
             </div>
 
-            <p style="font-size:14px;color:#475569">
+            <p style="
+              font-size:13px;
+              color:#64748b;
+              line-height:1.6;
+            ">
               If you didn’t request this, you can safely ignore this email.
             </p>
         `),
