@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 import {
-    LayoutDashboard,
-    FileText,
     Briefcase,
     Users,
     Activity,
     RefreshCw,
-    Download,
     AlertCircle,
     CheckCircle,
     ChevronRight,
@@ -24,77 +20,76 @@ const AdminDashboard = () => {
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
     const [ingesting, setIngesting] = useState(false);
-    const {user} = useContext(AuthContext)
-    const { colors } = getThemeColors(user?.theme || 'light');
 
+    const { user } = useContext(AuthContext);
+    const { colors } = getThemeColors(user?.theme || 'light');
     const navigate = useNavigate();
 
-    // Fetch Dashboard Data
     const fetchDashboardData = async () => {
         try {
             const res = await axiosInstance.get('/admin/dashboard');
             setStats(res.data.message);
         } catch (error) {
-            console.error('Failed to load stats', error);
+            console.error('Dashboard fetch failed:', error.response?.data);
+            toast.error(error.response?.data?.message || 'Failed to load dashboard');
         }
     };
 
     useEffect(() => {
+        if (!user || user.role !== 'admin') return;
         setLoading(true);
         fetchDashboardData().finally(() => setLoading(false));
-    }, []);
+    }, [user]);
 
-    // Handle Ingestion Trigger
     const handleIngest = async () => {
         setIngesting(true);
         try {
             await axiosInstance.get('/admin/fetch');
-            toast.success('Opportunity ingestion triggered successfully!');
-            fetchDashboardData(); // Refresh stats
+            toast.success('Opportunities synced successfully');
+            fetchDashboardData();
         } catch (error) {
-            toast.error('Ingestion failed.');
+            console.error('Ingest error:', error.response?.data);
+            toast.error(error.response?.data?.message || 'Sync failed');
         } finally {
             setIngesting(false);
         }
     };
 
-    if (loading)
+    if (!user || user.role !== 'admin') {
+        return (
+            <div className="h-screen flex items-center justify-center text-red-500 font-bold">
+                Unauthorized Access
+            </div>
+        );
+    }
+
+    if (loading) {
         return (
             <div className="flex h-screen items-center justify-center text-gray-500">
                 Loading Dashboard...
             </div>
         );
+    }
 
     return (
-        <div
-            className="min-h-screen py-12 px-4 md:px-8"
-            style={{ backgroundColor: colors.bgLight }}
-        >
+        <div className="min-h-screen py-12 px-4 md:px-8" style={{ backgroundColor: colors.bgLight }}>
             <main className="max-w-7xl mx-auto space-y-10">
-                {/* Header Section */}
+
+                {/* HEADER */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div
-                        className="relative pl-5 border-l-4"
-                        style={{ borderColor: colors.secondary }}
-                    >
-                        <h1
-                            className="text-3xl md:text-4xl font-bold tracking-tight"
-                            style={{ color: colors.textMain }}
-                        >
+                    <div className="relative pl-5 border-l-4" style={{ borderColor: colors.secondary }}>
+                        <h1 className="text-3xl font-bold" style={{ color: colors.textMain }}>
                             System <span style={{ color: colors.primary }}>Overview</span>
                         </h1>
-                        <p
-                            className="mt-2 text-sm md:text-lg font-medium"
-                            style={{ color: colors.textMuted }}
-                        >
-                            Manage platform resources and monitor system health.
+                        <p className="text-sm mt-1" style={{ color: colors.textMuted }}>
+                            Admin platform metrics & controls
                         </p>
                     </div>
 
                     <button
                         onClick={handleIngest}
                         disabled={ingesting}
-                        className={`flex items-center gap-2 px-6 py-3 text-white rounded-xl shadow-md transition-all active:scale-95 text-xs font-bold uppercase tracking-widest ${ingesting ? 'opacity-70 cursor-not-allowed' : 'hover:opacity-90'}`}
+                        className="flex items-center gap-2 px-6 py-3 rounded-xl text-white text-xs font-bold uppercase tracking-widest active:scale-95"
                         style={{ backgroundColor: colors.primary }}
                     >
                         <RefreshCw className={`w-4 h-4 ${ingesting ? 'animate-spin' : ''}`} />
@@ -102,149 +97,83 @@ const AdminDashboard = () => {
                     </button>
                 </div>
 
-                {/* Stats Grid */}
+                {/* STATS */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <StatCard
-                        icon={<Users className="w-5 h-5" />}
-                        title="Total Students"
-                        value={stats?.users?.total || 0}
-                        brandColor={colors.primary}
-                    />
-                    <StatCard
-                        icon={<Briefcase className="w-5 h-5" />}
-                        title="Active Jobs"
-                        value={stats?.opportunities?.active || 0}
-                        subtext={`of ${stats?.opportunities?.total} total`}
-                        brandColor={colors.secondary}
-                    />
-                    <StatCard
-                        icon={<FileText className="w-5 h-5" />}
-                        title="Resumes Parsed"
-                        value={stats?.resumes || 0}
-                        brandColor={colors.textMain}
-                    />
-                    <StatCard
-                        icon={<Activity className="w-5 h-5" />}
-                        title="Roadmaps Created"
-                        value={stats?.roadmaps || 0}
-                        brandColor={colors.primary}
-                    />
+                    <StatCard title="Total Users" value={stats?.users?.total || 0} icon={<Users />} color={colors.primary} />
+                    <StatCard title="Active Jobs" value={stats?.opportunities?.active || 0} subtext={`of ${stats?.opportunities?.total || 0}`} icon={<Briefcase />} color={colors.secondary} />
+                    <StatCard title="Roadmaps Created" value={stats?.roadmaps || 0} icon={<Activity />} color={colors.textMain} />
+                    <StatCard title="Resumes Parsed" value={stats?.resumes || 0} icon={<Activity />} color={colors.primary} />
                 </div>
 
-                {/* Recent Logs Preview */}
-                <div
-                    className="rounded-3xl shadow-sm border overflow-hidden"
-                    style={{ borderColor: colors.border }}
-                >
-                    <div
-                        className="px-8 py-6 border-b flex justify-between items-center"
-                        style={{ borderColor: colors.border }}
-                    >
+                {/* LOGS */}
+                <div className="rounded-3xl border overflow-hidden" style={{ borderColor: colors.border }}>
+                    <div className="px-8 py-6 border-b flex justify-between items-center">
                         <div className="flex items-center gap-2">
                             <History size={18} style={{ color: colors.primary }} />
-                            <h3
-                                className="font-bold text-lg"
-                                style={{ color: colors.textMain }}
-                            >
+                            <h3 className="font-bold text-lg" style={{ color: colors.textMain }}>
                                 System Activity
                             </h3>
                         </div>
                         <button
                             onClick={() => navigate('/logger')}
-                            className="text-xs font-bold uppercase tracking-widest hover:underline flex items-center gap-1"
+                            className="text-xs font-bold uppercase tracking-widest"
                             style={{ color: colors.primary }}
                         >
-                            View All Logs <ChevronRight size={14} />
+                            View Logs <ChevronRight size={14} />
                         </button>
                     </div>
-                    <div className="divide-y" style={{ borderColor: colors.border }}>
-                        {stats?.recentLogs?.map((log) => (
-                            <div
-                               className="px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-colors"
-                            >
-                                <div className="flex items-center gap-4">
+
+                    {stats?.recentLogs?.length ? (
+                        stats.recentLogs.map((log) => (
+                            <div key={log._id} className="px-8 py-4 border-t flex justify-between">
+                                <div className="flex gap-3">
                                     <LogLevelBadge level={log.level} />
-                                    <div className="flex flex-col">
-                                        <span
-                                            className="text-sm font-bold"
-                                            style={{ color: colors.textMain }}
-                                        >
-                                            {log.meta?.action || 'System Event'}
-                                        </span>
-                                        <span
-                                            className="text-xs font-medium truncate max-w-lg"
-                                            style={{ color: colors.textMuted }}
-                                        >
-                                            {log.message}
-                                        </span>
+                                    <div>
+                                        <p className="font-bold text-sm">{log.meta?.action || 'System Event'}</p>
+                                        <p className="text-xs opacity-60">{log.message}</p>
                                     </div>
                                 </div>
-                                <span
-                                    className="text-[10px] font-bold uppercase tracking-wider opacity-40 whitespace-nowrap"
-                                    style={{ color: colors.textMain }}
-                                >
+                                <span className="text-xs opacity-40">
                                     {new Date(log.createdAt).toLocaleString()}
                                 </span>
                             </div>
-                        ))}
-                    </div>
+                        ))
+                    ) : (
+                        <div className="p-6 text-sm opacity-60">No recent logs</div>
+                    )}
                 </div>
             </main>
         </div>
     );
 };
 
-// Sub-components
-const StatCard = ({ icon, title, value, subtext, brandColor }) => {
-    const {user} = useContext(AuthContext)
-    const { colors } = getThemeColors(user?.theme || 'light');
-    <div
-        className="p-6 rounded-3xl border  flex items-start justify-between transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-1"
-        style={{ borderColor: colors.border }}
-    >
-        <div className="space-y-1">
-            <p
-                className="text-[10px] font-bold uppercase tracking-widest"
-                style={{ color: colors.textMuted }}
-            >
-                {title}
-            </p>
-            <h3 className="text-3xl font-bold" style={{ color: colors.textMain }}>
-                {value}
-            </h3>
-            {subtext && (
-                <p
-                    className="text-[10px] font-medium opacity-60"
-                    style={{ color: colors.textMuted }}
-                >
-                    {subtext}
-                </p>
-            )}
+const StatCard = ({ title, value, subtext, icon, color }) => {
+    return (
+        <div className="p-6 rounded-3xl border flex justify-between items-start shadow-sm hover:shadow-md">
+            <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest opacity-60">{title}</p>
+                <h3 className="text-3xl font-bold">{value}</h3>
+                {subtext && <p className="text-xs opacity-60">{subtext}</p>}
+            </div>
+            <div className="p-3 rounded-xl text-white" style={{ backgroundColor: color }}>
+                {icon}
+            </div>
         </div>
-        <div
-            className="p-3 rounded-xl shadow-sm text-white"
-            style={{ backgroundColor: brandColor }}
-        >
-            {icon}
-        </div>
-    </div>
+    );
 };
 
 const LogLevelBadge = ({ level }) => {
-    const {user} = useContext(AuthContext)
-    const { colors } = getThemeColors(user?.theme || 'light');
-    const config = {
-        info: { color: '#3b82f6', icon: <CheckCircle className="w-3 h-3" /> },
-        warn: { color: '#f59e0b', icon: <AlertCircle className="w-3 h-3" /> },
-        error: { color: '#ef4444', icon: <AlertCircle className="w-3 h-3" /> },
+    const map = {
+        info: { color: '#3b82f6', icon: <CheckCircle size={12} /> },
+        warn: { color: '#f59e0b', icon: <AlertCircle size={12} /> },
+        error: { color: '#ef4444', icon: <AlertCircle size={12} /> },
     };
-
-    const current = config[level] || config.info;
+    const current = map[level] || map.info;
 
     return (
         <span
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[9px] font-bold uppercase tracking-wider"
-            style={{ backgroundColor: `${current.color}15`, color: current.color }}
+            className="flex items-center gap-1 px-2 py-1 rounded text-[9px] font-bold uppercase"
+            style={{ backgroundColor: `${current.color}20`, color: current.color }}
         >
             {current.icon} {level}
         </span>
