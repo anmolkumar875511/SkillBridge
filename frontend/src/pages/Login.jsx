@@ -91,6 +91,7 @@ const Login = () => {
         try {
             if (state === 'Sign Up') {
                 await axiosInstance.post('/user/register', { name, email, password });
+                console.log(name, email, password);
                 setState('Middle');
                 toast.success('OTP Sent To your Email', { id: toastId });
             } else {

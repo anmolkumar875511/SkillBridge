@@ -24,11 +24,7 @@ export const registerUser = asyncHandler(async (req, res, next) => {
         return next(new apiError(400, 'Missing required fields'));
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailRegex.test(email)) {
-        return next(new apiError(400, 'Invalid email format'));
-    }
+    console.log(name, email, password);
 
     let user = await User.findOne({ email });
 
